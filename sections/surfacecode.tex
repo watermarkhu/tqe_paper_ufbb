@@ -1,0 +1,18 @@
+\section{The Surface Code}\label{sec:surfacecode}
+
+The modification of the Union-Find decoder proposed here has the same scope as its inspiration, and is thus applicable to any surface code of any genus, with or withouth boundary, and to color codes. For simplicity, we only describe the standard implementation of the surface code without boundary.
+
+\subsection{The toric code}
+
+The \emph{toric code}, a topological code introduced by Kitaev \cite{kitaev2003fault}, is defined by arranging qubits on the edges of a square lattice with periodic boundary conditions. The code is denoted by $V,E,F$, respectively the set of vertices, set of edges, and the set of faces on the lattice. The toric code is defined to be the ground state of the Hamiltonian 
+\begin{equation}
+    H = -\sum_{v \in V} X_v -\sum_{f \in F} Z_f, 
+\end{equation}
+where operator $X_v$ is the product of Pauli $X$ operators on the qubits located on edges forming the vertex $v$, \emph{i.e.} $X_v = \prod_{e \in v} X_e$, and $Z_f = \prod_{e \in f} Z_e$ is the product of Pauli $Z$ operators on the qubits located on edges of face $f$. The code space is spanned by the simultaneous "+1" eigenstate of all operators $X_v$ and $Z_f$. These operators, together with any possible product of them, are the \emph{stabilizers} of the code, and form the stabilizer group $S$. This topology encodes the logical operators in the torus' non-trivial cycles. Errors, below a certain threshold, will only introduce local effects and do not change these cycles.
+
+\subsection{Error model}
+For simplicity, we will only consider i.i.d. phase-flip errors, where each qubit is subjected to a $Z$ error with probability $p_Z$. Due to \emph{lattice duality}, where the vertices and faces of the lattices can be interchanged, the error detection and correction of bit-flip errors is identical. 
+Additionally, any qubit may be \emph{erased} from the system with probability $p_e$. The set of erased qubits is denoted with $\varepsilon$. This \emph{erasure} is detectable, such that we can replace or reinitiate all erased qubits, which corresponds to a random Pauli error after measurement. 
+
+\subsection{Error correction}
+Error correction is proceded by measuring a set of independent stabilizers of the code, \emph{i.e.} the operators $X_v$ and $Z_f$. For a set of phase-flip errors $E_Z = \{I,Z\}^{\otimes n}$, the stabilizers $X_v$ that anticommute with the error return a "-1" outcome. The set of "-1" eigenvalues of the stabilizers is called the syndrome $\sigma$ of the code. Given the measured $\sigma$, and optionally the known erasure $\varepsilon$, it is the task of the decoder to find the correction operator $\mathcal{C}(\sigma, \varepsilon)$. When the correction operator is applied, the code is returned to the code space, \emph{i.e.} $\mathcal{C}(\sigma, \varepsilon)E_Z \in S$. The error is corrected up to a stabilizer. The mapping of measured syndrome to the correction is thus not one-to-one, and it is up to the decoder to choose the most appropriate correction. 

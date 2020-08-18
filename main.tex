@@ -1,0 +1,110 @@
+\documentclass{ieeeaccess}
+\usepackage{amsfonts, amsmath, amssymb, amsthm}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+% \usepackage{caption}
+% \DeclareCaptionFont{ieeeblue}{\color{accessblue}}
+% \DeclareCaptionLabelFormat{myformat}{\figcapfont{\textbf{#1}\textbf{#2}}}
+% \captionsetup{labelfont={bf,ieeeblue},labelformat=myformat}
+\usepackage{setspace}
+\usepackage[font={sf,scriptsize,stretch=0.84}, labelfont={bf,color=accessblue}]{caption}
+
+\usepackage{textcomp}
+\usepackage{mathtools}
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+% \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+%     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+\usepackage[style=ieee, sorting=none]{biblatex}
+\addbibresource{references.bib}
+
+% \usepackage{tikz}
+% \usetikzlibrary{shapes,calc,math,patterns,arrows,positioning,fadings}
+% % Required to make tikz work with ieeeaccess template
+% % https://tex.stackexchange.com/questions/440422/tikz-package-causing-error-in-ieee-access-template
+% \NewSpotColorSpace{PANTONE}
+% \AddSpotColor{PANTONE} {PANTONE3015C} {PANTONE\SpotSpace 3015\SpotSpace C} {1 0.3 0 0.2}
+% \SetPageColorSpace{PANTONE}
+
+% \usepackage[table]{xcolor}
+% % Define colors
+% \definecolor{mblue}{HTML}{1F77B4}
+% \definecolor{morange}{HTML}{FF7F0E}
+% \definecolor{mgreen}{HTML}{2CA02C}
+% \definecolor{mred}{HTML}{D62728}
+% \definecolor{mpurple}{HTML}{9467BD}
+% \definecolor{mbrown}{HTML}{8C564B}
+% \definecolor{mpink}{HTML}{E377C2}
+% \definecolor{mgrey}{HTML}{7F7F7F}
+% \definecolor{mlime}{HTML}{BCBD22}
+% \definecolor{mcyan}{HTML}{17BECF}
+
+\newtheorem{definition}{Definition}[section]
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}{Proposition}[section]
+
+% Set new commands
+\newcommand{\codeword}[1]{\texttt{\textcolor{MidnightBlue}{#1}}}
+%\newcommand{\codefunc}[1]{\texttt{\textcolor{OliveGreen}{#1}}}
+\let\oldemptyset\emptyset
+\let\emptyset\varnothing
+\newcommand{\codefunc}[1]{\texttt{#1}}
+\newcommand{\m}[1]{\mathcal{#1}}
+\newcommand{\n}[1]{\mathscr{#1}}
+\newcommand{\bound}{\mathscr{B}}
+\newcommand{\akker}{\mathscr{A}}
+\newcommand{\nset}{\mathcal{N}}
+\newcommand{\vset}{\mathcal{V}}
+\newcommand{\pre}[1]{ {}^{#1} }
+\newcommand{\ceil}[1]{{\left \lceil #1 \right \rceil }}
+\newcommand{\floor}[1]{{\left \lfloor #1 \right \rfloor }}
+
+
+\begin{document}
+\history{Date of publication xxxx 00, 0000, date of current version xxxx 00, 0000.}
+\doi{10.1109/TQE.2020.DOI}
+
+\title{Quasilinear Time Decoding Algorithm for \\Topological Codes with High Error Threshold}
+\author{
+    \uppercase{S. Hu}\authorrefmark{1}, \IEEEmembership{Fellow, IEEE},
+    \uppercase{and D. Elkouss\authorrefmark{2}}
+}
+\address[1]{Department of Physics, Delft University of Technology (email: watermarkhu@outlook.com)}
+\address[2]{QuTech, Delft University of Technology, Lorentzweg 1
+2628CJ Delft, The Netherlands (email: d.elkousscoronas@qutech.nl)}
+
+\tfootnote{This paragraph of the first footnote will contain support 
+information, including sponsor and financial support acknowledgment. For 
+example, ``This work was supported in part by the U.S. Department of 
+Commerce under Grant BS123456.''}
+
+\markboth
+{S. Hu \headeretal: IEEE Transactions on Quantum Engineering}
+{S. Hu \headeretal: IEEE Transactions on Quantum Engineering}
+
+\corresp{Corresponding author: First A. Author (email: author@ boulder.nist.gov).}
+
+\begin{abstract}
+    Quantum computing has the potential to transcend the information technology as we know it. Small scale quantum systems are already possible today, and the goal is to scale up these quantum architectures to build practical quantum devices. A major limiting factor in quantum computing is the accumulation of errors that may be caused by various sources. A solution is to encode the logical information in a larger amount of physical qubits to increase resilience and to decode the information with a decoder. 
+    
+    We introduce a modification of the Union-Find decoder that aims to futher decrease the weight of the correction operator, similarly to the Minimum-Weight Perferct Matching decoder. The modified decoder, dubbed the Union-Find Balanced-Bloom decoder, manages to have an increased error threshold compared to the Union-Find decoder of any lattice size. For small lattice sizes, the Union-Find Balanced-Bloom decoder performs near the code threshold of the Minimum-Weight Matching decoder. We manage to maintain a quasilinear worst-case time complexity of $\m{O}(N\log{N})$. 
+\end{abstract}
+
+\begin{keywords}
+    Quantum Computing, Quantum Error Correction, Surface Code
+\end{keywords}
+
+\titlepgskip=-15pt
+\maketitle
+
+\input{sections/introduction}
+\input{sections/surfacecode}
+\input{sections/matchingweight}
+\input{sections/ufbb}
+\input{sections/complexity}
+\input{sections/performance}
+\input{sections/conclusion}
+
+\printbibliography
+\EOD
+\end{document}
