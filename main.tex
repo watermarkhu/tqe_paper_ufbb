@@ -1,8 +1,9 @@
 \documentclass{ieeeaccess}
+\usepackage[OT1]{fontenc} 
 \usepackage{amsfonts, amsmath, amssymb, amsthm}
 \usepackage{algorithmic}
 \usepackage{graphicx}
-% \usepackage{caption}
+\usepackage{caption}
 % \DeclareCaptionFont{ieeeblue}{\color{accessblue}}
 % \DeclareCaptionLabelFormat{myformat}{\figcapfont{\textbf{#1}\textbf{#2}}}
 % \captionsetup{labelfont={bf,ieeeblue},labelformat=myformat}
@@ -15,28 +16,10 @@
 % \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
 %     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 \usepackage[style=ieee, sorting=none]{biblatex}
-\addbibresource{references.bib}
-
-% \usepackage{tikz}
-% \usetikzlibrary{shapes,calc,math,patterns,arrows,positioning,fadings}
-% % Required to make tikz work with ieeeaccess template
-% % https://tex.stackexchange.com/questions/440422/tikz-package-causing-error-in-ieee-access-template
-% \NewSpotColorSpace{PANTONE}
-% \AddSpotColor{PANTONE} {PANTONE3015C} {PANTONE\SpotSpace 3015\SpotSpace C} {1 0.3 0 0.2}
-% \SetPageColorSpace{PANTONE}
+\addbibresource{cit.bib}
 
 % \usepackage[table]{xcolor}
 % % Define colors
-% \definecolor{mblue}{HTML}{1F77B4}
-% \definecolor{morange}{HTML}{FF7F0E}
-% \definecolor{mgreen}{HTML}{2CA02C}
-% \definecolor{mred}{HTML}{D62728}
-% \definecolor{mpurple}{HTML}{9467BD}
-% \definecolor{mbrown}{HTML}{8C564B}
-% \definecolor{mpink}{HTML}{E377C2}
-% \definecolor{mgrey}{HTML}{7F7F7F}
-% \definecolor{mlime}{HTML}{BCBD22}
-% \definecolor{mcyan}{HTML}{17BECF}
 
 \newtheorem{definition}{Definition}[section]
 \newtheorem{lemma}{Lemma}[section]
@@ -99,8 +82,10 @@ Commerce under Grant BS123456.''}
 
 \input{sections/introduction}
 \input{sections/surfacecode}
-\input{sections/matchingweight}
+\input{sections/unionfind}
 \input{sections/ufbb}
+\input{sections/matchingweight}
+\input{sections/nodeset}
 \input{sections/complexity}
 \input{sections/performance}
 \input{sections/conclusion}
