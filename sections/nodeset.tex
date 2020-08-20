@@ -1,6 +1,6 @@
-\subsection{Node set data structure}\label{sec:nodeset}
+\subsection{Node-set data structure}\label{sec:nodeset}
 
-The calculation of the PMW requires to introduce a new data structure that we call the node-set of a cluster. The node-set of a cluster is a partition of the cluster such that each element of the partition consists of a set of adjacent vertices that are either interior elements in the associated graph or have equal PMW (Figure \ref{fig1}). The calculation of the PMW is performed by two depth-first searches of the node-set (Figure \ref{fig2}), where the PMW is translated into a node delay that determines the priority for cluster growth, such that the growth of a cluster moves towards equal PMW in the cluster (Balanced Bloom).
+The calculation of the PMW requires to introduce a new data structure that we call the node-set of a cluster, which coexists with the Union-Find data structure. The node-set of a cluster is a partition of the cluster such that each element of the partition - a node - consists of a set of adjacent vertices that are either interior elements in the associated graph or have equal PMW (Figure \ref{fig1}). This allows the calculation of the PMW to be reduced to the nodes of the cluster and is performed by two depth-first searches of the node-set (Figure \ref{fig2}), where the PMW is translated into a node delay that determines the priority for clustes growth, such that the growth of a cluster moves towards equal PMW in the cluster (Balanced Bloom).
 
 \Figure[htb](topskip=0pt, botskip=0pt, midskip=0pt){tikzfigs/tikz-figure1.pdf}{A node-set $\mathcal{N}$ vs. a vertex set $\mathcal{V}$, both representing the same cluster. Each shaded area covers the vertices of a different  node.\label{fig1}}
 
