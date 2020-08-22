@@ -1,4 +1,5 @@
 \documentclass{article}
+
 \usepackage{tikz}
 \usetikzlibrary{external,shapes,calc,math,patterns,arrows,positioning,fadings}
 \tikzexternalize[optimize=false]
@@ -101,7 +102,6 @@
     \draw[l1, ->, dashed, color=mblue] (1.75,1.2) -- +(90:0.5) arc (0:45:.5) -- +(135:0.4);
     \draw[l1, ->, color=mred] (1.4, 3) -- +(-45:1.1) arc (45:0:0.5) -- +(-90:0.7);
     \draw[l1, ->, color=mred] (1.3, 2.1) -- +(-90:0.9) arc (180:225:.5) -- +(-45:0.7);
-    \draw[l1, ->, color=mred] (0.6, 1.3) -- +(225:.3);
     \draw[l1, ->, color=mred] (0.6, 0.3) -- +(225:.3);
     \draw[l1, ->, color=mred] (1.3, 0.3) -- +(-90:.2);
     \node[text=mblue] at (0,2.2) {Parity};
@@ -111,4 +111,5 @@
     \path (3,.5) node[node1, even]{} -- +(.2,0) node[anchor=west] {even parity}; 
     \path (3,0) node[node1, odd]{} -- +(.2,0) node[anchor=west] {odd parity}; 
 \end{tikzpicture}
+
 \end{document}

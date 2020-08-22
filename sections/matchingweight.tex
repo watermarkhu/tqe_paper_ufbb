@@ -1,14 +1,16 @@
 \subsection{Potential matching weight}\label{sec:matchingweight}
 
-In the following we give some intuition into the improvement of the Union-Find Balanced Bloom decoder upon the original Union-Find decoder. Consider the cluster containing the set of edges $\m{E}$ and set of non-trivial vertices $\mathcal{V}=\{v_0,v_1,v_2\}$ in Figure \ref{fig0}. Now let us investigate the weights of a matching if an additional non-trivial vertex $v'$ is connected to the cluster. If $v'$ is connected to $v_0$ or to $v_2$, then the resulting matching has a total weight of 2: $(v',v_0)$ and $(v_1,v_2)$, or $(v_0,v_1)$ and $(v_2,v')$. However, if $v'$ is connected to vertex $v_2$, then the total weight is 3: $(v', v_1)$ and $(v_0, v_2)$. Inspired by this idea, we introduce the concept of potential matching weight (PMW) of a vertex. 
+In the following we give some intuition into the improvement of the Union-Find Balanced Bloom decoder upon the original Union-Find decoder. Consider the cluster containing the set of non-trivial vertices $\mathcal{V}=\{v_0,v_1,v_2\}$ and set of edges $\m{E}=\{(v_0,v_1), (v_1, v_2)\}$ in Figure \ref{fig0}. Now let us investigate the weights of a matching if an additional non-trivial vertex $v'$ is connected to the cluster. If $v'$ is connected to $v_0$ or to $v_2$, then the resulting matching has a total weight of 2: $(v',v_0)$ and $(v_1,v_2)$, or $(v_0,v_1)$ and $(v_2,v')$. However, if $v'$ is connected to vertex $v_2$, then the total weight is 3: $(v', v_1)$ and $(v_0, v_2)$. Inspired by this idea, we introduce the concept of potential matching weight (PMW) of a vertex. 
 
 \Figure[htb](topskip=0pt, botskip=0pt, midskip=0pt){tikzfigs/tikz-figure0.pdf}{Unbalanced matching weight in cluster vertex set $\mathcal{V}$. The matching edges (dashed) correspond to the position of $v'$.\label{fig0}}
 
 \begin{definition}\label{def:pmw}
-    Consider an odd-parity cluster $c_i$ containing a vertex $v$. The Potential Matching Weight (PMW) of the vertex $v$ is the matching weight in the subset of edges of an odd-parity cluster $c_i$ in a hypothetical union with another cluster $c_j$ in the next growth iteration, where the merging boundary edge is supported by $v$. 
+    Consider an odd-parity cluster $c(\m{V},\m{E})$ containing a vertex $v\in \m{V}$. The Potential Matching Weight (PMW) of the vertex $v$ is the matching weight in the subset of edges of the cluster $c$ in a hypothetical union with another odd-parity cluster in the next growth iteration, where the merging boundary edge is $(v,v')$. 
     \begin{equation}
-      PMW(v) = \abs{\m{C} \cap \m{E}} + 1 |\text{ merge to even cluster on } v
+      PMW(v) = \abs{\m{C} \cap (\m{E} \cup (v, v'))} + 1 \mid v' \notin \m{V} 
     \end{equation}
 \end{definition}
-In other words, the potential matching weight is a vertex-specific predictive heuristic to the matching weight assuming a union in the next growth iteration. However, the calculation of the potential matching weight is seemingly not as straight forward, especially for clusters of increasingly larger size. Furthermore, if the potential matching weight is to be calculated for every vertex with boundary edges in all clusters in every growth iteration, the algorithm's time complexity would increase dramatically. Luckily, this calculation can be performed on a reduced graph of the cluster, which requires an additional data structure outlined in the next section. 
+In other words, the potential matching weight is a vertex-specific predictive heuristic to the matching weight assuming a union in the next growth iteration. 
+
+However, the calculation of the potential matching weight is seemingly not as straight forward, especially for clusters of increasingly larger size. Furthermore, if the potential matching weight is to be calculated for every vertex with boundary edges in all clusters in every growth iteration, the algorithm's time complexity would increase dramatically. Luckily, this calculation can be performed on a reduced graph of the cluster, which requires an additional data structure outlined in the next section. 
 
