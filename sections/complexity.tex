@@ -1,6 +1,9 @@
 
 \section{Complexity of Balanced-Bloom}\label{sec:complexity}
 
+\Figure[htb](topskip=0pt, botskip=0pt, midskip=0pt){tikzfigs/tikz-figure6.pdf}{bla.).\label{fig6}}
+
+
 In this section, we will find the time complexity of the Union-Find Balanced-Bloom decoder (Algorithm \ref{algo:ufbb}) using an analytic approach. As the Union-Find Balanced-Bloom decoder is a modification of the Dynamic-forest Bucket Union-Find decoder (Algorithm \ref{algo:dbuf}), which is known to have a time complexity of $\m{O}(N\alpha(N))$ (Section \ref{sec:ufcomplexity}), we will only consider the added complexity that is made by the modification. The additional contribution to the complexity of the Dynamic-forest Bucket Union-Find decoder can be divided into two parts. First is the contribution by the depth-first searches of \codefunc{Calcparity} and \codefunc{Calcdelay}, the parity and delay calculations, which we dub the \emph{PDC complexity}, treated in Section \ref{sec:pdfcomplexity}. The second contribution will be caused by the replacement of \codefunc{Grow} with \codefunc{Ngrow}, where now an additional depth-first search of the node-tree of every cluster needs to be performed to access its boundary edges stored at the nodes and grow them with \codefunc{Bloom}. We call this second contribution the \emph{bloom complexity}, which is detailed in Section \ref{sec:bloomcomplexity}.
 
 \subsection{PDC complexity}\label{sec:pdfcomplexity}

@@ -1,8 +1,34 @@
 \section{Performance}\label{sec:performance}
 
 
-\Figure[htb](topskip=0pt, botskip=0pt, midskip=0pt){tikzfigs/threshold_ufbb.pdf}{bla\label{threshold_ufbb}}
-\Figure[htb](topskip=0pt, botskip=0pt, midskip=0pt){tikzfigs/comp_ufbb_toric_2d_p98.pdf}{bla\label{tmw_comp}}
+We benchmark the performance of the Union-Find Balanced-Bloom decoder of Algorithm \ref{algo:ufbb} using our application in Python3 (see Appendix \ref{ap:oopsurfacecode}). This is done by Monte Carlo simulations of decoding on a simulated lattice and to fit for the code threshold, described in Section \ref{sec:simthres}. For the independent noise model (Definition \ref{def:independent}), we simulate on lattice sizes $L_{small}=[8, 16, 24, 32, 40, 48, 56, 64]$ with a minimum of $96.000$ samples and on $L_{big}=[72, 80, 88, 96]$ with a minimum of $28.800$ samples. For the phenomenological noise model (Definition \ref{def:pheno}), we simulate on lattice sizes $L_{small}=[8,12,16,20,24]$ with a minimum of $105.600$ samples and on lattice sizes $L_{big}=[28, 32, 36, 40, 44]$ with $13.200$ samples. 
+
 \Figure[htb](topskip=0pt, botskip=0pt, midskip=0pt){tikzfigs/threshold_comparison.pdf}{bla\label{thres_comp}}
+
+
+\subsection{Threshold}
+
+We had initially simulated for the decoding success rates for the range of lattices in $L_{small}$, which is the same range used when benchmarking the various implementations of the Union-Find decoder in Section \ref{sec:ufperformance}. For $L_{small}$, we find that, except for the environment of planar code with independent noise, the thresholds of the Union-Find Balanced-Bloom decoder are increased from the DBUF thresholds, and moves close to the thresholds of the MWPM decoder. We also observe an increase in decoding success rate at the threshold $k_{th}$ from DBUF, which is also the case for the environment of planar code with independent noise. For the range of lattices in $L_{big}$ (Figure \ref{fig:threshold_ufbbbig}), the threshold of the Union-Find Balanced-Bloom decoder decreases to below DBUF thresholds. This does not necessarily mean that it performs worse, as $k_{th}$ is still above DBUF's values, but does raise questions on the scalability of the Union-Find Balanced-Bloom decoder. In fact, if we look closely at the values of $k_C$ (Figure \ref{fig:thres_ufbb_toric_2d_data}), we find that the fit does not accurately represent the underlying data points, which is different behavior from the MWPM and DBUF decoders. The threshold and $k_C$ of the Union-Find Balanced-Bloom decoder may not be accurate for comparison. 
+
+For this reason, we have applied a \emph{sequential fit} to the data acquired in the Monte Carlo simulations of lattices of $L = L_{small} \cup L_{big}$. In the sequential fit, we iterate stepwise in the ordered list of lattice sizes $L$ and fit for the data of $L_i, L_{i+1}$ for $i \in |L|-1$ iterations. The fit thus returns an error threshold in the range of the chosen lattice sizes. The range of thresholds $p_{th}(L_i, L_{i+1})$ for the environment of toric code with independent noise is plotted in Figure \ref{fig:thres_ufbb_toric_2d_seq}. We see that the sequential fits follow a trend where the increase in the input lattice sizes results in a decrease in $p_{th}$ but increase in $k_{th}$. The range of thresholds coordinates $(p_{th}, k_{th})$ is plotted in Figure \ref{fig:thres_ufbb_toric_2d_comp}, together with the data acquired from the simulations for the performance of the MWPM decoder and the DBUF decoder. Similar figures for the Monte Carlo simulations on the planar code and the phenomenological noise model are included in Figures \ref{fig:thres_ufbb_planar_2d}, \ref{fig:thres_ufbb_toric_3d}, and \ref{fig:thres_ufbb_planar_3d}. 
+
+We ascribe the degradation of the threshold error rate to the \emph{parity inversion} effect of Definition \ref{def:parityinversion}. Recall from Lemma \ref{lem:eqstate} that the number of iterations waited before a union $I_t$ is proportional to the number of iterations required to reach the balanced-bloom state (Definition \ref{def:balancedbloom}) $M_{t+1}$, where $(I:M)$ is the equilibrium state of Definition \ref{def:eqstate}. By setting the equilibrium factor to $k_{eq}=\frac{1}{2}$, the equilibrium state is occupied half on average. The degradation is caused by the proportionality of the number of parity inversions and consequently equilibrium-state parameter $M$ to the lattice size. As the lattice size increases, the equilibrium state is still occupied half on average, but the absolute difference in $M-I$ increases. It is thus increasingly more unlikely that the balanced-bloom state is reached. 
+
+Overall, for small lattice sizes, the Union-Find Balanced-Bloom decoder has an increased error threshold $p_{th}$ from the threshold of the Union-Find decoder and is comparable to the threshold values of the Minimum-Weight Perfect Matching decoder. The error threshold decreases for larger lattice sizes, but the Union-Find Balanced-Bloom decoder still has an increased performance, which is now apparent by an increased decoding success rate at the threshold $k_{th}$. The improvement across all lattice sizes is most apparent when comparing the range of threshold coordinates in $(p_X, k_C)$ space, where the coordinates now occupy a range that is not possible with the Union-Find decoder. 
+
+\Figure[htb](topskip=0pt, botskip=0pt, midskip=0pt){tikzfigs/threshold_ufbb.pdf}{bla\label{threshold_ufbb}}
+
+
+\subsection{Matching weight and running time}
+
+Finally, we plot the average matching weight and running time of the Union-Find Balanced-Bloom (UFBB) compared with the Dynamic-forest Bucket Union-Find decoder (DBUF) and the Minimum-Weight Perfect Matching (MWPM) decoder for data acquired on simulations on a toric code with independent noise and $p_X = 0.1$ in Figure \ref{fig:ufbb_tmwcomp_toric_2d}. We can see from this figure that the Union-Find Balanced-Bloom decoder has a constant decreased weight. As for the running time, the UFBB decoder offers a midway choice between the MWPM decoder and DBUF decoder. We refer to Figures \ref{fig:mwcomp_ufbb} and \ref{fig:tcomp_ufbb} for the same plots but on a planar code or phenomenological noise, for which we observe the same behavior. 
+
+We find that the decrease in weight is constant across the range of values of $p_X$, which is also the case for the planar code and the phenomenological noise model. We can compare the decrease in matching weight as the ratios between the normalized matching weight between the UFBB and DBUF decoders as
+\begin{equation}
+  r_{\abs{\m{C}}}=\frac{\abs{\m{C}_{UFBB}}/\abs{\m{C}_{MWPM}}}{\abs{\m{C}_{DBUF}}/\abs{\m{C}_{MWPM}}}. 
+\end{equation}
+We find the averaged values for $r_{\abs{\m{C}}}$ from the Monte Carlo simulations on the toric and planar lattices, and with the independent and phenomenological noise models, in Table \ref{tab:nmwratio}. The Union-Find Balanced-Bloom decoder successfully decreases the matching weight from the Dynamic-forest Bucket Union-Find decoder. The decrease is more apparent under the independent noise model. 
+
+\Figure[htb](topskip=0pt, botskip=0pt, midskip=0pt){tikzfigs/comp_ufbb_toric_2d_p98.pdf}{bla\label{tmw_comp}}
 % \Figure[htb](topskip=0pt, botskip=0pt, midskip=0pt){tikzfigs/threshold_comparison_dense.pdf}{bla\label{thres_comp_d}}
 % this can be plotted with a shared y-axis
