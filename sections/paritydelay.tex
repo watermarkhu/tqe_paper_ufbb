@@ -11,15 +11,15 @@ np_\beta =
 
 In the second DFS, we calculate for the difference in node suspension $\delta ns$ of a node $n_\beta$ with its parent $n_\alpha$. We can choose an arbitrary \textbf{node delay} $nd$ for the root node such as $nd_r=0$ and add the difference $\delta ns$ during each step to obtain $nd$ for every node. This node delay of a node $n_\beta$ is only dependent on the node radii of itself $nr_\beta$ and its parent $nr_\alpha$, the length of node-tree edge $(n_\beta, n_\alpha)$ and its parity $np_\beta$. 
 \begin{multline}\label{eq:delayequation}
-    nd_\beta = nd_\alpha + \Bigg \lceil 2k_{eq}\bigg(\ceil{\frac{nr_\beta}{2}} - \floor{\frac{nr_\alpha + nr_\beta \bmod 2}{2}}\\
+    nd_\beta = nd_\alpha + \Bigg \lceil 2k_{inv}\bigg(\ceil{\frac{nr_\beta}{2}} - \floor{\frac{nr_\alpha + nr_\beta \bmod 2}{2}}\\
     - (-1)^{np_\beta}\abs{(n_\beta,n_\alpha)}\bigg) - (nr_\beta - nr_\alpha) \bmod 2 \Bigg \rceil
 \end{multline}
-Here, the \textbf{equilibrium factor} $k_{eq}$ is a constant that deals with the inversion of node parities in a node-tree during merges of clusters, detailed in Section \ref{sec:nodejoin}. 
+Here, the \textbf{inverion factor} $k_{inv}$ is a constant that deals with the inversion of node parities in a node-tree during merges of clusters, detailed in Section \ref{sec:nodejoin}. 
 
 \Figure[htb](topskip=0pt, botskip=0pt, midskip=0pt){tikzfigs/tikz-figure3.pdf}{Two depth-first searches on $\mathcal{N}$ to compute node parities (head recursively) and delays (tail recursively).\label{fig3}}
 
 There is a final step in calculating the node suspension from the node delay, which are related by
-\begin{equation}
+\begin{equation}\label{eq:suspension}
     ns = nd - \max_{nd_i \in \nset} nd_i - nw, 
 \end{equation}
 where $nw$ is equal to the number of iterations a node has \textbf{waited} or has been suspended from growth. The maximum node delay can be maintained during the second DFS of the node-tree. The node suspension itself is calculated dynamically during the growth of the cluster. 

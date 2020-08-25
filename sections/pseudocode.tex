@@ -1,51 +1,35 @@
 \subsection{Pseudocode}
 
+The full version of the algorithm we have described is given in Algorithm \ref{algo:ufbb}. Note that this pseudocode includes shorted steps included in the pseudocode of the Union-Find decoder \cite{delfosse2017almost}. This is done for clarity on the additions of the Node-Suspension data structure and protocols. The first block 1-4 initilizes the clusters and described the loop of cluster growth. Block 2 contains lines 5-8 and describes the DFS's related to the calculation of node parities and delays, and the DFS of the cluster growth. Block 3 contains lines 9-17 described the combined merging protocols of the Union-Find and Node-Suspension data structures. Node that lines 16-17 contain an extra step to ensure that the vertex-trees are always acyclic. The final block in line 17 is the peeling decoder \cite{delfosse2017linear}. 
 \begin{algorithm}[htbp]
     \BlankLine
     \KwData{A graph $G=(\m{V},\m{E})$, an erasure $\m{R} \subseteq \m{E}$ and syndrome $\sigma \subseteq \m{V}$}
     \KwResult{Correction set $\m{C}$}
     \BlankLine
-    \tcp{Syndrome validation}
-    Initialize clusters $c_i$ with disjoint-set trees $\m{V}_i$, node-trees $\nset_i$ and boundaries at the nodes\;
-    Initialize $\m{L}_b$\tcp*{Ensures weighted growth}
-    \codefunc{Place} odd-parity clusters in $\m{L}_b$ (Algorithm \ref{algo:place})\;
-    \For{bucket $b_k$ in $\m{L}_b$}{
-      Initialize $\m{L}_m=\emptyset, \m{L}_p=\emptyset$\;
-      \For{$c_i$ in $b_k$}{
-        \If{$c_i.bucket$ is $k$}{
-  
-          \If{$c_i.r_u$ exists\tcp*{There is a undefined node subroot}}{
-            \codefunc{Calcparity}$(c_i.n_u)$ (Algorithm \ref{algo:calcparity})\;
-            \codefunc{Calcdelay}$(c_i.n_u, c_i)$ (Algorithm \ref{algo:calcdelay})\;
-          }
-          \codefunc{Ngrow}$(c_i.n_r, c_i, \m{L}_m)$ (Algorithm \ref{algo:bbgrow}) \tcp*{Recursively applied descendants}
-          add $c_i$ to $\m{L}_p$\;
+    Initialize cluster vertex-trees, node-trees and other of UF.\;
+    Create the list $\m{L}$ of odd clusters.\;
+    \While(){$\m{L}$ is not empty}{
+      Initialize the fusion list $\m{F}$ as an empty list.\;
+      \For(){cluster $c\in\m{L}$}{
+        \If(){pointer to even sub-root $n_e$ exists}{
+          Apply DFS's to calculate node parities and delays (Equations \eqref{eq:nodeparity}, \eqref{eq:delayequation}) in partition of even sub-tree;
         }
+        Apply DFS from root $n_r$ to all leafs. If $ns=0$ (Equation \eqref{eq:suspension}), grow all boundary edges of vertices in the node a half-edge per the Union-Find decoder, such that grown edges are added to $\m{F}$. If $ns\neq0$, apply $nw=nw+1$ and continue the DFS.\;
       }
-      \For{$(u,v)$ in $\m{L}_m$}{
-        get roots $r_u=\codefunc{Find}(u), r_v=\codefunc{Find}(v)$ (Algorithm \ref{algo:find})\;
-        \eIf{$r_u \neq r_v$}{
-          apply $\codefunc{Union}(r_u,r_v)$ (Algorithm \ref{algo:unionweight} or \ref{algo:unionrank}), merge boundary lists\;
-  
-          \eIf{$u.n$ exists and $v.n$ exists}{
-            get clusters $c_u, c_v$ and merged cluster $c_{uv}$\;
-            \codefunc{Join}$(u.n, v.n, c_u, c_v, c_{uv})$ (Algorithm \ref{algo:join})\tcp*{Merge node-trees}
-          }(either $u$ or $v$ is a new vertex){
-            save node $n$ to new vertex\tcp*{Save node to new vertex}
+      \For(){edge $(u,v) \in \m{F}$}{
+        \eIf(){$\codefunc{Find}(u)\neq\codefunc{Find}(v)$}{
+          Merge vertex-trees by weighted \codefunc{Union}.\;
+          \eIf(){$u \in n_v$ and $v \in n_v$}{
+            Merge node-trees by \codefunc{Join}.\;
+          }(){
+            Add $u$ or $v$ to $n_v$ or $n_u$, respectively.\;
           }
-        }{
-          Subtract 1 from $(u,v).support$\tcp*{Maintains dynamic tree}
+        }(){
+          Subtract 1 from $(u,v)$ in \emph{Support}.\;
         }
-      }
-      \For{cluster $c_i$ in $\m{L}_p$}{
-        $\codefunc{Place}(c_i, \m{L}_b)$ (Algorithm \ref{algo:place})\;
       }
     }
-    \KwRet{Validated erasure forest $\bar{\m{T}_\m{R}}$}
-    \BlankLine
-    \tcp{Peeling decoder}
-    Run Peeling decoder (Algorithm \ref{algo:peel} or \ref{algo:peelbound}) with forests $\bar{\m{T}_\m{R}}$
-    \BlankLine
-    \caption{Union-Find Balanced-Bloom decoder}\label{algo:ufbb}
+    Apply the peeling decoder.
+    \caption{Union-Find Node-Suspension decoder}\label{algo:ufbb}
   \end{algorithm}
     
