@@ -43,6 +43,22 @@
 \newcommand{\ceil}[1]{{\left \lceil #1 \right \rceil }}
 \newcommand{\floor}[1]{{\left \lfloor #1 \right \rfloor }}
 
+% Set algorithm2e package settings
+\usepackage[linesnumbered, ruled, vlined]{algorithm2e}
+\SetAlgoCaptionLayout{centerline}
+\setlength{\algoheightrule}{1pt}
+\setlength{\algotitleheightrule}{1pt}
+\setlength{\interspacetitleboxruled}{.5em}
+\SetStartEndCondition{ }{}{}
+\SetKwProg{Fn}{def}{\string:}{}
+\SetKw{KwTo}{in}
+\SetKwFor{For}{for}{\string:}{}
+\SetKwIF{If}{ElseIf}{Else}{if}{ then}{else if}{else}{}
+\SetKwFor{While}{while}{ do}{}
+\SetInd{0.1em}{0.5em}
+\SetAlgoNoEnd\DontPrintSemicolon
+\SetAlFnt{\small}
+
 
 \begin{document}
 \history{Date of publication xxxx 00, 0000, date of current version xxxx 00, 0000.}
@@ -89,6 +105,8 @@ Commerce under Grant BS123456.''}
 \input{sections/nodeset}
 \input{sections/paritydelay}
 \input{sections/nodejoin}
+\input{sections/equilibrium}
+\input{sections/pseudocode}
 \input{sections/complexity}
 \input{sections/performance}
 \input{sections/conclusion}
