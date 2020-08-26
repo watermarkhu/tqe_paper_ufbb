@@ -1,4 +1,4 @@
-\subsection{Parity inversion}
+\subsection{Parity inversion}\label{sec:inversion}
 
 A unfortunate effect of the Node-Suspension data structure, which we dub parity-inversion, causes a decrease in the performance of the algorithm as the lattice size is increased (see Figure \ref{threshold_ufbb}). We will demonstrate this effect through the example in Figure \ref{fig5}\emph{a}. Consider three instances of the node-tree of Figure \ref{fig0} $\nset_a, \nset_b, \nset_c$, positioned closely to each other on the lattice. Every node in all node-trees have radius 1, and the node suspension in $n_1$ in each node-tree is 2. Thus means that if $n_1$ is suspended for two growth iterations, such as in Figure \ref{fig1}, all nodes have the same PMW. However, in this example, the node-trees $\nset_a, \nset_b, \nset_c$ merge after 1 iteration. The merged cluster is odd, thus we recalculate the node parities and delays per the rules set in the previous section. Now, the parities in the partition of the node-tree containing the nodes of $\nset_b$ have been inverted , and the calculated node suspensions in this partition increases dramatically. 
 

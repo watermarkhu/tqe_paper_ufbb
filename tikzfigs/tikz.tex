@@ -2,6 +2,7 @@
 \usepackage{etoolbox}
 \usepackage{tikz}
 \usepackage{alphalph}
+\usepackage{nicefrac}
 \usetikzlibrary{external,shapes,calc,math,patterns,arrows,positioning,fadings}
 \tikzexternalize[optimize=false]
 
@@ -120,9 +121,9 @@
 
     \begin{scope}[shift={(0, -4)}]
         \node at (-3, 0) {$\mathcal{N}$}; 
-        \node[node, pattern=horizontal lines, pattern color=mblue] at (0,0) (d) {3};
-        \node[nodel, pattern=dots , pattern color=mred] at (2,0) (e) {1};
-        \node[node, pattern=vertical lines, pattern color=mgreen] at (4,0) (f) {3};
+        \node[node, pattern=horizontal lines, pattern color=mblue] at (0,0) (d) {$\nicefrac{3}{2}$};
+        \node[nodel, pattern=dots , pattern color=mred] at (2,0) (e) {$\nicefrac{1}{2}$};
+        \node[node, pattern=vertical lines, pattern color=mgreen] at (4,0) (f) {$\nicefrac{3}{2}$};
         \node at (0,-1) {$n_0$};
         \node at (2,-1) {$n_1$};
         \node at (4,-1) {$n_2$};
@@ -164,13 +165,13 @@
     \end{scope}
 
     \begin{scope}[shift={(-1, -3)}, scale=1.5]
-        \node[tnode, pattern=horizontal lines, pattern color=mblue] at (0,0) (n0) {2};
+        \node[tnode, pattern=horizontal lines, pattern color=mblue] at (0,0) (n0) {1};
         \node[nodel, pattern=horizontal lines, pattern color=mblue!50!white, line width=0] at (1,0) {};
         \node[nodel, pattern=vertical lines,   pattern color=mred!50!white] at (1,0) (j01) {0};
-        \node[tnode, pattern=vertical lines , pattern color=mred] at (2,0) (n1) {2};
+        \node[tnode, pattern=vertical lines , pattern color=mred] at (2,0) (n1) {1};
         \node[nodel, pattern=vertical lines,   pattern color=mred!50!white, line width=0] at (3,0) {};
         \node[nodel, pattern=horizontal lines, pattern color=mgreen!50!white] at (3,0) (j12) {0};
-        \node[tnode, pattern=horizontal lines, pattern color=mgreen] at (4,0) (n2) {2};
+        \node[tnode, pattern=horizontal lines, pattern color=mgreen] at (4,0) (n2) {1};
         \node at (0,-.7) {$sn_0$};
         \node at (1,-.7) {$jn_{1}$};
         \node at (2,-.7) {$sn_2$};

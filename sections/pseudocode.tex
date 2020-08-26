@@ -1,4 +1,4 @@
-\subsection{Pseudocode}
+\subsection{Pseudocode}\label{sec:pseudocode}
 
 The full version of the algorithm we have described is given in Algorithm \ref{algo:ufbb}. Note that this pseudocode includes shorted steps included in the pseudocode of the Union-Find decoder \cite{delfosse2017almost}. This is done for clarity on the additions of the Node-Suspension data structure and protocols. The first block 1-4 initilizes the clusters and described the loop of cluster growth. Block 2 contains lines 5-8 and describes the DFS's related to the calculation of node parities and delays, and the DFS of the cluster growth. Block 3 contains lines 9-17 described the combined merging protocols of the Union-Find and Node-Suspension data structures. Node that lines 16-17 contain an extra step to ensure that the vertex-trees are always acyclic. The final block in line 17 is the peeling decoder \cite{delfosse2017linear}. 
 \begin{algorithm}[htbp]
