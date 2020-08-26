@@ -217,43 +217,45 @@
 
 
 
-\begin{tikzpicture}[scale=0.95]
-    \node (o1) [even, node1] at (1.5, 1) {$sn_1$};
-    \node (o2) [even, node1] at (1, 0) {$sn_2$};
-    \node (o3) [even, node1] at (2, 0) {$sn_o$};
-    \node (e4) [undef] at (3.5,1) {$sn_3$};
-    \node (e5) [undef] at (3.5,0) {$sn_e$};
+\begin{tikzpicture}[scale=0.9]
+    \node at (1.5,2) {$\nset_o$};
+    \node at (3.5,2) {$\nset_e$};
+    \node (o1) [even, node1] at (1.5, 1) {$n_1$};
+    \node (o2) [even, node1] at (1, 0) {$n_2$};
+    \node (o3) [even, node1] at (2, 0) {$n_o$};
+    \node (e4) [undef] at (3.5,1) {$n_3$};
+    \node (e5) [undef] at (3.5,0) {$n_e$};
     \draw[l1] (o2) -- (o1) -- (o3) (e4) -- (e5);
     \draw[l1, dashed] (o3) -- (e5) node[midway,below] (a) {};
-    \draw[l1, <-] (a) -- ++(0,-.5) node[below] {$\codefunc{Join}(s_3, s_5)$};
+    \draw[l1, <-] (a) -- ++(0,-.5) node[below] {$\codefunc{Join}(n_e, n_o)$};
   
-    \begin{scope}[shift={(4.5,1)}]
-    \node (o1) [even, node1] at (1.5, 1) {$sn_1$};
-    \node (o2) [even, node1] at (1, 0) {$sn_2$};
-    \node (o3) [even, node1] at (2, 0) {$sn_o$};
-    \node (e4) [undef] at (2,-2) {$sn_3$};
-    \node (e5) [undef] at (2,-1) {$sn_e$};
+    \begin{scope}[shift={(5,1)}]
+    \node (o1) [even, node1] at (1.5, 1) {$n_1$};
+    \node (o2) [even, node1] at (1, 0) {$n_2$};
+    \node (o3) [even, node1] at (2, 0) {$n_o$};
+    \node (e4) [undef] at (2,-2) {$n_3$};
+    \node (e5) [undef] at (2,-1) {$n_e$};
     \draw[l1] (o2) -- (o1) -- (o3) -- (e5) -- (e4);
     \draw[l1, ->, dashed, color=mblue] (e4) ++(-.7,0) -- + (0,1);
     \draw[l1, ->, color=mred] (o3) ++(.7,-.5) -- +(0,-1.5);
     \end{scope}
   
-    \begin{scope}[shift={(10,-1)}]
-    \node (o1) [undef] at (0.75, 0.75) {$sn_1$};
-    \node (o2) [undef] at (0, 0) {$sn_2$};
-    \node (o3) [undef] at (0, 1.5) {$se_o$};
-    \node (e4) [undef] at (0,3) {$sn_3$};
-    \node (e5) [undef] at (0.75,2.25) {$sn_e$};
+    \begin{scope}[shift={(11,-1)}]
+    \node (o1) [undef] at (0.75, 0.75) {$n_1$};
+    \node (o2) [undef] at (0, 0) {$n_2$};
+    \node (o3) [undef] at (0, 1.5) {$e_o$};
+    \node (e4) [undef] at (0,3) {$n_3$};
+    \node (e5) [undef] at (0.75,2.25) {$n_e$};
     \draw[l1] (o2) -- (o1) -- (o3) -- (e5) -- (e4);
     \draw[l1, <-, dashed, color=mblue] (e4) ++(-.7,0) -- +(0,-3);
     \draw[l1, ->, color=mred] (e4) ++(1.5,0) -- +(0,-3);
     \end{scope}
   
     \node at (0.5,2) {\emph{(a)}};
-    \node at (5,2) {\emph{(b)}};
-    \node at (8.5,2) {\emph{(c)}};
+    \node at (5.5,2) {\emph{(b)}};
+    \node at (9.5,2) {\emph{(c)}};
 
-    \begin{scope}[shift={(13,0)}]
+    \begin{scope}[shift={(15,0)}]
         \path (0, 2) node[even, node1] {} -- +(.5,0) node[anchor=west]{Suspension known};
         \path (0, 1) node[undef] {} -- +(.5,0) node[anchor=west]{Suspension undefined};
         \draw[l1, ->, color=mred] (-.25, -1) -- ++(0.5,0);

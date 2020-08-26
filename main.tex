@@ -12,6 +12,7 @@
 \usepackage[font={sf,scriptsize,stretch=0.84}, labelfont={bf,color=accessblue}]{caption}
 
 \usepackage{textcomp}
+\usepackage{nicefrac}
 \usepackage{mathtools}
 \DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
 % \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
@@ -66,7 +67,7 @@
 
 \title{Quasilinear Time Decoding Algorithm for \\Topological Codes with High Error Threshold}
 \author{
-    \uppercase{S. Hu}\authorrefmark{1}, \IEEEmembership{Fellow, IEEE},
+    \uppercase{S. Hu}\authorrefmark{1},
     \uppercase{and D. Elkouss\authorrefmark{2}}
 }
 \address[1]{Department of Physics, Delft University of Technology (email: watermarkhu@outlook.com)}
@@ -87,7 +88,7 @@ Commerce under Grant BS123456.''}
 \begin{abstract}
     Quantum computing has the potential to transcend the information technology as we know it. Small scale quantum systems are already possible today, and the goal is to scale up these quantum architectures to build practical quantum devices. A major limiting factor in quantum computing is the accumulation of errors that may be caused by various sources. A solution is to encode the logical information in a larger amount of physical qubits to increase resilience and to decode the information with a decoder. 
     
-    We introduce a modification of the Union-Find decoder that aims to futher decrease the weight of the correction operator, similarly to the Minimum-Weight Perferct Matching decoder. The modified decoder, dubbed the Union-Find Balanced-Bloom decoder, manages to have an increased error threshold compared to the Union-Find decoder of any lattice size. For small lattice sizes, the Union-Find Balanced-Bloom decoder performs near the code threshold of the Minimum-Weight Matching decoder. We manage to maintain a quasilinear worst-case time complexity of $\m{O}(N\log{N})$. 
+    We introduce a modification of the Union-Find decoder that aims to further decrease the weight of the correction operator, similarly to the Minimum-Weight Perfect Matching decoder. The modified decoder, dubbed the Union-Find Balanced-Bloom decoder, manages to have an increased error threshold compared to the Union-Find decoder of any lattice size. For small lattice sizes, the Union-Find Balanced-Bloom decoder performs near the code threshold of the Minimum-Weight Matching decoder. We manage to maintain a quasilinear worst-case time complexity of $\m{O}(N\log{N})$. 
 \end{abstract}
 
 \begin{keywords}
@@ -107,8 +108,6 @@ Commerce under Grant BS123456.''}
 \input{sections/nodejoin}
 \input{sections/inversion}
 \input{sections/pseudocode}
-
-\clearpage
 \input{sections/complexity}
 \input{sections/performance}
 \input{sections/conclusion}
