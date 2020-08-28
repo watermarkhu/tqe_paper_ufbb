@@ -1,36 +1,37 @@
 \subsection{Pseudocode}\label{sec:pseudocode}
 \FloatBarrier
-The full version of the algorithm we have described is given in Algorithm \ref{algo:ufbb}. Note that this pseudocode includes instructions that are shortened versions of the pseudocode of the Union-Find decoder \cite{delfosse2017almost}. This is done for clarity on the additions of the Node-Suspension data structure and protocols on top of the Union-Find pseudocode. The first block 1-4 initializes the clusters and described the loop of cluster growth. Block 2 contains lines 5-8 and describes the DFS's related to the calculation of node parities and delays, and the DFS of the cluster growth. Block 3 contains lines 9-17 described the combined merging protocols of the Union-Find and Node-Suspension data structures. Node that lines 16-17 contain an extra step to ensure that the vertex-trees are always acyclic. The final block in line 17 is the peeling decoder \cite{delfosse2017linear}. 
+The full version of the algorithm we have described is given in Algorithm \ref{algo:ufbb}. Note that this pseudocode includes instructions that are shortened versions of the pseudocode of the Union-Find decoder \cite{delfosse2017almost}. This is done for clarity on the additions of the Node-Suspension data structure and protocols on top of the Union-Find pseudocode. The first block  of lines\ref{algo:B1a}-\ref{algo:B1b} initializes the clusters and described the loop of cluster growth. Block 2 contains lines \ref{algo:B2a}-\ref{algo:grow} and describes the DFS's related to the calculation of node parities and delays, and the DFS of the cluster growth. Block 3 contains lines \ref{algo:B3a}-\ref{algo:B3b} described the combined merging protocols of the Union-Find and Node-Suspension data structures. Node that lines \ref{algo:dfa}-\ref{algo:dfb} contain an extra step to ensure that the vertex-trees are always acyclic. The final block in line \ref{algo:B4a} is the peeling decoder \cite{delfosse2017linear}. 
 
 \begin{algorithm}[htb]
     \BlankLine
     \KwData{A graph $G=(\m{V},\m{E})$, an erasure $\m{R} \subseteq \m{E}$ and syndrome $\sigma \subseteq \m{V}$}
     \KwResult{Correction set $\m{C}$}
     \BlankLine
-    Initialize cluster vertex-trees, node-trees and other of UF.\;
+    Initialize cluster vertex-trees, node-trees and other of UF.\;\label{algo:B1a}
     Create the list $\m{L}$ of odd clusters.\;
     \While(){$\m{L}$ is not empty}{
-      Initialize the fusion list $\m{F}$ as an empty list.\;
-      \For(){cluster $c\in\m{L}$}{
+      Initialize the fusion list $\m{F}$ as an empty list.\;\label{algo:B1b}
+      \For(){cluster $c\in\m{L}$ \label{algo:B2a}}{
         \If(){pointer to even sub-root $n_e$ exists}{
-          Apply DFS's to calculate node parities and delays (Equations \eqref{eq:nodeparity}, \eqref{eq:delayequation}) in partition of even sub-tree;
+          Apply DFS's to calculate node parities and delays (Equations \eqref{eq:nodeparity}, \eqref{eq:delayequation}) in partition of even sub-tree;\label{algo:pdc}
         }
-        Apply DFS from root $n_r$ to all leafs. If $ns=0$ (Equation \eqref{eq:suspension}), grow all boundary edges of vertices in the node a half-edge per the Union-Find decoder, such that grown edges are added to $\m{F}$. If $ns\neq0$, apply $nw=nw+1$ and continue the DFS.\;
+        Apply DFS from root $n_r$ to all leafs. If $ns=0$ (Equation \eqref{eq:suspension}), grow all boundary edges of vertices in the node a half-edge per the Union-Find decoder, such that grown edges are added to $\m{F}$. If $ns\neq0$, apply $nw=nw+1$ and continue the DFS.\;\label{algo:grow}
       }
-      \For(){edge $(u,v) \in \m{F}$}{
+      \For(){edge $(u,v) \in \m{F}$\label{algo:B3a}}{
         \eIf(){$\codefunc{Find}(u)\neq\codefunc{Find}(v)$}{
           Merge vertex-trees by weighted \codefunc{Union}.\;
-          \eIf(){$u \in n_v$ and $v \in n_v$}{
+          \eIf(){$u \in n_v$ and $v \in n_v$\label{algo:joina}}{
             Merge node-trees by \codefunc{Join}.\;
           }(){
-            Add $u$ or $v$ to $n_v$ or $n_u$, respectively.\;
+            Add $u$ or $v$ to $n_v$ or $n_u$, respectively.\;\label{algo:joinb}
           }
-        }(){
-          Subtract 1 from $(u,v)$ in \emph{Support}.\;
+        }(\label{algo:dfa}){
+          Subtract 1 from $(u,v)$ in \emph{Support}.\;\label{algo:dfb}
         }
       }
+      Update $\m{L}$ with odd clusters\; \label{algo:B3b}
     }
-    Apply the peeling decoder \cite{delfosse2017linear}.
+    Apply the peeling decoder \cite{delfosse2017linear}.\label{algo:B4a}
     \caption{Union-Find Node-Suspension decoder}\label{algo:ufbb}
   \end{algorithm}
     
