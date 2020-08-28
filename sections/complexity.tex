@@ -17,40 +17,51 @@ The cost of node suspension calculation is equal to the number of nodes traverse
 From rules 2 and 3, we conclude that $N_{sus}$ is proportional to the sum of sizes of all even node-trees during all mergers of the growth process on the lattice. Note that if many clusters merge within the same growth iteration, only the last even cluster counts towards the cost, since rule 3 ensures that the calculation is not performed on intermediate even partitions. To find the worst-case time complexity, we maximize $N_{sus}$, which is proportional to the computation time. We take a top-down approach of \textbf{cluster fragmentation}; starting from a single cluster that maximally occupies the lattice at the end of growth, and move back in time to find its ancestor clusters and their sizes. The maximization of $N_{sus}$ is in the repetitiveness of the recalculation over some parition of the final node-tree. 
 
 \begin{definition}\label{def:fragmentation}
-  Let the \emph{fragmentation} of an odd cluster with node-tree $\pre{k-1}\nset^o$ split it into a set of its ancestral node-trees. Here $k$ indicates the \emph{generation}, where larger $k$ indicates a more distant ancestor set of smaller node-trees. Let the fragmentation step $f$ be the combination of \emph{partial fragmentations (PF)} $f_o$, which fragments an odd node-tree into an even ancestor and an odd ancestor
+  Let the \emph{fragmentation} of an odd cluster with node-tree $\pre{k-1}\nset^o$ split it into a set of its ancester node-trees. Here $k-1$ indicates the \emph{fragmentation step number}, where larger step number $k$ refers to an ancestor node-tree of smaller size. Let the fragmentation $f$ be the combination of \emph{intermediate fragmentations} (IF) $f_o$, which fragments an odd node-tree into an even ancestor and an odd ancestor
   \begin{equation}\label{eq:pfe}
     f_o(\{\pre{k-1}\nset^o\}) = \m{F}^o_k = \{\pre{k}\nset^e_{-1}, \pre{k}\nset^o_0 \}, 
   \end{equation}
-  and PF $f_e$ fragments even node-trees into $n_f$ odd ancestors
+  and $f_e$, which fragments even node-trees into $n_f$ odd ancestors
   \begin{equation}\label{eq:pfo}
     f_e(\{\pre{k}\nset^e_{-1}\}) = \m{F}^e_k=\{\pre{k}\nset^{o}_1,...,\pre{k}\nset^o_{n_f}\},
   \end{equation}
-  such that a fragmentation step is
+  such that a fragmentation is
   \begin{equation}\label{eq:fstep}
     f(\{\pre{k-1}\nset^o\}) = \m{F}_k = \{\pre{k}\nset^o_0,\pre{k}\nset^{o}_1,...,\pre{k}\nset^{o}_{n_f}\}.
   \end{equation}
 \end{definition}
 
-A fragmentation step is only possible on an odd node-tree $\nset^o$ with $|{\nset^o}| \geq 3$. The fragmentation functions does not remove single-node node-trees from a set when applied, such that for an odd cluster of finite size, after $k_m$ fragmentation steps all odd ancestors in $\m{F}_{k_{m}}$ are single nodes. Using fragmentations, we can sum over the fragmentation generations to find the sum of even node-tree sizes
+A fragmentation $f$ is only possible on an odd node-tree $\nset^o$ with $|{\nset^o}| \geq 3$. The fragmentation functions does not remove single-node node-trees from a set when applied, such that for an odd cluster of finite size, after $k_m$ fragmentation steps all odd ancestors in $\m{F}_{k_{m}}$ are single nodes. Using fragmentations, we can sum over the fragmentation steps of the maximally occupying cluster with node-tree $\pre{0}\nset^o$ to find the sum of even node-tree sizes
 \begin{equation}\label{eq:npdc}
-  N_{sus} = 2\sum_{k=1}^{k_{m}}{ \sum_j{ \left\{ \abs{\pre{k}\nset_j^e} \big| \pre{k}\nset_j^e \in \m{F}^o_k(\pre{0}\nset^o)\right\} } },
+  N_{sus} = 2\sum_{k=1}^{k_{m}}{ \sum_j{ \left\{ \abs{\pre{k}\nset_j^e} \forall \pre{k}\nset_j^e \in \m{F}^o_k(\pre{0}\nset^o)\right\} } },
 \end{equation}
-for which we require (a) the number of generations $k_m$, (b) the number of odd ancestors $n_f$ in Equation \eqref{eq:pfo} and (c) the ratio between the node-tree sizes of an odd node-tree and its even ancestor. To find these values, we make two assumptions to simplify the sum: 
-\begin{enumerate}
-  \item Assume that all odd ancestors at generation $k_m$ are of a single node. 
-  \item Assume that cluster does not increase in size (vertex-tree) when grown, such that only mergers occur between existing clusters. 
-\end{enumerate}
-As a result of assumption 2, nodes are effectively not allowed to increase in radius. While this is only conceptually impossible, it maximizes the number of nodes on the lattice such that the sum in Equation \eqref{eq:pfo} forms an upper bound to $N_{sus}$. Furthermore, this assumption
+for which we require (a) the number of fragmentation steps $k_m$, (b) the number of odd ancestors $n_f$ in Equation \eqref{eq:pfo} and (c) the ratios between the node-tree sizes of an odd node-tree and its ancestors
+\begin{equation}\label{eq:ratio}
+  R_i = \frac{\abs{\pre{k}\nset^o_i}}{\abs{\pre{k-1}\nset^o}}, \hspace{0.5cm} \sum_{i=0}^{n_f}{R_i} = 1.
+\end{equation}
+
+To find these values, we assume that vertex-trees do not increase in size  when grown, and thus only mergers between clusters result in larger vertex-trees. As a consequence, nodes are effectively not allowed to increase in radius, and the number of vertices in the cluster equals the number of nodes in the node-tree. While this is not physically possible, the assumption maximizes the number of nodes on the lattice such that the sum in Equation \eqref{eq:pfo} forms an upper bound to $N_{sus}$.
+
+\begin{lemma}\label{lem:evenconstant}
+  For constant $R_i$ and $\abs{\vset}=\abs{\nset}$, the sum of all even node-tree sizes in every step is constant. 
+\end{lemma}
+\begin{proof}
+  For $k=1$, there is a single even ancestor $\pre{1}\nset^e$ of size 
+  \begin{equation*}
+    \abs{\pre{1}\nset^e} = (1 - R_0)\abs{\pre{0}\nset^o}.
+  \end{equation*}
+  For $k=2$, every odd node-tree in $\m{F}_1=\{\pre{1}\nset^o_0,...,\pre{1}\nset^{o}_{n_f}\}$ is fragmented by IF $f_o$ to an even ancestor $\pre{2}\nset^e_i$ for $i \in \{0,...,n_f \}$, such that 
+  \begin{equation*}
+    \sum_{i=0}^{n_f}{\abs{\pre{2}\nset^e_i}}  = \sum_{i=0}^{n_f}{R_i(1 - R_0)\abs{\pre{0}\nset^o}}= (1 - R_0)\abs{\pre{0}\nset^o}.
+  \end{equation*}
+  The same is true for all fragmentation steps $k$. 
+\end{proof}
 
 \begin{theorem}\label{the:fragnumber}
   Fragmentation number $n_f=2$ maximizes $N_{sus}$ in equation \eqref{eq:npdc}.
 \end{theorem}
 \begin{proof}
-  The sum of even node-tree sizes in each fragmentation step is constant per Lemma \ref{lem:equalevensum}. Thus, \eqref{eq:npdc} is maximized by having as many fragmentations steps as possible, or the largest possible $p$.  As $k_f$ increases the number of odd node-trees in each fragmentation step $f_o$, the average size of these odd node-trees has decreased. Consequently, the node-tree size decreases faster towards the minimum size of three nodes as more fragmentation steps are applied (Equation \eqref{eq:fstep}). As the sum of even node-tree sizes in each fragmentation step is the same, increasing $k_f$ decreases the number of fragmentation steps:
-  \begin{equation}
-    p \propto \frac{1}{k_f}.
-  \end{equation}
-  Hence, $N_{PDC}$ is maximized for the minimal value of $k_f$, which is $k_f = 2$.
+  The sum of even node-tree simzes in every fragmentation step is constant per Lemma \ref{lem:evenconstant}. Thus, \eqref{eq:npdc} is maximized by a largest possible $k_m$.  As $n_f$ increases the number of odd node-trees in each IF $f_o$, the average size of these odd node-trees decreases. As more fragmentations are applied, the node-tree sizes in the fragmented set approach the single-node node-tree. An increases in $n_f$ decreases the number of fragmentation steps as $ k_m \propto \frac{1}{n_f}$.  Hence, $N_{PDC}$ is maximized for the minimal value of $n_f$, which is $n_f = 2$.
 \end{proof}
 
 
