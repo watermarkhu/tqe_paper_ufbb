@@ -7,7 +7,8 @@ In this section, we will find the worst-cast time complexity of the Union-Find N
 
 \subsection{Suspension cost}\label{sec:suscomplexity}
 
-The cost of node suspension calculation is equal to the number of nodes traversed in the DFS's of the node parities and node delays. To find this number $N_{sus}(N)$ analytically, we utilize the rules of cluster growth and mergers. 
+The cost of node suspension calculation is equal to the number of nodes traversed in the DFS's of the node parities and node delays. To find this number $N_{sus}(N)$ analytically, we utilize the rules of cluster growth and mergers.
+
 \begin{enumerate}
   \item Weight growth states that clusters are grown in the order of sizes of their vertex-trees. 
   \item Joins between the node-trees between odd and even clusters always retains the root node of the odd cluster.
@@ -36,10 +37,10 @@ A fragmentation step is only possible on an odd node-tree $\nset^o$ with $|{\nse
 \end{equation}
 for which we require (a) the number of generations $k_m$, (b) the number of odd ancestors $n_f$ in Equation \eqref{eq:pfo} and (c) the ratio between the node-tree sizes of an odd node-tree and its even ancestor. To find these values, we make two assumptions to simplify the sum: 
 \begin{enumerate}
-  \item Assume that all odd ancestor at generation $k_m$ are of a single node. 
+  \item Assume that all odd ancestors at generation $k_m$ are of a single node. 
   \item Assume that cluster does not increase in size (vertex-tree) when grown, such that only mergers occur between existing clusters. 
 \end{enumerate}
-As a result of assumption 2, nodes are effectively not allowed to increase in radius. While this is only conceptually impossible, it maximizes the number of nodes on the lattice such that the sum in Equation \eqref{eq:pfo} forms an upper bound to $N_{sus}$. 
+As a result of assumption 2, nodes are effectively not allowed to increase in radius. While this is only conceptually impossible, it maximizes the number of nodes on the lattice such that the sum in Equation \eqref{eq:pfo} forms an upper bound to $N_{sus}$. Furthermore, this assumption
 
 \begin{theorem}\label{the:fragnumber}
   Fragmentation number $n_f=2$ maximizes $N_{sus}$ in equation \eqref{eq:npdc}.
