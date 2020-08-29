@@ -1,7 +1,7 @@
 
 \section{Complexity of Balanced-Bloom}\label{sec:complexity}
 
-\Figure[htb](topskip=0pt, botskip=0pt, midskip=0pt){tikzfigs/tikz-figure6.pdf}{bla.).\label{fig6}}
+\Figure[htb](topskip=0pt, botskip=0pt, midskip=0pt){tikzfigs/tikz-figure6.pdf}{The fragmentation of node-tree $\pre{k-1}\nset^o$ into its ancester node-trees, where the prefix $k_1$ indicates the fragmentation step number. In the intermediate fragmentation $f_o$, $\pre{k-1}\nset^o$ is fragmented into an odd ancestor $\pre{k}\nset^o_0$ and even ancestor $\pre{k}\nset^e_{-1}$. Consequently in the intermediate fragmentation $f_e$, $\pre{k}\nset^e_{-1}$ is fragmented to odd ancestors $\pre{k}\nset^o_{1}$ and $\pre{k}\nset^o_{2}$. With $n_f=2$, each intermediate fragmentation is the opposite of a join operation between twe node-trees. Futhermore, note that if $\abs{\vset_0} = \abs{\vset_1} = \abs{\vset_2}$, the vertex-tree sizes related to node trees $\pre{k}\nset^o_0, \pre{k}\nset^o_1, \pre{k}\nset^o_2$, each fragmentation step is the opposite of a growth iteration. \label{fig6}}
 
 In this section, we will find the worst-cast time complexity of the Union-Find Node-Suspension decoder. The addition cost of the original Union-Find decoder can be split in two parts: (A) the depth-first-searches (DFS's) related to the (re)calculation of the node parities and node delays in line \ref{algo:pdc}, and (B) the DFS related to the growth of a cluster in line \ref{algo:grow}. We dub these two parts the \textbf{suspension cost} and the \textbf{growth cost}, respectively. The \codefunc{Join} operation in lines \ref{algo:joina}-\ref{algo:joinb} only has a linear addition to the cost.
 
@@ -34,14 +34,14 @@ From rules \ref{rjoin} and \ref{rgrow}, we conclude that $N_{sus}$ is proportion
 
 A fragmentation $f$ is only possible on an odd node-tree $\nset^o$ with $|{\nset^o}| \geq 3$. The fragmentation functions does not remove single-node node-trees from a set when applied, such that for an odd cluster of finite size, after $k_m$ fragmentation steps all odd ancestors in $\m{F}_{k_{m}}$ are single nodes. Using fragmentations, we can sum over the fragmentation steps of the maximally occupying cluster with node-tree $\pre{0}\nset^o$ to find the sum of even node-tree sizes
 \begin{equation}\label{eq:npdc}
-  N_{sus} = 2\sum_{k=1}^{k_{m}}{ \sum_j{ \left\{ \abs{\pre{k}\nset_j^e} \forall \pre{k}\nset_j^e \in \m{F}^o_k(\pre{0}\nset^o)\right\} } },
+  N_{sus} = 2\sum_{k=1}^{k_{m}}{ \sum_{ \pre{k}\nset_j^e \in \m{F}^o_k(\pre{0}\nset^o) }{ \abs{\pre{k}\nset_j^e}} },
 \end{equation}
 for which we require (a) the number of fragmentation steps $k_m$, (b) the number of odd ancestors $n_f$ in Equation \eqref{eq:pfo} and (c) the ratios between the node-tree sizes of an odd node-tree and its ancestors
 \begin{equation}\label{eq:ratio}
   R_i = \frac{\abs{\pre{k}\nset^o_i}}{\abs{\pre{k-1}\nset^o}}, \hspace{0.5cm} \sum_{i=0}^{n_f}{R_i} = 1.
 \end{equation}
 
-To find these values, we assume that vertex-trees do not increase in size  when grown, and thus only mergers between clusters result in larger vertex-trees. As a consequence, nodes are effectively not allowed to increase in radius, and the number of nodes in the cluster equals the number vertices $\abs{\nset}=\abs{\vset}$. While this is not physically possible, the assumption maximizes the number of nodes on the lattice such that the sum in Equation \eqref{eq:pfo} forms an upper bound to $N_{sus}$.
+Normally, the number of nodes in a cluster is bounded by the number of vertices $\abs{\nset}\leq \abs{\vset}$. However, to find the parameters of Equation \eqref{eq:npdc}, we assume that vertex-trees do not increase in size  when grown, and thus only mergers between clusters result in larger vertex-trees. As a consequence, nodes are effectively not allowed to increase in radius, and the number of nodes in the cluster equals the number vertices $\abs{\nset}=\abs{\vset}$. While this is not physically possible, the assumption maximizes the number of nodes on the lattice such that the sum in Equation \eqref{eq:pfo} forms an upper bound to $N_{sus}$.
 
 \begin{lemma}\label{lem:evenconstant}
   For constant $R_i$ and $\abs{\nset}=\abs{\vset}$, the sum of all even node-tree sizes in every step is constant. 
@@ -95,43 +95,35 @@ Every fragmentation step on an odd cluster $\pre{k-1}\nset$ splits it into three
 
 The last unknown parameter for the maximization of $N_{sus}$ in Equation \eqref{eq:npdc} is $k_m$, the total number of fragmentation steps.
 
-\begin{theorem}
+\begin{theorem}\label{the:km}
   For $n_f = 2$ and $R_i = \{\nicefrac{1}{3},\nicefrac{1}{3},\nicefrac{1}{3}\}$, the maximum number of fragmentation steps is $k_m = \log_3{\abs{\pre{0}\nset^o}}$.
 \end{theorem}
 \begin{proof}
   In every fragmentation step, all node-trees are fragmented into 3 ancestors that are $\nicefrac{1}{3}$ the size of their descendant. The series of $k_m$ fragmentations is thus simply $k_m$ divisions of the node-tree $\pre{0}\nset^o$ in 3 parts until all ancestors have size 1.
 \end{proof}
 
-Now, all variables that are need to find the upper bound to $N_{sus}$ have been collected. From Lemma \ref{lem:evenconstant} and Theorem \ref{the:ratios}, we find that in every fragmentated set $\m{F}^o_k$ the sum of even node-tree sizes is bounded by $\nicefrac{2}{3}\abs{\pre{0}\nset^o}$. Filling this and the value for $k_m$ in Equation \eqref{eq:npdc} we find that
+Now, all variables that are needed to find the upper bound to $N_{sus}$ have been collected. From Lemma \ref{lem:evenconstant} and Theorem \ref{the:ratios}, we find that in every fragmented set $\m{F}^o_k$ the sum of even node-tree sizes is $\nicefrac{2}{3}\abs{\pre{0}\nset^o}$. Filling this and the value for $k_m$ in Equation \eqref{eq:npdc} we find that
 
 \begin{align}
-  \nonumber N_{sus} &\leq 2\sum_{k=1}^{k_{m}}{ \sum_j{ \left\{ \abs{\pre{k}\nset_j^e} \forall \pre{k}\nset_j^e \in \m{F}^o_k(\pre{0}\nset^o)\right\} } } \\
-  \nonumber         &\leq \sum_{k=1}^{\log_3{\abs{\pre{0}\nset^o}}} \frac{2}{3}\abs{\pre{0}\nset^o}\\
-                    &\leq \frac{2}{3}\abs{\pre{0}\nset^o}\log{\abs{\pre{0}\nset^o}}.
+  \nonumber N_{sus} &\leq 2\sum_{k=1}^{k_{m}}{ \sum_{ \pre{k}\nset_j^e \in \m{F}^o_k(\pre{0}\nset^o) }{ \abs{\pre{k}\nset_j^e} } } \\
+  \nonumber         &\leq 2\sum_{k=1}^{\log_3{\abs{\pre{0}\nset^o}}} \frac{2}{3}\abs{\pre{0}\nset^o}\\
+                    &\leq \frac{4}{3}\abs{\pre{0}\nset^o}\log{\abs{\pre{0}\nset^o}}.
 \end{align}
 
-Since we assumed that $\abs{\nset} = \abs{\vset}$, the maximum size of $\abs{\pre{0}\nset^o}$ is bounded by the system size $N$. The worst-case time complexity of the delay computation is thus bounded by $\m{O}(N\log_3{N})$. 
+The maximum size of $\abs{\pre{0}\nset^o}$ is bounded by the system size $N = \abs{V}$. The worst-case time complexity of the suspension calculation is thus $\m{O}(N\log_3{N})$. 
 
-\subsection{Bloom complexity}\label{sec:bloomcomplexity}
+\subsection{Growth cost}\label{sec:growthcost}
 
-To grow a cluster represented by a node-tree $\nset$, a depth-first search is performed on the node-tree to iterate over each boundary list that are stored at the nodes.
-\begin{definition}\label{def:nbloom}
-  Let the total number of times nodes are bloomed with \codefunc{Bloom} be $N_{bloom}$.
-\end{definition}
-
-Similar to the previous section, we assume a maximum number of nodes on the lattice where, in each cluster $|\nset| = |\vset|$ and $N_v = 0$. For a fragmentation step of $f(\pre{k-1}\nset^o)$ to $\{\pre{k}\nset^o_0, \pre{k}\nset^o_1, \pre{k}\nset^o_2\}$, $N_{bloom}$ is maximized if all three ancestral node-trees are grown. As the growth of every set $\nset$ adds $|\nset|$ to $N_{bloom}$, the total number of bloom can be found similarly to $N_{PDC}$ in Equation \eqref{eq:npdc}. The sum is now on all odd node-tree sizes in all $p$ fragmentation steps $\m{F}_k$:
-\begin{equation}\label{eq:nnode}
-  N_{bloom} \leq \sum^{p}_{k=1}\sum_j \left\{ \abs{\pre{k}\nset^o_j} \big| \pre{k}\nset^o_j \in \m{F}_k \right\}
+To grow a cluster represented by a node-tree $\nset$, a depth-first search (DFS) is performed on the node-tree to find all nodes that have zero suspension. The total cost of these DFS's are proportional to the total number of nodes encountered during these DFS's, which we dub $N_{grow}$. Using the definition of fragmentations of Definition \ref{def:fragmentation}, the cost of growth is propotional to
+\begin{equation}\label{eq:ngrow}
+  N_{grow} = 2\sum_{k=1}^{k_{m}}{ \sum_{ \pre{k}\nset_j^o \in \m{F}_k(\pre{0}\nset^o) }{ \abs{\pre{k}\nset_j^o} } }.
 \end{equation}
-For a full fragmentation of $\nset$ of size $|\nset|$, the sum of all set sizes in each fragmentation set $\m{F}$ is
-\begin{equation}\label{eq:sumsetsfrag}
-  \sum_j \left\{ \abs{\pre{k}\nset_j} \big| \pre{k}\nset^o_j \in \m{F}_k \right\} = \abs{\pre{0}\nset^o}.
-\end{equation}
-By filling in $p$ from \eqref{eq:numfrag}, we find that
+We assume again that no trivial vertices are added  to a cluster or $|\nset| = |\vset|$. Determined by rule \ref{rgrow}, $N_{grow}$ is maximized if there are as many as possible mergers to a combined odd node-tree, while a minimum number of ancestor node-trees are involved. This is again achieved through $n_f = 2$. Within each fragmentation step, the DFS's are performed on each of the node-trees $\{\pre{k}\nset^o_0, \pre{k}\nset^o_1, \pre{k}\nset^o_2\}$ if all three clusters are grown. This is the case for $R_0 = R_1 = R_2$ such that $\abs{\vset_0}= \abs{\vset_1}=\abs{\vset_2}$, and all three clusters are grown simultanously (rule \ref{rweight}). 
+
+For these values of $n_f$ and $R$, we can apply Theorem \ref{the:km} for $k_m$. For $|\nset| = |\vset|$, the sum of node-tree sizes in every fragmented set $\m{F}_k$ is exactly $\abs{\pre{0}\nset^o}$, and Equation \eqref{eq:ngrow} becomes an upper bound to $N_{grow}$: 
 \begin{align}
-  % \nonumber % Remove numbering (before each equation)
-  \nonumber & N_{bloom} & \leq \sum^{p}_{k=1}\sum_j \left\{ \abs{\pre{k}\nset^o_j} \big| \pre{k}\nset^o_j \in \m{F}_k \right\} & \\
-  \nonumber &           & \leq \sum_{k=1}^{\log_3{\abs{\pre{0}\nset^o}}} \abs{\pre{0}\nset^o}                                  & \\
-            &           & \leq \abs{\pre{0}\nset^o}\log_3{\abs{\pre{0}\nset^o}},                                               &
+  \nonumber N_{grow} &\leq 2\sum_{k=1}^{k_{m}}{ \sum_{\pre{k}\nset_j^o \in \m{F}_k(\pre{0}\nset^o)}{ \abs{\pre{k}\nset_j^o} } } \\
+  \nonumber         &\leq 2\sum_{k=1}^{\log_3{\abs{\pre{0}\nset^o}}} \abs{\pre{0}\nset^o}\\
+                    &\leq 2\abs{\pre{0}\nset^o}\log{\abs{\pre{0}\nset^o}}.
 \end{align}
-which again corresponds to a worst-case time complexity that is bounded by $\m{O}(N\log{N})$.
+which again corresponds to a worst-case time complexity $\m{O}(N\log_3{N})$.

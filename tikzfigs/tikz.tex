@@ -120,7 +120,7 @@
     \node at (-3, 2.5) {$\mathcal{V}$};
 
     \begin{scope}[shift={(0, -4)}]
-        \node at (-3, 0) {$\mathcal{N}$}; 
+        \node at (-3, 0) {$\mathcal{N}$};
         \node[node, pattern=horizontal lines, pattern color=mblue] at (0,0) (d) {$\nicefrac{3}{2}$};
         \node[nodel, pattern=dots , pattern color=mred] at (2,0) (e) {$\nicefrac{1}{2}$};
         \node[node, pattern=vertical lines, pattern color=mgreen] at (4,0) (f) {$\nicefrac{3}{2}$};
@@ -135,29 +135,29 @@
 % Node types
 \begin{tikzpicture}[scale=0.75]
     \node at (-3, 2) {$\mathcal{V}$};
-    \node at (-3, -3) {$\mathcal{N}$}; 
+    \node at (-3, -3) {$\mathcal{N}$};
     \begin{scope}[shift={(-1, 0)}, scale=1.5]
-        \node at (0,0) (0) {}; \node at (2,0) (1) {}; \node at (4,0) (2) {};        
+        \node at (0,0) (0) {}; \node at (2,0) (1) {}; \node at (4,0) (2) {};
         \path[pattern=horizontal lines, pattern color=mblue, rounded corners=10pt, rotate around={45:(0)}] (-1.1,-1.1) rectangle (1.1,1.1);
         \path[pattern=vertical lines, pattern color=mred, rounded corners=10pt, rotate around={45:(1)}] (0.9,-1.1) rectangle (3.1,1.1);
         \path[pattern=horizontal lines, pattern color=mgreen, rounded corners=10pt, rotate around={45:(2)}] (2.9,-1.1) rectangle (5.1,1.1);
-    
+
         \node[tnode, fill=white!70!mblue] at (0) (v0) {$v_1$};
         \node[tnode] at (-1,0) (v0l) {};
         \node[tnode] at (0,1) (v0u) {};
         \node[tnode] at (0,-1) (v0d) {};
-    
+
         \node[tnode, fill=white!70!mred] at (1) (v1) {$v_3$};
         \node[tnode] at (1,0) (v1l) {$v_{2}$};
         \node[tnode] at (2,1) (v1u) {};
         \node[tnode] at (2,-1) (v1d) {};
-    
+
         \node[tnode, fill=white!70!mgreen] at (2) (v2) {$v_5$};
         \node[tnode] at (3,0) (v2l) {$v_{4}$};
         \node[tnode] at (5,0) (v2r) {};
         \node[tnode] at (4,1) (v2u) {};
         \node[tnode] at (4,-1) (v2d) {};
-    
+
         \draw[l1] (v0l) -- (v0) -- (v1l) -- (v1) -- (v2l) -- (v2) -- (v2r);
         \draw[l1] (v0u) -- (v0) -- (v0d);
         \draw[l1] (v1u) -- (v1) -- (v1d);
@@ -211,8 +211,8 @@
     \node[text=mred] at (2.6,2.8) {Delay};
     \node at (0,3) {$\mathcal{N}$};
 
-    \path (3,.5) node[node1, even]{} -- +(.2,0) node[anchor=west] {even parity}; 
-    \path (3,0) node[node1, odd]{} -- +(.2,0) node[anchor=west] {odd parity}; 
+    \path (3,.5) node[node1, even]{} -- +(.2,0) node[anchor=west] {even parity};
+    \path (3,0) node[node1, odd]{} -- +(.2,0) node[anchor=west] {odd parity};
 \end{tikzpicture}
 
 
@@ -228,29 +228,29 @@
     \draw[l1] (o2) -- (o1) -- (o3) (e4) -- (e5);
     \draw[l1, dashed] (o3) -- (e5) node[midway,below] (a) {};
     \draw[l1, <-] (a) -- ++(0,-.5) node[below] {$\codefunc{Join}(n_e, n_o)$};
-  
+
     \begin{scope}[shift={(5,1)}]
-    \node (o1) [even, node1] at (1.5, 1) {$n_1$};
-    \node (o2) [even, node1] at (1, 0) {$n_2$};
-    \node (o3) [even, node1] at (2, 0) {$n_o$};
-    \node (e4) [undef] at (2,-2) {$n_3$};
-    \node (e5) [undef] at (2,-1) {$n_e$};
-    \draw[l1] (o2) -- (o1) -- (o3) -- (e5) -- (e4);
-    \draw[l1, ->, dashed, color=mblue] (e4) ++(-.7,0) -- + (0,1);
-    \draw[l1, ->, color=mred] (o3) ++(.7,-.5) -- +(0,-1.5);
+        \node (o1) [even, node1] at (1.5, 1) {$n_1$};
+        \node (o2) [even, node1] at (1, 0) {$n_2$};
+        \node (o3) [even, node1] at (2, 0) {$n_o$};
+        \node (e4) [undef] at (2,-2) {$n_3$};
+        \node (e5) [undef] at (2,-1) {$n_e$};
+        \draw[l1] (o2) -- (o1) -- (o3) -- (e5) -- (e4);
+        \draw[l1, ->, dashed, color=mblue] (e4) ++(-.7,0) -- + (0,1);
+        \draw[l1, ->, color=mred] (o3) ++(.7,-.5) -- +(0,-1.5);
     \end{scope}
-  
+
     \begin{scope}[shift={(11,-1)}]
-    \node (o1) [undef] at (0.75, 0.75) {$n_1$};
-    \node (o2) [undef] at (0, 0) {$n_2$};
-    \node (o3) [undef] at (0, 1.5) {$e_o$};
-    \node (e4) [undef] at (0,3) {$n_3$};
-    \node (e5) [undef] at (0.75,2.25) {$n_e$};
-    \draw[l1] (o2) -- (o1) -- (o3) -- (e5) -- (e4);
-    \draw[l1, <-, dashed, color=mblue] (e4) ++(-.7,0) -- +(0,-3);
-    \draw[l1, ->, color=mred] (e4) ++(1.5,0) -- +(0,-3);
+        \node (o1) [undef] at (0.75, 0.75) {$n_1$};
+        \node (o2) [undef] at (0, 0) {$n_2$};
+        \node (o3) [undef] at (0, 1.5) {$e_o$};
+        \node (e4) [undef] at (0,3) {$n_3$};
+        \node (e5) [undef] at (0.75,2.25) {$n_e$};
+        \draw[l1] (o2) -- (o1) -- (o3) -- (e5) -- (e4);
+        \draw[l1, <-, dashed, color=mblue] (e4) ++(-.7,0) -- +(0,-3);
+        \draw[l1, ->, color=mred] (e4) ++(1.5,0) -- +(0,-3);
     \end{scope}
-  
+
     \node at (0.5,2) {\emph{(a)}};
     \node at (5.5,2) {\emph{(b)}};
     \node at (9.5,2) {\emph{(c)}};
@@ -271,8 +271,8 @@
 \begin{tikzpicture}[on grid, scale=0.8]
 
     \begin{scope}[shift={(9.5,-3.5)}]
-        \node[node2, pattern=dots, pattern color=black!20!white] (n1) at (0,2) {\small$n_1$}; 
-        \node[node2, pattern=dots, pattern color=black!20!white] (n2) at (1.5,2) {\small$n_2$}; 
+        \node[node2, pattern=dots, pattern color=black!20!white] (n1) at (0,2) {\small$n_1$};
+        \node[node2, pattern=dots, pattern color=black!20!white] (n2) at (1.5,2) {\small$n_2$};
         \draw[l1] (n1) -- (n2) node[edge, above=0.2cm]{$|(n_1, n_2)|$};
         \node[align=center, fill=white!80!black, rounded corners=2pt, inner sep=0.5mm] at (0.75, 1.3) {\footnotesize node suspension};
         \draw (0, 0.5) node[odd, nodem]{} +(1,0) node[align=left, anchor=west]{\footnotesize Odd };
@@ -283,10 +283,10 @@
     \node[smallarrow, label={[label distance=-3.6mm]0:\tiny 1}] at (4, -1.3) {};
 
     \foreach \x in {0,3,6}{\DLINE{\x}{0}{2}{0}}
-      \foreach \x in {0,2,3,5,6,8}{\draw (\x,0) node [even, nodem] (a\x) {} ++(0,-.7) node (ad\x) {0};}
-      \foreach[count=\i] \x in {1,4,7}{      \draw (\x,0) node [odd, nodem]  (a\x) {} ++(0,-.7) node (ad\x) {2};
-                                             \node at (\x,0.7) {$\nset_{\alphalph{\i}}$};}
-      \draw[l1] (a0) -- (a1) node[edge]{1} -- (a2) node[edge]{1} (a3) -- (a4) node[edge]{1} -- (a5) node[edge]{1} (a6) -- (a7) node[edge]{1} -- (a8) node[edge]{1};
+    \foreach \x in {0,2,3,5,6,8}{\draw (\x,0) node [even, nodem] (a\x) {} ++(0,-.7) node (ad\x) {0};}
+    \foreach[count=\i] \x in {1,4,7}{      \draw (\x,0) node [odd, nodem]  (a\x) {} ++(0,-.7) node (ad\x) {2};
+            \node at (\x,0.7) {$\nset_{\alphalph{\i}}$};}
+    \draw[l1] (a0) -- (a1) node[edge]{1} -- (a2) node[edge]{1} (a3) -- (a4) node[edge]{1} -- (a5) node[edge]{1} (a6) -- (a7) node[edge]{1} -- (a8) node[edge]{1};
 
     \begin{scope}[shift={(0,-2)}]
         \node[smallarrow, label={[label distance=-3.6mm]0:\tiny 2}] at (4, -1.3) {};
@@ -302,11 +302,11 @@
         \foreach \x in {0,2,6,8}{\draw (\x,0) node [even] (b\x) {} ++(0,-.7) node {0};}
         \foreach \x in {1,7}{    \draw (\x,0) node [odd, nodem]  (b\x) {} ++(0,-.7) node {1};}
         \foreach \x in {3,5}{    \draw (\x,0) node [odd]  (b\x) {} ++(0,-.7) node {4};}
-                                 \draw (4,0)  node [even, nodem] (b4)  {} ++(0,-.7) node {1};
+        \draw (4,0)  node [even, nodem] (b4)  {} ++(0,-.7) node {1};
         \draw[l1] (b0) -- (b1) node[edge]{1} -- (b2) node[edge]{1} -- (b3) node[edge]{2} -- (b4) node[edge]{1} -- (b5) node[edge]{1} -- (b6) node[edge]{2} -- (b7) node[edge]{1} -- (b8) node[edge]{1};
     \end{scope}
 
-        
+
     \begin{scope}[shift={(12.5,0)}]
         \node at (-.5,1) {\emph{(b)}};
         \node[smallarrow, label={[label distance=-3.6mm]0:\tiny 1}] at (4, -1.3) {};
@@ -314,9 +314,9 @@
         \foreach \x in {0,3,6}{\DLINE{\x}{0}{2}{0}}
         \foreach \x in {0,2,3,5,6,8}{\draw (\x,0) node [even, nodem] (c\x) {} ++(0,-.7) node {0};}
         \foreach[count=\i] \x in {1,4,7}{      \draw (\x,0) node [odd, nodem]  (c\x) {} ++(0,-.7) node (cd\x) {2};
-                                               \node at (\x,0.7) {$\nset_{\alphalph{\i}}$};}
+                \node at (\x,0.7) {$\nset_{\alphalph{\i}}$};}
         \draw[l1] (c0) -- (c1) node[edge]{1} -- (c2) node[edge]{1} (c3) -- (c4) node[edge]{1} -- (c5) node[edge]{1} (c6) -- (c7) node[edge]{1} -- (c8) node[edge]{1};
-  
+
         \begin{scope}[shift={(0,-2)}]
             \node[smallarrow, label={[label distance=-3.6mm]0:\tiny 2}] at (4, -1.3) {};
             \foreach \x in {0,3,6}{\DLINE{\x}{0}{2}{0}}
@@ -325,13 +325,13 @@
             \draw[l1] (c0) -- (c1) node[edge]{1} -- (c2) node[edge]{1} (c3) -- (c4) node[edge]{1} -- (c5) node[edge]{1} (c6) -- (c7) node[edge]{1} -- (c8) node[edge]{1};
             \draw[l1, dotted] (c2) -- (c3) (c5) -- (c6);
         \end{scope}
-  
+
         \begin{scope}[shift={(0,-4)}]
             \DLINE{0}{0}{8}{0}
             \foreach \x in {0,2,6,8}{\draw (\x,0) node [even] (d\x) {} ++(0,-.7) node {0};}
             \foreach \x in {1,7}{    \draw (\x,0) node [odd, nodem]  (d\x) {} ++(0,-.7) node {0};}
             \foreach \x in {3,5}{    \draw (\x,0) node [odd]  (d\x) {} ++(0,-.7) node {2};}
-                                    \draw (4,0)  node [even, nodem] (d4)  {} ++(0,-.7) node {0};
+            \draw (4,0)  node [even, nodem] (d4)  {} ++(0,-.7) node {0};
             \draw[l1] (d0) -- (d1) node[edge]{1} -- (d2) node[edge]{1} -- (d3) node[edge]{2} -- (d4) node[edge]{1} -- (d5) node[edge]{1} -- (d6) node[edge]{2} -- (d7) node[edge]{1} -- (d8) node[edge]{1};
         \end{scope}
     \end{scope}
@@ -347,16 +347,16 @@
     \node (b1l) [below left = 1cm and 1.2cm of a] {};
     \node (b1r) [above right = 3.5cm and 1.2cm of b] {};
     \path[fill=black!10!white, rounded corners=0.5cm] (b1l) rectangle (b1r);
-    \node (b1t) at ($(a)!0.5!(b)$) {}; \node [above=3cm of b1t] {generation $k$};
+    \node (b1t) at ($(a)!0.5!(b)$) {}; \node [above=3cm of b1t] {fragmentation step $k$};
     \node (b2l) [below left = 1cm and 1.2cm of c] {};
     \node (b2r) [above right = 3.5cm and 1.2cm of c] {};
     \path[fill=black!10!white, rounded corners=0.5cm] (b2l) rectangle (b2r);
     \node [above=3cm of c] {$k-1$};
 
     \begin{scope}[shift={(10.5,0)}]
-      \path (0,2) node[onset]{} -- +(.5,0)node[anchor=west]{odd node-tree};
-      \path (0,1) node[enset]{} -- +(.5,0)node[anchor=west]{even node-tree};
-      \path (0,0) node[subtree]{} -- +(.5,0)node[anchor=west]{subtree};
+        \path (0,2) node[onset]{} -- +(.5,0)node[anchor=west]{odd node-tree};
+        \path (0,1) node[enset]{} -- +(.5,0)node[anchor=west]{even node-tree};
+        \path (0,0) node[subtree]{} -- +(.5,0)node[anchor=west]{subtree};
     \end{scope}
 
     \node (a0) [above = 0 cm of a] {\footnotesize $\pre{k}\mathcal{N}^o_2$};
@@ -367,8 +367,8 @@
     \draw[onset] (a2) circle[radius=.4cm];
 
     \foreach \i in {0,1,2}{
-        \node (b\i) [above = \i cm of b] {};
-    }
+            \node (b\i) [above = \i cm of b] {};
+        }
     \node at (b2) {\footnotesize $\pre{k}\mathcal{N}^o_0$};
     \node at ($(b0)!0.5!(b1)$) {\footnotesize $\pre{k}\mathcal{N}^e_{-1}$};
     \draw[onset] (b2) circle[radius=0.4cm];
@@ -378,9 +378,9 @@
     \draw[enset] (bc) -- +(0, 1) arc (0:180:0.5) -- +(0, -1) arc (180:360:0.5) -- cycle;
 
     \foreach \i in {0,1,2}{
-      \node (c\i) [above =\i cm of c] {};
-      \draw[subtree] (c\i) circle[radius=.4cm];
-    }
+            \node (c\i) [above =\i cm of c] {};
+            \draw[subtree] (c\i) circle[radius=.4cm];
+        }
     \node[right = 0.5cm of c] (cc1) {}; \node[right = 0.6cm of c] (cc2) {};
     \draw[subtree] (cc1) -- +(0, 1) arc (0:180:0.5) -- +(0, -1) arc (180:360:0.5) -- cycle;
     \draw[onset] (cc2) -- +(0, 2) arc (0:180:0.6) -- +(0, -2) arc (180:360:0.6) -- cycle;
@@ -401,8 +401,8 @@
     \node (u1rt) at ($(b0)!0.5!(b1)$) {}; \node(u1r) [left=1cm of u1rt] {};
     \node (u2lt) at ($(b1)!0.5!(b2)$) {}; \node(u2l) [right=1cm of u2lt] {};
     \node (u2rt) at ($(c1)!0.5!(c2)$) {}; \node(u2r) [left=1cm of u2rt] {};
-    \draw[l1, ->] (u1l) -- (u1r) node[midway,above] {even-join};
-    \draw[l1, ->] (u2l) -- (u2r) node[midway,above, text width = 2cm, align=center] {(final)\\odd-join};
+    \draw[l1, ->] (u1l) -- (u1r) node[midway,above] {\codefunc{Join}};
+    \draw[l1, ->] (u2l) -- (u2r) node[midway,above, text width = 2cm, align=center] {\codefunc{Join}};
 
 \end{tikzpicture}
 \end{document}
