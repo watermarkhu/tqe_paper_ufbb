@@ -9,21 +9,22 @@ In this section, we will find the worst-cast time complexity of the Union-Find N
 
 The cost of node suspension calculation is equal to the number of nodes traversed in the DFS's of the node parities and node delays. To find this number $N_{sus}(N)$ analytically, we utilize the rules of cluster growth and mergers.
 
-\begin{enumerate}
-  \item Weight growth states that clusters are grown in the order of sizes of their vertex-trees. 
-  \item Joins between the node-trees between odd and even clusters always retains the root node of the odd cluster.
-  \item The DFS's of the node parity and delay calculation are always performed just before cluster growth in an even partition of the node-tree starting from the pointer saved at the root node .
+
+\begin{enumerate}[label=\textbf{R\arabic*},ref=R\arabic*]
+  \item Joins between the node-trees between odd and even clusters always retains the root node of the odd cluster. \label{rjoin}
+  \item The DFS's of the node parity and delay calculation are always performed just before cluster growth in an even partition of the node-tree starting from the pointer saved at the root node. \label{rgrow}
+  \item Weight growth states that clusters are grown in the order of sizes of their vertex-trees. \label{rweight}
 \end{enumerate}
-From rules 2 and 3, we conclude that $N_{sus}$ is proportional to the sum of sizes of all even node-trees during all mergers of the growth process on the lattice. Note that if many clusters merge within the same growth iteration, only the last even cluster counts towards the cost, since rule 3 ensures that the calculation is not performed on intermediate even partitions. To find the worst-case time complexity, we maximize $N_{sus}$, which is proportional to the computation time. We take a top-down approach of \textbf{cluster fragmentation}; starting from a single cluster that maximally occupies the lattice at the end of growth, and move back in time to find its ancestor clusters and their sizes. The maximization of $N_{sus}$ is in the repetitiveness of the recalculation over some parition of the final node-tree. 
+From rules \ref{rjoin} and \ref{rgrow}, we conclude that $N_{sus}$ is proportional to the sum of sizes of all even node-trees during all mergers of the growth process on the lattice. Note that if many clusters merge within the same growth iteration, only the last even cluster counts towards the cost, since \ref{rgrow} ensures that the calculation is not performed on intermediate even partitions. To find the worst-case time complexity, we maximize $N_{sus}$, which is proportional to the computation time. We take a top-down approach of \textbf{cluster fragmentation}; starting from a single cluster that maximally occupies the lattice at the end of growth, and move back in time to find its ancestor clusters and their sizes. The maximization of $N_{sus}$ is in the repetitiveness of the recalculation over some parition of the final node-tree. 
 
 \begin{definition}\label{def:fragmentation}
   Let the \emph{fragmentation} of an odd cluster with node-tree $\pre{k-1}\nset^o$ split it into a set of its ancester node-trees. Here $k-1$ indicates the \emph{fragmentation step number}, where larger step number $k$ refers to an ancestor node-tree of smaller size. Let the fragmentation $f$ be the combination of \emph{intermediate fragmentations} (IF) $f_o$, which fragments an odd node-tree into an even ancestor and an odd ancestor
-  \begin{equation}\label{eq:pfe}
-    f_o(\{\pre{k-1}\nset^o\}) = \m{F}^o_k = \{\pre{k}\nset^e_{-1}, \pre{k}\nset^o_0 \}, 
+  \begin{equation}\label{eq:pfo}
+    f_o(\{\pre{k-1}\nset^o\}) = \m{F}^o_k = \{\pre{k}\nset^e, \pre{k}\nset^o_0 \}, 
   \end{equation}
   and $f_e$, which fragments even node-trees into $n_f$ odd ancestors
-  \begin{equation}\label{eq:pfo}
-    f_e(\{\pre{k}\nset^e_{-1}\}) = \m{F}^e_k=\{\pre{k}\nset^{o}_1,...,\pre{k}\nset^o_{n_f}\},
+  \begin{equation}\label{eq:pfe}
+    f_e(\{\pre{k}\nset^e\}) = \m{F}^e_k=\{\pre{k}\nset^{o}_1,...,\pre{k}\nset^o_{n_f}\},
   \end{equation}
   such that a fragmentation is
   \begin{equation}\label{eq:fstep}
@@ -40,10 +41,10 @@ for which we require (a) the number of fragmentation steps $k_m$, (b) the number
   R_i = \frac{\abs{\pre{k}\nset^o_i}}{\abs{\pre{k-1}\nset^o}}, \hspace{0.5cm} \sum_{i=0}^{n_f}{R_i} = 1.
 \end{equation}
 
-To find these values, we assume that vertex-trees do not increase in size  when grown, and thus only mergers between clusters result in larger vertex-trees. As a consequence, nodes are effectively not allowed to increase in radius, and the number of vertices in the cluster equals the number of nodes in the node-tree. While this is not physically possible, the assumption maximizes the number of nodes on the lattice such that the sum in Equation \eqref{eq:pfo} forms an upper bound to $N_{sus}$.
+To find these values, we assume that vertex-trees do not increase in size  when grown, and thus only mergers between clusters result in larger vertex-trees. As a consequence, nodes are effectively not allowed to increase in radius, and the number of nodes in the cluster equals the number vertices $\abs{\nset}=\abs{\vset}$. While this is not physically possible, the assumption maximizes the number of nodes on the lattice such that the sum in Equation \eqref{eq:pfo} forms an upper bound to $N_{sus}$.
 
 \begin{lemma}\label{lem:evenconstant}
-  For constant $R_i$ and $\abs{\vset}=\abs{\nset}$, the sum of all even node-tree sizes in every step is constant. 
+  For constant $R_i$ and $\abs{\nset}=\abs{\vset}$, the sum of all even node-tree sizes in every step is constant. 
 \end{lemma}
 \begin{proof}
   For $k=1$, there is a single even ancestor $\pre{1}\nset^e$ of size 
@@ -58,239 +59,58 @@ To find these values, we assume that vertex-trees do not increase in size  when 
 \end{proof}
 
 \begin{theorem}\label{the:fragnumber}
-  Fragmentation number $n_f=2$ maximizes $N_{sus}$ in equation \eqref{eq:npdc}.
+  Fragmentation number $n_f=2$ maximizes $N_{sus}$ in Equation \eqref{eq:npdc}.
 \end{theorem}
 \begin{proof}
   The sum of even node-tree simzes in every fragmentation step is constant per Lemma \ref{lem:evenconstant}. Thus, \eqref{eq:npdc} is maximized by a largest possible $k_m$.  As $n_f$ increases the number of odd node-trees in each IF $f_o$, the average size of these odd node-trees decreases. As more fragmentations are applied, the node-tree sizes in the fragmented set approach the single-node node-tree. An increases in $n_f$ decreases the number of fragmentation steps as $ k_m \propto \frac{1}{n_f}$.  Hence, $N_{PDC}$ is maximized for the minimal value of $n_f$, which is $n_f = 2$.
 \end{proof}
 
+Every fragmentation step on an odd cluster $\pre{k-1}\nset$ splits it into three parts $\{\pre{k}\nset^o_0, \pre{k}\nset^o_1, \pre{k}\nset^o_2\}$, where $\pre{k}\nset^o_1, \pre{k}\nset^o_2$ are ancestors of the even node-tree $\pre{k}\nset^e$ in the IF $f_o$. 
 
-% \input{tikzfigs/fragmentation}
-
-If partial fragmentation function $f_o$ is called on a set of node-trees $f_o(\{\nset^o, \nset^e, ...\})$, it fragments all odd node-trees in the set. Partial fragmentation function $f_e$ fragments all even node-trees. Along these lines, the entire set of odd node-trees $\m{F}_k$ can undergo the another fragmentation step into odd subsets, resulting in another set of ancestral node-trees $\m{F}_{k+1}$. We can do this some $p$ times on $\pre{0}\nset^o$, where we have selected $k-1=0$, until our resulting set of node-trees $\m{F}_{p}$ consists only of the smallest possible node subsets $\pre{p}\nset^o$ where $|\pre{p}\nset^o|=1$.
-
-
-To find the worst-case complexity, we maximize $N_{PDC}$ or the cost of the partial calculations during the construction of the node-trees on the lattice. Let us assume the worst-case, when there are a maximal number of nodes in the node-trees just before the last round of growth. As the lattice is maximally occupied, this is a single odd node-tree $\pre{0}\nset^o$ in which a partial calculation is performed as part of the last round of growth. Node-tree $\pre{0}\nset^o$ has a maximal number of nodes if $|n.\vset|=1$ for all nodes $n$ in $\pre{0}\nset^o$. Thus, on a lattice of $N=|\vset|$ vertices, the node-tree $\pre{0}\nset^o$ has a maximal
-\begin{equation}\label{eq:limitnsetsize}
-  \abs{\pre{0}\nset^o} \leq N
-\end{equation}
-nodes. As the partial calculation is only executed on the even subtrees, $N_{PDC}$ is the sum of even node-trees sizes $|\pre{k}\nset^e|$, in all partial fragmentation sets $\m{F}^o_{k}$, during all fragmentation steps $k=[1,...,p]$, in the full fragmentation of $F(\pre{0}\nset^o)$. We add the factor 2 in Equation \eqref{eq:npdc} as both the parity calculation and delay calculations requires its own depth-first search. The sequence of fragmentations that maximizes the even node-tree sizes maximizes $N_{PDC}$.
-% The worst-case delay complexity is computed by maximizing $N_{PDC}$ of the full fragmentation of $\pre{0}\nset^o$ with $S_{\pre{0}\nset^o} = N/2-1$.
-\begin{definition}\label{def:fullfrag}
-  Let the series of all $p$ fragmentation steps $f$ on $\pre{0}\nset^o$ be the \emph{full fragmentation} $F$, with
-  \begin{equation}\label{eq:fullfrag}
-    F(\pre{0}\nset^o) = \underbrace{f(f(...f(\pre{0}\nset^o)))}_\text{p times} = \{\pre{p}\nset^{o}_1, \pre{p}\nset^{o}_2,...,\pre{p}\nset^{o}_{N_\sigma} \} \hspace{.3cm} | \hspace{.3cm} \abs{\pre{p}\nset^{o}_i} = 1.
-  \end{equation}
-\end{definition}
-
-\begin{definition}\label{lem:fragratio}
-  Let the partial fragmentation ratio $R$ be the relative sizes of an ancestral node-tree $\pre{k+1}\nset$ and the fragmented node-tree $\pre{k}\nset$.
-  \begin{equation}\label{eq:fragratio}
-    zfragratio = \frac{\abs{\pre{k+1}\nset}}{\abs{\pre{k}\nset}}
-  \end{equation}
-\end{definition}
-In $f_e$ there are a set of partial fragmentation ratios $\{R_{-1}, R_0\}$, and in $f_o$ are a set of partial fragmentation ratios $\{R_1,...,R_{k_f}\}$, where
-\begin{align}
-  R_{-1} +  R_0         & = 1  \\
-  \sum_{i=1}^{k_f}{R_i} & = 1.
-\end{align}
-
-The problem of finding the sequence of even ancestral node-tree sizes to maximize the value of $N_{PDC}$ now becomes finding the partial fragmentation number $k_f$ and the set of partial fragmentation ratios $\{R_{-1},..., R_{k_f}\}$.
-
-\begin{lemma}\label{lem:sumevenkf}
-  For the same partial fragmentation ratios $\{R_{-1}, R_0\}$ in $f_o$, the sum of even ancestral node-tree sizes after a fragmentation step is not dependent on $k_f$ (see Figure \ref{fig:fragcorrect}).
+\begin{lemma}\label{lem:chrono}
+  The node-tree size of $\pre{k}\nset_0$ must be smaller than $\pre{k}\nset^o_1, \pre{k}\nset^o_2$, such that $R_1 \geq R_0 \leq R_2$. 
 \end{lemma}
 \begin{proof}
-  Let us consider an even node-tree $\pre{k}\nset^e$ that is first partially fragmented by $f_e$ to $\m{F}^e_k$. The fragmentation set $\m{F}^e_k$ is then partially fragmented by $f_o$ to $\m{F}_{k+1}^o$. Let us consider the two cases when $k_f=2$ and $k_f=4$. For $k_f=2$, the partial fragmentation $f_e$ splits $\pre{k}\nset^e$ into two odd ancestral node-trees in $\m{F}^e_k$ and four node-trees in $\m{F}_{k+1}^o$.
-  % Let the size of $\pre{k-1}\nset^e$ be $|\pre{k-1}\nset^e| = K$. To find $n_o$, let us consider two cases where $n_o = 1$ or $n_o=2$. If an even node-tree $\pre{k-1}\nset^e$ is fragmented with $k_f=2$, a fragmentation step $f(\pre{k-1}\nset^e)=f_o(f_e(\pre{k-1}\nset^e))$ produces the following partial fragmentation sets:
-  \begin{align*}
-    % \nonumber % Remove numbering (before each equation)
-    f_e(\pre{k}\nset^e)_{k_f = 2}
-    = \m{F}^e_{k}|_{k_f = 2}
-     & = \{ \pre{k} \nset^{o}_1, \pre{k} \nset^{o}_2\}                                                                             \\
-    f_o(\m{F}^e_{k}|_{k_f = 2})
-    = \m{F}^o_{k+1}|_{k_f = 2}
-     & = \left\{ \{\pre{k+1}\nset^{o}_{0}, \pre{k+1}\nset^{e}\}^o_1 , \{\pre{k+1}\nset^{o}_{0}, \pre{k+1}\nset^{e} \}^o_2 \right\}
-  \end{align*}
-  The ratios of the sizes of fragmented node-trees in $f_e$ are
+  The intermediate fragmentations must occur in the order of \eqref{eq:pfo} and \eqref{eq:pfe}, as \eqref{eq:pfe} requires an even node-tree that is fragmented by \eqref{eq:pfo}. In terms of cluster growth, the vertex-trees $\vset_1, \vset_2$, corresponding to $\nset^o_1, \pre{k}\nset^o_2$, must merge before the combined vertex-tree can merge with $\vset_0$, which corresponds to $\pre{k}\nset_0$. Declared by rule \ref{rweight}, $\abs{\vset_1}$ and $\abs{\vset_2}$ must be smaller or equal to $\abs{\vset_0}$, such that 
   \begin{equation*}
-    \frac{\abs{\pre{k} \nset^{o}_1}}{\abs{\pre{k}\nset^e}} = R_1, \hspace{2em}
-    \frac{\abs{\pre{k} \nset^{o}_2}}{\abs{\pre{k}\nset^e}} = R_2,
+    \abs{\vset_1}\geq \vset_0 \leq\abs{\vset_2}.
   \end{equation*}
-  where $ R_1 + R_2 = 1$. The ratios of the sizes of fragmented node-trees in $f_o$ are
+  If this condition is not met, the cluster of $\vset_0$ grows first and merges with either $\vset_1$ or $\vset_2$, and the chronolonogy of events is disturbed. Since we assumed $\abs{\nset}=\abs{\vset}$, this can be translated to 
   \begin{equation*}
-    \frac{\abs{\pre{k+1}\nset^{o}_0|^o_1}}{\abs{\pre{k} \nset^{o}_1}} =
-    \frac{\abs{\pre{k+1}\nset^{o}_0|^o_2}}{\abs{\pre{k} \nset^{o}_2}} = R_0, \hspace{2em}
-    \frac{\abs{\pre{k+1}\nset^{e}  |^o_1}}{\abs{\pre{k} \nset^{o}_1}} =
-    \frac{\abs{\pre{k+1}\nset^{e}  |^o_2}}{\abs{\pre{k} \nset^{o}_2}} = R_{-1},
+    \abs{\nset_1}\geq \nset_0 \leq\abs{\nset_2},
   \end{equation*}
-  where $R_0 + R_{-1} = 1$. The sum of the sizes of even node-trees in the odd partial fragmentation set $\m{F}^o_{k+1}$ is thus
-  \begin{equation*}
-    R_1 R_{-1} \abs{\pre{k}\nset^e} + R_2 R_{-1} \abs{\pre{k}\nset^e} = (R_1 + R_2) R_{-1} \abs{\pre{k}\nset^e} = R_{-1} \abs{\pre{k}\nset^e}
-  \end{equation*}
-
-  For $k_f = 4$, the partial fragmentation sets are
-  \begin{align*}
-    % \nonumber % Remove numbering (before each equation)
-    f_e(\pre{k}\nset^e)_{k_f = 4}
-    = \m{F}^e_{k}|_{k_f = 4}
-     & =\{ \pre{k}\nset^{o}_1, \pre{k}\nset^{o}_2,  \pre{k}\nset^{o}_3,\pre{k}\nset^{o}_4\}, \\
-    f_o(\m{F}^e_{k}|_{k_f = 4})
-    = \m{F}^o_{k+1} |_{k_f = 4}
-     & = \big\{      \{ \pre{k+1}\nset^{o}_0, \pre{k+1}\nset^e\}^o_1,
-    \{ \pre{k+1}\nset^{o}_0, \pre{k+1}\nset^e\}^o_2,                                         \\
-     & \hspace{3em} \{ \pre{k+1}\nset^{o}_0, \pre{k+1}\nset^e\}^o_2,
-    \{ \pre{k+1}\nset^{o}_0, \pre{k+1}\nset^e\}^o_4 \big\}.
-  \end{align*}
-  The ratios of the sizes of fragmented node-trees in $f_e$ are
-  \begin{equation*}
-    \frac{\abs{\pre{k} \nset^{o}_1}}{\abs{\pre{k}\nset^e}} = q_1, \hspace{2em}
-    \frac{\abs{\pre{k} \nset^{o}_2}}{\abs{\pre{k}\nset^e}} = q_2, \hspace{2em}
-    \frac{\abs{\pre{k} \nset^{o}_3}}{\abs{\pre{k}\nset^e}} = q_3, \hspace{2em}
-    \frac{\abs{\pre{k} \nset^{o}_4}}{\abs{\pre{k}\nset^e}} = q_4,
-  \end{equation*}
-  where $ q_1 + q_2 + q_3 + q_4 = 1$. The ratios of the sizes of fragmented node-trees in $f_o$ are
-  \begin{equation*}
-    \frac{\abs{\pre{k+1}\nset^o_0|^o_1}}{\abs{\pre{k} \nset^{o}_1}} =
-    \frac{\abs{\pre{k+1}\nset^o_0|^o_2}}{\abs{\pre{k} \nset^{o}_2}} =
-    \frac{\abs{\pre{k+1}\nset^o_0|^o_3}}{\abs{\pre{k} \nset^{o}_3}} =
-    \frac{\abs{\pre{k+1}\nset^o_0|^o_4}}{\abs{\pre{k} \nset^{o}_4}} = R_0,
-  \end{equation*}
-  and
-  \begin{equation*}
-    \frac{\abs{\pre{k+1}\nset^e|^o_1}}{\abs{\pre{k} \nset^{o}_1}} =
-    \frac{\abs{\pre{k+1}\nset^e|^o_2}}{\abs{\pre{k} \nset^{o}_2}} =
-    \frac{\abs{\pre{k+1}\nset^e|^o_3}}{\abs{\pre{k} \nset^{o}_3}} =
-    \frac{\abs{\pre{k+1}\nset^e|^o_4}}{\abs{\pre{k} \nset^{o}_4}} = R_{-1},
-  \end{equation*}
-  where $R_0 + R_{-1} = 1$. The sum of the sizes of even node-trees in  the odd partial fragmentation set $\m{F}^o_{k+1}$ is thus
-  \begin{align*}
-    q_1 R_{-1} \abs{\pre{k}\nset^e} + q_2 R_{-1} \abs{\pre{k}\nset^e} + q_3 R_{-1} \abs{\pre{k}\nset^e} + q_4 R_{-1} \abs{\pre{k}\nset^e}
-     & = (q_1 + q_2 + q_3 + q_4 ) R_{-1} \abs{\pre{k}\nset^e} \\
-     & = R_{-1} \abs{\pre{k}\nset^e}.
-  \end{align*}
-  This is true for any $k_f = 2i, i\in \mathbb{N}^*$.
+  and to the ratio to the descendant node-tree of Equation \eqref{eq:ratio}.
 \end{proof}
 
-\begin{lemma}\label{lem:equalevensum}
-  The sum of even node-tree sizes in every fragmentation step $k$ is only dependent on partial fragmentation ratios $\{R_{-1}, R_0\}$.
-  \begin{equation}\label{eq:equalevensum}
-    \sum_j{ \left\{ \abs{\pre{k}\nset_j^e} \big| \pre{k}\nset_j^e \in \m{F}^o_k \right\} } = \text{constant}
-    \hspace{1em} \bigg| \hspace{1em} \forall \m{F}_k^o \text{ during } F(\pre{0}\nset^o).
-  \end{equation}
-\end{lemma}
-\begin{proof}
-  Consider an odd node-tree $\pre{k-1}\nset^o$ that is partially fragmented as
-  \begin{align*}
-    f_o(\pre{k-1}\nset^o) = \m{F}^o_k     & = \{\pre{k}\nset^e_{-1}, \pre{k}\nset^o_0 \}                                                                                                                                 \\
-    f_e(\m{F}^o_k)        = \m{F}^e_k     & = \left\{ \{\pre{k}\nset^o_i\ | i \in [1,..,k_f] \}^e_{-1}, \pre{k}\nset^{o}_0 \right\}                                                                                      \\
-    f_o(\m{F}^e_k )       = \m{F}^o_{k+1} & = \left\{ \left\{ \{\pre{k+1}\nset^e_{-1}, \pre{k+1}\nset^o_0\}_i^o | i \in [1,..,k_f] \right\}^e_{-1}, \left\{\pre{k}\nset^e_{-1}, \pre{k}\nset^o_0 \right\}^{o}_0 \right\}
-  \end{align*}
-
-  The sum of even node-tree sizes in $\m{F}^o_k$ is simply the size of $\pre{k}\nset^e_{-1}$ and is equal to
-  \begin{equation*}
-    \sum_j{ \left\{ \abs{\pre{k}\nset_j^e} \big| \pre{k}\nset_j^e \in \m{F}^o_k \right\} } = \abs{\pre{k}\nset^e_{-1}} = R_{-1}\abs{\pre{k-1}\nset^o}.
-  \end{equation*}
-
-  The sum of even node-tree sizes in $\m{F}^o_{k+1}$ can be divided into two parts. The first part is the partial fragmentations $f_e f_o$ of $\pre{k}\nset^e_{-1}$, which we know from Lemma \ref{lem:sumevenkf} is $R_{-1}|\pre{k}\nset^e_{-1}|$ regardless of the choice for $k_f$. The second part is the partial fragmentation $f_o$ of $\pre{k}\nset^o_0$, which is $R_{-1}|\pre{k}\nset^o_0|$. Hence, the sum is
-  \begin{equation*}
-    \sum_j{ \left\{ \abs{\pre{k}\nset_j^e} \big| \pre{k}\nset_j^e \in \m{F}^o_{k+1} \right\} } = R_{-1} \left( \abs{\pre{k}\nset^e_{-1}} + \abs{\pre{k}\nset^o_0} \right) = R_{-1}\abs{\pre{k-1}\nset^o}.
-  \end{equation*}
-\end{proof}
-
-\begin{theorem}\label{the:fragnumber}
-  For the fragmentation number $k_f=2$, $N_{PDC}$ of Definition \ref{def:npdc} and Equation \eqref{eq:npdc} is maximized (see Figure \ref{fig:fragexamples}).
+\begin{theorem}\label{the:ratios}
+  The set of node-tree ratios that maximizes $N_{sus}$ in Equation \eqref{eq:npdc} is $R_0 = R_1 = R_2 = \nicefrac{1}{3}$.
 \end{theorem}
 \begin{proof}
-  The sum of even node-tree sizes in each fragmentation step is constant per Lemma \ref{lem:equalevensum}. Thus, \eqref{eq:npdc} is maximized by having as many fragmentations steps as possible, or the largest possible $p$.  As $k_f$ increases the number of odd node-trees in each fragmentation step $f_o$, the average size of these odd node-trees has decreased. Consequently, the node-tree size decreases faster towards the minimum size of three nodes as more fragmentation steps are applied (Equation \eqref{eq:fstep}). As the sum of even node-tree sizes in each fragmentation step is the same, increasing $k_f$ decreases the number of fragmentation steps:
-  \begin{equation}
-    p \propto \frac{1}{k_f}.
-  \end{equation}
-  Hence, $N_{PDC}$ is maximized for the minimal value of $k_f$, which is $k_f = 2$.
-\end{proof}
-
-% \input{tikzfigs/fragnumber}
-
-The search for the fragmentation ratios has now been reduced to finding $\{R_{-1}, R_0\}$ of $f_o$ and $\{R_1, R_2\}$ of $f_e$ since $k_f = 2$. A partial fragmentation $f_e$ of $\pre{k}\nset^e_{-1}$ and fragmentation step $f$ of $\pre{k-1}\nset^o$ are now
-\begin{align}
-  f_e(\pre{k}\nset^e_{-1}) & = \m{F}^e_k  =\{\pre{k}\nset^{o}_1,\pre{k}\nset^o_2\} \label{eq:newpfe}                      \\
-  f(\pre{k-1}\nset^o)      & = \m{F}_k    = \{\pre{k}\nset^o_0, \pre{k}\nset^o_1, \pre{k}\nset^o_1\}. \label{eq:newfstep}
-\end{align}
-The sizes of the ancestral odd node-trees in a fragmentation step $f$ are related to the joined node-tree by
-\begin{equation}
-  \frac{\abs{\pre{k}\nset^o_0}}{\abs{\pre{k-1}\nset^o}} = R_0, \hspace{2em}
-  \frac{\abs{\pre{k}\nset^o_1}}{\abs{\pre{k-1}\nset^o}} = R_1, \hspace{2em}
-  \frac{\abs{\pre{k}\nset^o_2}}{\abs{\pre{k-1}\nset^o}} = R_2,
-\end{equation}
-where
-\begin{align}
-  \nonumber  \tilde{R}_1                     & = R_{-1}R_1                      \\
-  \tilde{R}_2                                & = R_{-1}R_2 \label{eq:bigratios} \\
-  \nonumber  R_0 + \tilde{R}_1 + \tilde{R}_2 & = 1.
-\end{align}
-
-This fragmentation number does not come unexpectedly. If $k_f=2$, a fragmentation $f_e$ outputs two ancestral node-trees. This is equivalent to a single even-join. If $k_f>2$, the fragmentation $f_e$ will be equivalent to several even-joins and intermediate odd-joins. Recall from Lemma \ref{lem:delaywhengrown} that the partial calculation of every intermediate odd-join is skipped. Thus, these partial calculations are ``lost'' from the maximization of $N_{PDC}$.
-
-Let us now try to maximize $N_{PDC}$ of Equation \eqref{eq:npdc}, not from the perspective of fragmentations, but from the perspective of cluster growth. During a growth iteration, some $N_v$ vertices are added to the cluster $c_j$, and some other clusters merge with $c_j$ that also require the join of their respective node-trees. If no join operations occur, the node-tree stays unchanged. The cluster is allowed to continue to grow without delay calculations per Lemma \ref{lem:calconce}. To maximize $N_{PDC}$, $N_v$ must be minimized, as every added vertex here is one that could have been part of a node in some other node-tree, and thus does not add to $N_{PDC}$.
-
-
-\begin{lemma}\label{lem:localmax}
-  Local maximization of the fragmentation ratio of the even subtree $R_{-1}=\tilde{R}_1+\tilde{R}_2$ leads to global maximization of $N_{PDC}$.
-\end{lemma}
-\begin{proof}
-  Recall from Equation \eqref{eq:pfe} that in the partial fragmentation $f_o$ of $\pre{k-1}\nset^o$, the size of the fragmented even ancestral subtree is
+  The ratios $\{R_0, R_1, R_2\}$ can be found by maximizing the size of the even node-tree $\pre{k}\nset^e$ in each fragmentation, which is 
   \begin{equation*}
-    \abs{\pre{k}\nset^e_{-1}} = R_{-1}\abs{\pre{k-1}\nset^o},
+    \abs{\pre{k}\nset^e} = (R_1 + R_2)\abs{\pre{k-1}\nset^o}.
   \end{equation*}
-  which counts towards $N_{PDC}$ in the full fragmentation. In the fragmentation step $k$, $\pre{k-1}\nset^o$ is fragmented according to fragmentation ratios $\{R_0, \tilde{R}_1, \tilde{R}_2\}_k$. In the next fragmentation step $k+1$, the odd node-trees of $\m{F}_k=\{\pre{k}\nset^o_0, \pre{k}\nset^o_1, \pre{k}\nset^o_1\}$ are to fragmented into ancestral node-trees. The framentation ratios for each of the fragmentations $f(\pre{k}\nset^o_0), f(\pre{k}\nset^o_1), f(\pre{k}\nset^o_1)$ are not dependant on $\{R_0, \tilde{R}_1, \tilde{R}_2\}_k$. Thus global maximization of $N_{PDC}$ is achieved by local maximization of $R_{-1}=\tilde{R}_1+\tilde{R}_2$ in every fragmentation.
+  Since $ R_1 \geq R_0 \leq R_2$ per lemma \ref{lem:chrono}, the largest values for $R_1, R_2$ possible are equal to $R_0$.
 \end{proof}
 
-\begin{theorem}\label{the:fragratio}
-  For the fragmentation ratios $R_0 = \tilde{R}_1 = \tilde{R}_2 = \frac{1}{3}$, $N_{PDC}$ of Definition \ref{def:npdc} and Equation \eqref{eq:npdc} is maximized in a Union-Find Balanced-Bloom decoder with weighted growth (see Section \ref{sec:bucketwg}).
+The last unknown parameter for the maximization of $N_{sus}$ in Equation \eqref{eq:npdc} is $k_m$, the total number of fragmentation steps.
+
+\begin{theorem}
+  For $n_f = 2$ and $R_i = \{\nicefrac{1}{3},\nicefrac{1}{3},\nicefrac{1}{3}\}$, the maximum number of fragmentation steps is $k_m = \log_3{\abs{\pre{0}\nset^o}}$.
 \end{theorem}
 \begin{proof}
-  Take the partial fragmentation $f_o$ of $\pre{k-1}\nset^o$ of Equation \eqref{eq:pfo} and $f_e$ of Equation \eqref{eq:newpfe}, which are equivalent to a final odd-join between $\nset^e_{-1}, \nset^o_0$ and even-join between $\nset^o_1, \nset^o_2$, respectively.
-
-  For $f_e$ that is equivalent to the even-join to even-parity cluster $c_{-1}$ between the odd-parity clusters $c_1, c_2$ with node-trees $\nset^o_1, \nset^o_2$, the clusters must have relatively equal vertex-tree sizes
-  \begin{equation*}
-    \abs{\vset_1} \approx \abs{\vset_2}.
-  \end{equation*}
-  If not, clusters $c_1, c_2$ may be allowed to grow multiple iterations before merging, sorted by weighted growth. In each iteration, some $N_v$ vertices are added to the cluster. Let the growth iteration in which the even-join occurred be labeled as $i_e$
-
-  For $f_o$ equivalent to the final odd-join between even $c_{-1}$ and odd $c_0$, the final odd-join must strictly occur after the even-join of $f_e$. This odd-join can either be initiated by odd-parity $c_0$ in some growth iteration $i_o > i_e$, when $c_2$ is the only odd-parity cluster, or initiated by either $c_1$ or $c_2$ in growth iteration $i_o = i_e$ (see Figure \ref{fig:fragfratio}). Determined by weighted growth, the vertex-tree sizes are related as
-  \begin{equation*}
-    \abs{\vset_0} \geq \abs{\vset_1} \approx \abs{\vset_2}.
-  \end{equation*}
-  Recall from equation \eqref{eq:sets} that $|\nset| \leq |\vset|$. We assume the largest possible node-tree size $|\nset| = |\vset|$ to find that
-  \begin{equation*}
-    \abs{\nset^o_0} \geq \abs{\nset^o_1} \approx \abs{\nset^o_2},
-  \end{equation*}
-  and hence
-  \begin{equation*}
-    R_0 \geq \tilde{R}1 \approx \tilde{R}2,
-  \end{equation*}
-  To maximize $N_{PDC}$, we want to maximize $\abs{\nset^e_{-1}} = \abs{\nset^o_1} + \abs{\nset^o_2}$ or $R_{-1}=\tilde{R}1 + \tilde{R}2$ (per Lemma \ref{lem:localmax}\footnote{Added in revision}). Since \eqref{eq:bigratios}, $R_0$ must be as small as possible, and thus $R_0 = \tilde{R}1 = \tilde{R}2 = \frac{1}{3}$.
+  In every fragmentation step, all node-trees are fragmented into 3 ancestors that are $\nicefrac{1}{3}$ the size of their descendant. The series of $k_m$ fragmentations is thus simply $k_m$ divisions of the node-tree $\pre{0}\nset^o$ in 3 parts until all ancestors have size 1.
 \end{proof}
 
-% \input{tikzfigs/fragratio}
+Now, all variables that are need to find the upper bound to $N_{sus}$ have been collected. From Lemma \ref{lem:evenconstant} and Theorem \ref{the:ratios}, we find that in every fragmentated set $\m{F}^o_k$ the sum of even node-tree sizes is bounded by $\nicefrac{2}{3}\abs{\pre{0}\nset^o}$. Filling this and the value for $k_m$ in Equation \eqref{eq:npdc} we find that
 
-The last unknown parameter for the maximization of $N_{PDC}$ in Equation \eqref{eq:npdc} is $p$, the total number of fragmentation steps. If we assume that in every growth step, not a single non-node vertex is added $N_v = 0$, the full fragmentation of odd node-tree $\pre{0}\nset^o$ is just the continuous division of the set in 3 parts per Theorem \ref{lem:fragratio}, which can be calculated easily.
-\begin{equation}\label{eq:numfrag}
-  p \leq \log_3(\abs{\pre{0}\nset^o})
-\end{equation}
-In every partial fragmentation set $\m{F}^o_k$, the sum of even node-tree sizes is
-\begin{equation}\label{eq:sumevensetsize}
-  \sum_j \left\{ \abs{\pre{k}\nset_j^e} \big| \pre{k}\nset_j^e \in \m{F}^o_k \right\} \leq \frac{2}{3}\abs{\pre{0}\nset^o},
-\end{equation}
-as $R_1+R_2 = \frac{2}{3}$ per Theorem \ref{the:fragratio}, and this value is constant for every fragmentation step per Lemma \ref{lem:equalevensum}. This is an inequality as we have assumed $|\nset| = |\vset|$ and $N_v=0$ in Theorem \ref{the:fragratio}. Filling in equation \eqref{eq:numfrag} and \eqref{eq:sumevensetsize} in \eqref{eq:npdc}, we find that
 \begin{align}
-  % \nonumber % Remove numbering (before each equation)
-  \nonumber N_{PDC} & \leq \sum_{k=1}^{p} \sum_j \left\{ \abs{\pre{k}\nset_j^e} \big| \pre{k}\nset_j^e \in \m{F}^o_k \right\} \\
-  \nonumber         & \leq \sum_{k=1}^{\log_3(\abs{\pre{0}\nset^o})} \frac{2}{3}\abs{\pre{0}\nset^o}                          \\
-                    & \leq \frac{2}{3}\abs{\pre{0}\nset^o}\log{\abs{\pre{0}\nset^o}}.
+  \nonumber N_{sus} &\leq 2\sum_{k=1}^{k_{m}}{ \sum_j{ \left\{ \abs{\pre{k}\nset_j^e} \forall \pre{k}\nset_j^e \in \m{F}^o_k(\pre{0}\nset^o)\right\} } } \\
+  \nonumber         &\leq \sum_{k=1}^{\log_3{\abs{\pre{0}\nset^o}}} \frac{2}{3}\abs{\pre{0}\nset^o}\\
+                    &\leq \frac{2}{3}\abs{\pre{0}\nset^o}\log{\abs{\pre{0}\nset^o}}.
 \end{align}
 
-Recall from Equation \eqref{eq:limitnsetsize} that the node-tree size is bounded by the lattice size $|\pre{0}\nset^o| \leq N$. The worst-case time complexity of the delay computation is thus bounded by $\m{O}(N\log{N})$. The average-case complexity is even lower as it is almost certain that not all vertices are nodes such that $|\nset| < |\vset|$ and $N_v \neq 0$.
+Since we assumed that $\abs{\nset} = \abs{\vset}$, the maximum size of $\abs{\pre{0}\nset^o}$ is bounded by the system size $N$. The worst-case time complexity of the delay computation is thus bounded by $\m{O}(N\log_3{N})$. 
 
 \subsection{Bloom complexity}\label{sec:bloomcomplexity}
 
