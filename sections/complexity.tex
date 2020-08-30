@@ -104,13 +104,13 @@ The last unknown parameter for the maximization of $N_{sus}$ in Equation \eqref{
 
 Now, all variables that are needed to find the upper bound to $N_{sus}$ have been collected. From Lemma \ref{lem:evenconstant} and Theorem \ref{the:ratios}, we find that in every fragmented set $\m{F}^o_k$ the sum of even node-tree sizes is $\nicefrac{2}{3}\abs{\pre{0}\nset^o}$. Filling this and the value for $k_m$ in Equation \eqref{eq:npdc} we find that
 
-\begin{align}
+\begin{align*}
   \nonumber N_{sus} &\leq 2\sum_{k=1}^{k_{m}}{ \sum_{ \pre{k}\nset_j^e \in \m{F}^o_k(\pre{0}\nset^o) }{ \abs{\pre{k}\nset_j^e} } } \\
   \nonumber         &\leq 2\sum_{k=1}^{\log_3{\abs{\pre{0}\nset^o}}} \frac{2}{3}\abs{\pre{0}\nset^o}\\
-                    &\leq \frac{4}{3}\abs{\pre{0}\nset^o}\log{\abs{\pre{0}\nset^o}}.
-\end{align}
+                    &\leq \frac{4}{3}\abs{\pre{0}\nset^o}\log_3{\abs{\pre{0}\nset^o}}.
+\end{align*}
 
-The maximum size of $\abs{\pre{0}\nset^o}$ is bounded by the system size $N = \abs{V}$. The worst-case time complexity of the suspension calculation is thus $\m{O}(N\log_3{N})$. 
+The maximum size of $\abs{\pre{0}\nset^o}$ is bounded by the system size $N = \abs{V}$. The worst-case time complexity of the suspension calculation is thus $\m{O}(N\log{N})$. 
 
 \subsection{Growth cost}\label{sec:growthcost}
 
@@ -121,9 +121,9 @@ To grow a cluster represented by a node-tree $\nset$, a depth-first search (DFS)
 We assume again that no trivial vertices are added  to a cluster or $|\nset| = |\vset|$. Determined by rule \ref{rgrow}, $N_{grow}$ is maximized if there are as many as possible mergers to a combined odd node-tree, while a minimum number of ancestor node-trees are involved. This is again achieved through $n_f = 2$. Within each fragmentation step, the DFS's are performed on each of the node-trees $\{\pre{k}\nset^o_0, \pre{k}\nset^o_1, \pre{k}\nset^o_2\}$ if all three clusters are grown. This is the case for $R_0 = R_1 = R_2$ such that $\abs{\vset_0}= \abs{\vset_1}=\abs{\vset_2}$, and all three clusters are grown simultanously (rule \ref{rweight}). 
 
 For these values of $n_f$ and $R$, we can apply Theorem \ref{the:km} for $k_m$. For $|\nset| = |\vset|$, the sum of node-tree sizes in every fragmented set $\m{F}_k$ is exactly $\abs{\pre{0}\nset^o}$, and Equation \eqref{eq:ngrow} becomes an upper bound to $N_{grow}$: 
-\begin{align}
+\begin{align*}
   \nonumber N_{grow} &\leq 2\sum_{k=1}^{k_{m}}{ \sum_{\pre{k}\nset_j^o \in \m{F}_k(\pre{0}\nset^o)}{ \abs{\pre{k}\nset_j^o} } } \\
   \nonumber         &\leq 2\sum_{k=1}^{\log_3{\abs{\pre{0}\nset^o}}} \abs{\pre{0}\nset^o}\\
-                    &\leq 2\abs{\pre{0}\nset^o}\log{\abs{\pre{0}\nset^o}}.
-\end{align}
-which again corresponds to a worst-case time complexity $\m{O}(N\log_3{N})$.
+                    &\leq 2\abs{\pre{0}\nset^o}\log_3{\abs{\pre{0}\nset^o}}.
+\end{align*}
+which again corresponds to a worst-case time complexity $\m{O}(N\log{N})$.
