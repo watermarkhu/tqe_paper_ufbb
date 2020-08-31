@@ -1,34 +1,67 @@
 \section{Performance}\label{sec:performance}
 
+We benchmark the performance of our own variants of the Union-Find decoder, as well as the Union-Find Node-Suspension (UFNS) decoder of Algorithm \ref{algo:ufbb}. Decoding rate $k_d$ for a given lattice size and physical error rate are acquired by Monte Carlo simulations. We apply the error model of \ref{sec:errormodel} of only i.i.d. phase-flip errors with chance $p_Z$ , which is \textbf{independent noise}. Additionaly, we compare the performance for \textbf{phenomonological noise}, which adds faulty syndrome measurements occuring at chance $p_Z$. Code thresholds $p_{th}$ are obtained by curve fitting for the crossing point of $k_d$-lines over a range of physical error rates of a range of lattice sizes. We also use the decoding succes rate at the threshold $k_d(p_{th})= k_{th}$ as a metric to compare decoders. 
 
-We benchmark the performance of the Union-Find Balanced-Bloom decoder of Algorithm \ref{algo:ufbb} using our application in Python3 (see Appendix \ref{ap:oopsurfacecode}). This is done by Monte Carlo simulations of decoding on a simulated lattice and to fit for the code threshold, described in Section \ref{sec:simthres}. For the independent noise model (Definition \ref{def:independent}), we simulate on lattice sizes $L_{small}=[8, 16, 24, 32, 40, 48, 56, 64]$ with a minimum of $96.000$ samples and on $L_{big}=[72, 80, 88, 96]$ with a minimum of $28.800$ samples. For the phenomenological noise model (Definition \ref{def:pheno}), we simulate on lattice sizes $L_{small}=[8,12,16,20,24]$ with a minimum of $105.600$ samples and on lattice sizes $L_{big}=[28, 32, 36, 40, 44]$ with $13.200$ samples. 
+\subsection{Union-Find decoder variants}
 
-\Figure[htb](topskip=0pt, botskip=0pt, midskip=0pt){tikzfigs/threshold_comparison.pdf}{bla\label{thres_comp}}
+We show that $p_{th}$ can be increased and the matching weight $\abs{\m{C}}$ can be decreased within the Union-Find decoder with some previously introduced concept \textbf{without} the Node-Suspension data structure. We compare distinct variants of our implementation of the Union-Find decoder, that either implements Weighted Growth via bucket sort or no Weighted Growth, and either constructs aclycic vertex-trees post-growth or maintains thems during cluster growth. The latter is achived by applying lines \ref{algo:dfa}-\ref{algo:dfb} of Algorithm \ref{algo:ufbb} in the UF decoder. The labels for each variant are listed in Table \ref{tab:uftable}.
+
+\begin{table}[htbp]
+  \centering
+  \begin{tabularx}{\linewidth} { | R{1.2} || C{0.9} | C{0.9} | }
+    \hline
+    & Vertex-tree \textbf{A}fter growth &  Vertex-tree \textbf{D}uring growth \\
+    \hhline{|=::=:=|}
+    No WG & AUF  & DUF \\
+    \hline
+    \textbf{B}ucket sort WG & BAUF & BDUF \\
+    \hline
+  \end{tabularx}
+  \caption{Abbreviated names for the variants of the Union-Find decoder.}\label{tab:uftable}
+\end{table}
+
+The thresholds $p_{th}$ and $k_{th}$ for each variant, including for the Minimum-Weight Perfect Matching (MWPM) decoder, are listed in Table \ref{tab:ufndfwug}. Weighted Growth has the expected behavior of increasing $p_{th}$. Maintaining vertex-trees during growth is equivalent to multiple breadth-first searches (BFS's) from each non-trivial vertex within the cluster, and provides a slight increase in $p_{th}$, but a more significant increase in $k_{th}$. We suspect that the BFS tree has shorter branches in between junctions, which leads to a deceased matching weight and increased $k_{th}$. We plot the matching weight $\abs{\m{C}}$ of the UF variants, normalized to the minimum weight of the MWPM decoder for $p_Z = 0.098$ in Figure \ref{comp_weight}. Here we see a correlation between a decrease in $\abs{\m{C}}$ with an increase in performance: both Weighted Growth and maintaining acyclic vertex-trees during growth increases the performance and decreases the matching weight. 
+
+\begin{table}[htbp]
+  \centering
+  \begin{tabularx}{\linewidth} { | R{1} || C{1} | C{1} | C{1} | C{1} | }
+    \hline
+    \multirow{2}{*}{} & \multicolumn{2}{c|}{Independent}& \multicolumn{2}{c|}{Phenomenological} \\
+    \cline{2-5}
+     & $p_{th}$ & $k_{th}$ & $p_{th}$ & $k_{th}$ \\
+    \hhline{|=::=:=:=:=|}
+    AUF & $9.72\%$ & $73.34\%$ & $ 2.53\%$ & $92.39\%$ \\
+    \hline
+    DUF & $9.79\%$ & $74.32\%$ & $2.56\%$ & $93.64\%$ \\
+    \hline
+    BAUF & $9.98\%$ & $72.71\%$ & $2.68\%$ & $91.32\%$ \\
+    \hline
+    BDUF & $10.01\%$ & $72.86\%$ & $2.69\%$ & $92.08\%$ \\
+    \hline
+    MWPM & $10.35\%$ & $71.58\%$ & $2.97\%$ & $90.24\%$\\
+    \hline
+  \end{tabularx}
+  \caption{Threshold error rates $p_{th}$ and threshold decoding success rates $k_{th}$ for the implementations of the  Union-Find decoder of Table \ref{tab:uftable}.}\label{tab:ufndfwug}
+\end{table}
+\Figure[htb](topskip=0pt, botskip=0pt, midskip=0pt){tikzfigs/comp_matching_weight.pdf}{
+  The matching weight $\abs{\m{C}}$ of the Union-Find decoder variants (Table \ref{tab:uftable}) and the UFNS decoder, normalized to the minimum weight $\min{\abs{\m{C}}}$ obtained via the Minimum-Weight Perfect Matching decoder. All weights are obtained by Monte Carlo simulations on $p_Z=0.098$ with a minimum of $100.000$ samples. The x-axis scales linearly with $N = L^2$. \label{comp_weight}}
+
+\subsection{Union-Find Node-Suspension decoder}
+
+\Figure[htb](topskip=0pt, botskip=0pt, midskip=0pt){tikzfigs/threshold_ufbb.pdf}{
+  The decoding rates $k_d$ of (a) the UFNS decoder and (c) the BDUF and MWPM decoders, obtained via Monte Carlo simulations with a minimum of 100.000 samples per lattice size per error rate. (a) The $k_d$ lines of the UFNS decoder do not cross in a single point, such that there is not obvious code threshold. (b) The crossing point of $k_d$ lines of subsequent lattice sizes are the so-called threshold coordinates, which follow a trend in $(p_Z, k_d)$ space as the lattice sizes increase. (c) The threshold coordinates of the UFNS decoder occupy the region in $(p_Z, k_d)$ space of the MWPM decoder. \label{threshold_ufbb}}
+
+We benchmark the performance of the Union-Find Node-Suspension (UFNS) decoder of Algorithm \ref{algo:ufbb}, and plot the $k_d$ lines in Figure \ref{threshold_ufbb}\emph{a}. We find that the $k_d$ lines of the UFNS decoder do not cross in a single point, such that there is no clear threshold $p_{th}$. In fact, the intersections of $k_d$ lines of subsequent lattices sizes, which we dub threshold coordinates, follow a trend where an increase in the input lattice sizes results in a decrease in $p_{th}$ but increase in $k_{th}$. We ascribe the degradation of the threshold error rate to the \emph{parity inversion} effect. These threshold coordinates $(p_{th}, k_{th})$ are plotted in Figure \ref{threshold_ufbb}\emph{b}. When these coordinates are plotted together with the $k_d$ lines of the BDUF and MWPM decoders, such as in Figure \ref{threshold_ufbb}\emph{c}, we see that the threshold coordinate for small lattice sizes is similar to the MWPM threshold coordinate. For larger lattice sizes, UFNS threshold coordinates move towards the BDUF threshold on the $p_Z$ axis, but still has an increased performance due on the increased $k_{th}$. Overall, the threshold coordinates occupy a region in $(p_Z, k_d)$ space that was previously reserved to the MWPM decoder. 
+
+\Figure[htb](topskip=0pt, botskip=0pt, midskip=0pt){tikzfigs/comp_time.pdf}{
+  The mean computation time of the UFNS, BDUF and MWPM decoders. All weights are obtained by Monte Carlo simulations on $p_Z=0.098$ with a minimum of $100.000$ samples. The x-axis scales linearly with $N = L^2$.\label{comp_time}}
+
+The matching weight $\abs{\m{C}}$ of the UFNS decoder is successfully further decreased compared to all UF variants of Table \ref{tab:uftable}. For $p_Z = 0.098$ the normalized matching weight is halved compared to the BDUF decoder (Figure \ref{comp_weight}). Finally, we compare the average running time of Monte Carlo simulations to obtain matchings between the UFNS, BDUF and MWPM decoders. The comparison for $p_Z=0.098$ is included in Figure \ref{comp_time}. The average running time of UFNS, while behaving according to the worst-case complexity of $\m{O}(N \log{N})$, is also not linear. However, The UFNS decoder does offer a midway choice between the MWPM decoder and DBUF decoder. 
+
+\Figure[htb](topskip=0pt, botskip=0pt, midskip=0pt){tikzfigs/comp_lowerror.pdf}{
+  The decoding rate $k_d$ for the low error regime of phenomonological noise for the MWPM, UFNS, BDUF and AUF decoders. The UFNS decoding rates are improved from the UF variants, and is very similar to MWPM. \label{comp_lowerror}}
 
 
-\subsection{Threshold}
+\par
 
-We had initially simulated for the decoding success rates for the range of lattices in $L_{small}$, which is the same range used when benchmarking the various implementations of the Union-Find decoder in Section \ref{sec:ufperformance}. For $L_{small}$, we find that, except for the environment of planar code with independent noise, the thresholds of the Union-Find Balanced-Bloom decoder are increased from the DBUF thresholds, and moves close to the thresholds of the MWPM decoder. We also observe an increase in decoding success rate at the threshold $k_{th}$ from DBUF, which is also the case for the environment of planar code with independent noise. For the range of lattices in $L_{big}$ (Figure \ref{fig:threshold_ufbbbig}), the threshold of the Union-Find Balanced-Bloom decoder decreases to below DBUF thresholds. This does not necessarily mean that it performs worse, as $k_{th}$ is still above DBUF's values, but does raise questions on the scalability of the Union-Find Balanced-Bloom decoder. In fact, if we look closely at the values of $k_C$ (Figure \ref{fig:thres_ufbb_toric_2d_data}), we find that the fit does not accurately represent the underlying data points, which is different behavior from the MWPM and DBUF decoders. The threshold and $k_C$ of the Union-Find Balanced-Bloom decoder may not be accurate for comparison. 
-
-For this reason, we have applied a \emph{sequential fit} to the data acquired in the Monte Carlo simulations of lattices of $L = L_{small} \cup L_{big}$. In the sequential fit, we iterate stepwise in the ordered list of lattice sizes $L$ and fit for the data of $L_i, L_{i+1}$ for $i \in |L|-1$ iterations. The fit thus returns an error threshold in the range of the chosen lattice sizes. The range of thresholds $p_{th}(L_i, L_{i+1})$ for the environment of toric code with independent noise is plotted in Figure \ref{fig:thres_ufbb_toric_2d_seq}. We see that the sequential fits follow a trend where the increase in the input lattice sizes results in a decrease in $p_{th}$ but increase in $k_{th}$. The range of thresholds coordinates $(p_{th}, k_{th})$ is plotted in Figure \ref{fig:thres_ufbb_toric_2d_comp}, together with the data acquired from the simulations for the performance of the MWPM decoder and the DBUF decoder. Similar figures for the Monte Carlo simulations on the planar code and the phenomenological noise model are included in Figures \ref{fig:thres_ufbb_planar_2d}, \ref{fig:thres_ufbb_toric_3d}, and \ref{fig:thres_ufbb_planar_3d}. 
-
-We ascribe the degradation of the threshold error rate to the \emph{parity inversion} effect of Definition \ref{def:parityinversion}. Recall from Lemma \ref{lem:eqstate} that the number of iterations waited before a union $I_t$ is proportional to the number of iterations required to reach the balanced-bloom state (Definition \ref{def:balancedbloom}) $M_{t+1}$, where $(I:M)$ is the equilibrium state of Definition \ref{def:eqstate}. By setting the equilibrium factor to $k_{eq}=\frac{1}{2}$, the equilibrium state is occupied half on average. The degradation is caused by the proportionality of the number of parity inversions and consequently equilibrium-state parameter $M$ to the lattice size. As the lattice size increases, the equilibrium state is still occupied half on average, but the absolute difference in $M-I$ increases. It is thus increasingly more unlikely that the balanced-bloom state is reached. 
-
-Overall, for small lattice sizes, the Union-Find Balanced-Bloom decoder has an increased error threshold $p_{th}$ from the threshold of the Union-Find decoder and is comparable to the threshold values of the Minimum-Weight Perfect Matching decoder. The error threshold decreases for larger lattice sizes, but the Union-Find Balanced-Bloom decoder still has an increased performance, which is now apparent by an increased decoding success rate at the threshold $k_{th}$. The improvement across all lattice sizes is most apparent when comparing the range of threshold coordinates in $(p_X, k_C)$ space, where the coordinates now occupy a range that is not possible with the Union-Find decoder. 
-
-\Figure[htb](topskip=0pt, botskip=0pt, midskip=0pt){tikzfigs/threshold_ufbb.pdf}{bla\label{threshold_ufbb}}
-
-
-\subsection{Matching weight and running time}
-
-Finally, we plot the average matching weight and running time of the Union-Find Balanced-Bloom (UFBB) compared with the Dynamic-forest Bucket Union-Find decoder (DBUF) and the Minimum-Weight Perfect Matching (MWPM) decoder for data acquired on simulations on a toric code with independent noise and $p_X = 0.1$ in Figure \ref{fig:ufbb_tmwcomp_toric_2d}. We can see from this figure that the Union-Find Balanced-Bloom decoder has a constant decreased weight. As for the running time, the UFBB decoder offers a midway choice between the MWPM decoder and DBUF decoder. We refer to Figures \ref{fig:mwcomp_ufbb} and \ref{fig:tcomp_ufbb} for the same plots but on a planar code or phenomenological noise, for which we observe the same behavior. 
-
-We find that the decrease in weight is constant across the range of values of $p_X$, which is also the case for the planar code and the phenomenological noise model. We can compare the decrease in matching weight as the ratios between the normalized matching weight between the UFBB and DBUF decoders as
-\begin{equation}
-  r_{\abs{\m{C}}}=\frac{\abs{\m{C}_{UFBB}}/\abs{\m{C}_{MWPM}}}{\abs{\m{C}_{DBUF}}/\abs{\m{C}_{MWPM}}}. 
-\end{equation}
-We find the averaged values for $r_{\abs{\m{C}}}$ from the Monte Carlo simulations on the toric and planar lattices, and with the independent and phenomenological noise models, in Table \ref{tab:nmwratio}. The Union-Find Balanced-Bloom decoder successfully decreases the matching weight from the Dynamic-forest Bucket Union-Find decoder. The decrease is more apparent under the independent noise model. 
-
-\Figure[htb](topskip=0pt, botskip=0pt, midskip=0pt){tikzfigs/comp_ufbb_toric_2d_p98.pdf}{bla\label{tmw_comp}}
-% \Figure[htb](topskip=0pt, botskip=0pt, midskip=0pt){tikzfigs/threshold_comparison_dense.pdf}{bla\label{thres_comp_d}}
-% this can be plotted with a shared y-axis
+The simulator for the surface code, the Union-Find decoder variants and the Union-Find Node-Suspension decoder have all been implemented in Python using our application \cite{OpenSurfaceSim}. The MWPM decoder utilitizes the C implementation of BlossomV \cite{kolmogorov2009blossom} due to substantial slow perfomances of Python implementations. Simulations were initially performed on a single 3.20 GHz Intel Core i5 CPU, but later parallelized on all 24 threads of 3.60 GHz Intel Xeon E5 CPU's. 
