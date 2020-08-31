@@ -1,7 +1,7 @@
 \Figure[htb](topskip=0pt, botskip=0pt, midskip=0pt){tikzfigs/threshold_comparison.pdf}{
   Direct comparison of the performance of various decoders covered in this thesis. The data of the original Union-Find (UF) decoder is taken from its publication \cite{delfosse2017almost}. Using the same range of lattice sizes and error rates, we simulate and plot also for our implementation of the Union-Find decoder with Weighted Growth applied via bucket sort and acyclic vertex-trees maintained during growth, the DBUF decoder, the Union-Find Node-Suspension decoder (UFNS), and the Minimum-Weight Perfect Matching (MWPM) decoder.\label{thres_comp}}
-\section{Conclusion}\label{sec:conclusion}
 
+\section{Conclusion}\label{sec:conclusion}
 We have thoroughly inspected the Union-Find decoder that has the advantage in running time and simplicity compared to other decoders. We have provided various implementations of the original Union-Find decoder with the bucket sort method for weighed growth and the dynamic forest variant of the decoder. We have introduced a modification of the original decoder that selectively grows regions of clusters based on the concept of a potential matching weight. The modified decoder, dubbed the Union-Find Node-Suspension (UFNS) decoder, relies on an additional data structure to facilitate the calculation of the potential matching weight. We summarize our results in short:
 
 \begin{itemize}
