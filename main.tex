@@ -25,7 +25,7 @@
 % \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
 %     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 \usepackage[style=ieee, sorting=none]{biblatex}
-\addbibresource{cit.bib}
+\addbibresource{citations/*.bib}
 
 % \usepackage[table]{xcolor}
 % % Define colors
@@ -81,7 +81,7 @@
 \address[2]{QuTech, Delft University of Technology, Lorentzweg 1
 2628CJ Delft, The Netherlands (email: d.elkousscoronas@qutech.nl)}
 
-\tfootnote{This work was partially supported by the Netherlands Organization for Scientific Research (NWO/OCW), as part of the Quantum Software Consortium program (project number 024.003.037/3368). }
+\tfootnote{This work was partially supported by the Netherlands Organization for Scientific Research (NWO/OCW), as part of the Quantum Software Consortium program (project number 024.003.037/3368), and the Unitary Fund.}
 
 \markboth
 {S. Hu \headeretal: IEEE Transactions on Quantum Engineering}
@@ -90,9 +90,7 @@
 \corresp{Corresponding author: First A. Author (email: author@ boulder.nist.gov).}
 
 \begin{abstract}
-    Quantum computing has the potential to transcend the information technology as we know it. Small scale quantum systems are already possible today, and the goal is to scale up these quantum architectures to build practical quantum devices. A major limiting factor in quantum computing is the accumulation of errors that may be caused by various sources. A solution is to encode the logical information in a larger amount of physical qubits to increase resilience and to decode the information with a decoder. 
-    
-    We introduce a modification of the Union-Find decoder that aims to further decrease the weight of the correction operator, similarly to the Minimum-Weight Perfect Matching decoder. The modified decoder, dubbed the Union-Find Balanced-Bloom decoder, manages to have an increased error threshold compared to the Union-Find decoder of any lattice size. For small lattice sizes, the Union-Find Balanced-Bloom decoder performs near the code threshold of the Minimum-Weight Matching decoder. We manage to maintain a quasilinear worst-case time complexity of $\m{O}(N\log{N})$. 
+    Quantum computing has the potential to transcend the information technology as we know it. Small scale quantum systems are already possible today, and the goal is to scale up these quantum architectures to build practical quantum devices. A major limiting factor in quantum computing is the accumulation of errors that may be caused by various sources. A solution is to encode the logical information in a larger amount of physical qubits to increase resilience and to decode the information with a decoder. A recently proposed decoder dubbed the Union-Find (UF) decoder utilizes the identically titled data structure to keep track of mergers between growing regions to find the appropiate correction. This decoder is fast and almost linear in its worst-case time complexity but has a reduced perfomance compared with the Minimum-Weight Perfect Matching (MWPM) decoder. We propose a modification of the UF decoder that aims to further decrease the weight of the correction operator, similarly to the MWPM decoder. The modified decoder, dubbed the Union-Find Node-Suspension (UFNS) decoder, manages to have an improved performance compared to the UF decoder of any lattice size. For small lattice sizes and also for low error rates, the UFNS decoder performs very comparable with the MWPM decoder. We manage to maintain a quasilinear worst-case time complexity of $\m{O}(N\log{N})$. 
 \end{abstract}
 
 \begin{keywords}
