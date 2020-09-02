@@ -90,7 +90,7 @@
 \corresp{Corresponding author: First A. Author (email: author@ boulder.nist.gov).}
 
 \begin{abstract}
-    Quantum computing has the potential to transcend the information technology as we know it. Small scale quantum systems are already possible today, and the goal is to scale up these quantum architectures to build practical quantum devices. A major limiting factor in quantum computing is the accumulation of errors that may be caused by various sources. A solution is to encode the logical information in a larger amount of physical qubits to increase resilience and to decode the information with a decoder. A recently proposed decoder dubbed the Union-Find (UF) decoder utilizes the identically titled data structure to keep track of mergers between growing regions to find the appropiate correction. This decoder is fast and almost linear in its worst-case time complexity but has a reduced perfomance compared with the Minimum-Weight Perfect Matching (MWPM) decoder. We propose a modification of the UF decoder that aims to further decrease the weight of the correction operator, similarly to the MWPM decoder. The modified decoder, dubbed the Union-Find Node-Suspension (UFNS) decoder, manages to have an improved performance compared to the UF decoder of any lattice size. For small lattice sizes and also for low error rates, the UFNS decoder performs very comparable with the MWPM decoder. We manage to maintain a quasilinear worst-case time complexity of $\m{O}(N\log{N})$. 
+    Quantum computing has the potential to transcend the information technology as we know it. Small scale quantum systems are already possible today, and the goal is to scale up these quantum architectures to build practical quantum devices. A major limiting factor in quantum computing is the accumulation of errors that may be caused by various sources. A solution is to encode the logical information in a larger amount of physical qubits to increase resilience and to decode the information with a decoder. A recently proposed decoder dubbed the Union-Find (UF) decoder utilizes the identically titled data structure to keep track of mergers between growing regions to find the appropiate correction. This decoder is fast and almost linear in its worst-case time complexity but has a reduced perfomance compared with the Minimum-Weight Perfect Matching (MWPM) decoder. We propose a modification of the UF decoder that aims to further decrease the weight of the correction operator, similarly to the MWPM decoder. The modified decoder, dubbed the Union-Find Node-Suspension (UFNS) decoder, manages to have an improved performance compared to the UF decoder of any lattice size. For small lattice sizes and also for low error rates, the UFNS decoder performs very comparable with the MWPM decoder. We manage to maintain a quasilinear worst-case time complexity of $\m{O}(n\log{n})$. 
 \end{abstract}
 
 \begin{keywords}
@@ -101,14 +101,7 @@
 \maketitle
 
 \input{sections/introduction}
-\input{sections/surfacecode}
-\input{sections/unionfind}
 \input{sections/ufbb}
-\input{sections/matchingweight}
-\input{sections/nodeset}
-\input{sections/paritydelay}
-\input{sections/nodejoin}
-\input{sections/inversion}
 \input{sections/pseudocode}
 \input{sections/complexity}
 \input{sections/performance}

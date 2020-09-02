@@ -105,13 +105,12 @@
     \node[node, fill=white] at (4,2) (7) {};
     \node[node, fill=white] at (4,-2) (8) {};
 
-    \draw[l1] (2) -- +(-1,0) (2) -- +(0,1) (2) -- +(0,-1);
-    \draw[l1] (3) -- +(1,0) (3) -- +(-1,0) (3) -- +(0,1);
-    \draw[l1] (4) -- +(1,0) (4) -- +(-1,0) (4) -- +(0,-1);
-    \draw[l1] (6) -- +(1,0) (6) -- +(0,1) (6) -- +(0,-1);
-    \draw[l1] (7) -- +(1,0) (7) -- +(-1,0) (7) -- +(0,1);
-    \draw[l1] (8) -- +(1,0) (8) -- +(-1,0) (8) -- +(0,-1);
-
+    % \draw[l1] (2) -- +(-1,0) (2) -- +(0,1) (2) -- +(0,-1);
+    % \draw[l1] (3) -- +(1,0) (3) -- +(-1,0) (3) -- +(0,1);
+    % \draw[l1] (4) -- +(1,0) (4) -- +(-1,0) (4) -- +(0,-1);
+    % \draw[l1] (6) -- +(1,0) (6) -- +(0,1) (6) -- +(0,-1);
+    % \draw[l1] (7) -- +(1,0) (7) -- +(-1,0) (7) -- +(0,1);
+    % \draw[l1] (8) -- +(1,0) (8) -- +(-1,0) (8) -- +(0,-1);
 
     \draw[l1] (6) -- (5) -- (1) -- (0) -- (3);
     \draw[l1] (2) -- (0) -- (4);
@@ -121,9 +120,9 @@
 
     \begin{scope}[shift={(0, -4)}]
         \node at (-3, 0) {$\mathcal{N}$};
-        \node[node, pattern=horizontal lines, pattern color=mblue] at (0,0) (d) {$\nicefrac{3}{2}$};
-        \node[nodel, pattern=dots , pattern color=mred] at (2,0) (e) {$\nicefrac{1}{2}$};
-        \node[node, pattern=vertical lines, pattern color=mgreen] at (4,0) (f) {$\nicefrac{3}{2}$};
+        \node[node, pattern=horizontal lines, pattern color=mblue] at (0,0) (d) {$1$};
+        \node[node1, inner sep=0, pattern=dots , pattern color=mred] at (2,0) (e) {$\nicefrac{1}{2}$};
+        \node[node, pattern=vertical lines, pattern color=mgreen] at (4,0) (f) {$1$};
         \node at (0,-1) {$n_0$};
         \node at (2,-1) {$n_1$};
         \node at (4,-1) {$n_2$};
