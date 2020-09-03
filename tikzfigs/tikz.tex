@@ -6,22 +6,26 @@
 \usetikzlibrary{external,shapes,calc,math,patterns,arrows,positioning,fadings}
 \tikzexternalize[optimize=false]
 
-\tikzstyle{node}=[circle, draw=black, minimum size=25pt, line width=1, inner sep= 5pt]
-\tikzstyle{nodel}=[circle, draw=black, minimum size=15pt, line width=1, inner sep= 0pt]
-\tikzstyle{nodem}=[circle, draw=black, minimum size=10pt, line width=1, inner sep= 0pt]
+\tikzstyle{l1}=[line width=0.9]
+\tikzstyle{l2}=[line width=0.5]
+\tikzstyle{node}=[circle, draw=black, minimum size=25pt, l1, inner sep= 5pt]
+\tikzstyle{nodel}=[circle, draw=black, minimum size=15pt, l1, inner sep= 0pt]
+\tikzstyle{nodem}=[circle, draw=black, minimum size=10pt, l1, inner sep= 0pt]
 \tikzstyle{tnode}=[nodel, minimum size=0.8 cm, fill=white]
-\tikzstyle{node1}=[circle, draw=black, minimum size=20pt, line width=1, inner sep= 2pt]
-\tikzstyle{node2}=[circle, draw=black, minimum size=14pt, line width=1, inner sep= 0pt, fill=white!70!black]
-\tikzstyle{l1}=[line width=1]
+\tikzstyle{node1}=[circle, draw=black, minimum size=20pt, l1, inner sep= 2pt]
+\tikzstyle{node2}=[circle, draw=black, minimum size=14pt, l1, inner sep= 0pt, fill=white!70!black]
 \tikzfading[name=fade right, left color=transparent!0, right color=transparent!100]
-\tikzstyle{odd}=[node2, dashed, pattern=dots, pattern color=mred!75!white]
+\tikzstyle{odd}=[node2, pattern=crosshatch dots, pattern color=mred!75!white]
 \tikzstyle{even}=[node2, pattern=dots, pattern color=mblue!75!white]
+\tikzstyle{odd1}=[nodel, minimum size=13pt, pattern=crosshatch dots, pattern color=mred!75!white]
+\tikzstyle{even1}=[nodel, minimum size=13pt, pattern=dots, pattern color=mblue!75!white]
 \tikzstyle{lodd}=[odd, pattern = crosshatch dots]
 \tikzstyle{leven}=[even, pattern = crosshatch dots]
 \tikzstyle{enset}=[node1, thick, double, font=\footnotesize]
 \tikzstyle{onset}=[node1, thick, densely dashed, double, font=\footnotesize]
 \tikzstyle{subtree}=[node1, opacity=0.3,dotted, font=\footnotesize]
-\tikzstyle{undef}=[node1, dotted, pattern=dots, pattern color=black!25!white]
+\tikzstyle{known}=[nodel, pattern=dots, pattern color=green!75!white]
+\tikzstyle{undef}=[nodel, dotted, pattern=dots, pattern color=black!25!white]
 \tikzstyle{edge}=[above,midway,font=\tiny]
 \tikzstyle{smallarrow} = [draw, single arrow, shape border rotate=270, minimum height=0.25cm, minimum width=0.35cm, single arrow head extend=0.01cm, inner sep=0]
 
@@ -65,17 +69,18 @@
 % PMW
 \begin{tikzpicture}[scale=0.8]
     % \node at (-1, -1) {$\mathcal{V}$};
+    \draw[l1, opacity=0.1, step=2] (-1,-1) grid (5,3); 
     \draw[l1] (0, 0) -- (4,0);
     \draw[l1] (-1,0) -- (5,0);
     \draw[l1] (0,1) -- (0,-1);
     \draw[l1] (2,1) -- (2,-1);
     \draw[l1] (4,1) -- (4,-1);
     \node[node, fill=white!70!mblue, text opacity=1] at (0,0) (1) {$v_0$};
-    \node[node, draw=mblue, dashed] at (0,2) (2) {$v_0'$};
+    \node[node, fill=white, draw=mblue, dashed] at (0,2) (2) {$v_0'$};
     \node[node, fill=white!70!mred, text opacity=1] at (2,0) (3){$v_1$};
-    \node[node, draw=mred,dotted] at (2,2) (4) {$v_1'$};
+    \node[node, fill=white, draw=mred,dotted] at (2,2) (4) {$v_1'$};
     \node[node, fill=white!70!mgreen, text opacity=1] at (4,0) (5) {$v_2$};
-    \node[node, draw=mgreen, dashdotted] at (4,2) (6) {$v_2'$};
+    \node[node, fill=white, draw=mgreen, dashdotted] at (4,2) (6) {$v_2'$};
 
     \draw[l1, dashed, mblue] (1) -- (2);
     \draw[l1, dashed, mblue, transform canvas={yshift=3pt}] (3) -- (5);
@@ -88,6 +93,8 @@
 
 % Node-tree
 \begin{tikzpicture}[scale=0.7]
+    \draw[l1, opacity=0.1, step=2] (-3,-3) grid (7,3); 
+
     \path[pattern=horizontal lines, pattern color=mblue] (0,3) arc (90:225:1) arc (45:-135:.4142) arc (45:315:1) arc (135:-45:.4142) arc (135:405:1) arc (225:135:.4142) arc (-45:45:1) arc (225:135:.4142) arc (-45:90:1) -- cycle;
 
     \begin{scope}[shift={(4,0)}, xscale=-1]
@@ -133,9 +140,11 @@
 
 % Node types
 \begin{tikzpicture}[scale=0.75]
+    
     \node at (-3, 2) {$\mathcal{V}$};
     \node at (-3, -3) {$\mathcal{N}$};
     \begin{scope}[shift={(-1, 0)}, scale=1.5]
+        \draw[l1, opacity=0.1, step=1] (-1.5,-1.5) grid (5.5,1.5); 
         \node at (0,0) (0) {}; \node at (2,0) (1) {}; \node at (4,0) (2) {};
         \path[pattern=horizontal lines, pattern color=mblue, rounded corners=10pt, rotate around={45:(0)}] (-1.1,-1.1) rectangle (1.1,1.1);
         \path[pattern=vertical lines, pattern color=mred, rounded corners=10pt, rotate around={45:(1)}] (0.9,-1.1) rectangle (3.1,1.1);
@@ -181,86 +190,159 @@
 \end{tikzpicture}
 
 % DFS
-\begin{tikzpicture}[x=1.5cm,y=1.5cm]
-    \node[even,node1] (a) at (1, 3) {$n_r$};
-    \node[odd ,node1]  (b) at (1, 2) {};
-    \node[odd ,node1]  (c) at (1, 1) {};
-    \node[even,node1] (d) at (1, 0) {};
-    \node[even,node1] (e) at (0, 1) {};
-    \node[even,node1] (f) at (0, 0) {};
-    \node[odd ,node1]  (g) at (2, 2) {};
-    \node[even,node1] (h) at (2, 1) {};
-    \node[even,node1] (i) at (2, 0) {};
-    \draw[l1] (a) -- (b) -- (c) -- (d);
-    \draw[l1] (b) -- (e);
-    \draw[l1] (c) -- (f);
-    \draw[l1] (c) -- (i);
-    \draw[l1] (a) -- (g) -- (h);
+\begin{tikzpicture}[x=1cm,y=1cm]
 
-    \draw[l1, ->, dashed, color=mblue] (0, 1.3) -- +(45:0.85) arc (-45:0:.5) -- +(90:.6);
-    \draw[l1, ->, dashed, color=mblue] (0, 0.3) -- +(45:0.85) arc (-45:0:.5) -- +(90:.2);
-    \draw[l1, ->, dashed, color=mblue] (0.75,0.2) -- +(90:.3);
-    \draw[l1, ->, dashed, color=mblue] (1.5,0.2) -- +(135:.4);
-    \draw[l1, ->, dashed, color=mblue] (1.75,1.2) -- +(90:0.5) arc (0:45:.5) -- +(135:0.4);
-    \draw[l1, ->, color=mred] (1.4, 3) -- +(-45:1.1) arc (45:0:0.5) -- +(-90:0.7);
-    \draw[l1, ->, color=mred] (1.3, 2.1) -- +(-90:0.9) arc (180:225:.5) -- +(-45:0.7);
-    \draw[l1, ->, color=mred] (0.6, 0.3) -- +(225:.3);
-    \draw[l1, ->, color=mred] (1.3, 0.3) -- +(-90:.2);
-    \node[text=mblue] at (0,2.2) {Parity};
-    \node[text=mred] at (2.6,2.8) {Delay};
-    \node at (0,3) {$\mathcal{N}$};
+    \node at (-2.75, -0.7) {Cluster-tree (Union-Find)};
+    \node at (3.1, -0.7) {Vertex-tree $\vset$};
+    \node at (9.2,-.7) {Node-tree $\mathcal{N}$ (Node-Suspension)};
 
-    \path (3,.5) node[node1, even]{} -- +(.2,0) node[anchor=west] {even parity};
-    \path (3,0) node[node1, odd]{} -- +(.2,0) node[anchor=west] {odd parity};
+    \draw[l1, opacity=0.5, ->] (5.5,1) -- +(.5,0);
+    \draw[l1, opacity=0.5, ->] (0.5,1) -- +(-.5,0);
+
+    \begin{scope}[shift={(-3,0)}]
+        \node at (-1, 2.5) {root};
+        \node[draw, l1, minimum size=20]   (v0) at (-1,2){$5$};
+        \node[nodem, minimum size=12] (v1) at (-1.5,0){$0$};
+        \node[nodem, minimum size=12] (v2) at (-1,0)  {$1$};
+        \node[nodem, minimum size=12] (v3) at (-.5,0) {$2$};
+        \node[nodem, minimum size=12] (v4) at (0,0)   {$3$};
+        \node[nodem, minimum size=12] (v5) at (.5,0)  {$4$};
+        \node[nodem, minimum size=12] (v6) at (1,0)   {$6$};
+        \node[nodem, minimum size=12] (v7) at (1.5,0) {$7$};
+        \node[nodem, minimum size=12] (v8) at (2,0)   {$8$};
+        \draw[l1] (v1) to [out=90, in=270] (v0.226);
+        \draw[l1] (v2) to [out=90, in=270] (v0.235);
+        \draw[l1] (v3) to [out=90, in=275] (v0.245);
+        \draw[l1] (v4) to [out=90, in=280] (v0.262);
+        \draw[l1] (v5) to [out=90, in=285] (v0.278);
+        \draw[l1] (v6) to [out=90, in=290] (v0.295);
+        \draw[l1] (v7) to [out=90, in=295] (v0.305);
+        \draw[l1] (v8) to [out=90, in=300] (v0.314);
+
+        \node[draw, l1, align=left, opacity=0.5, text opacity=1] (inf) at (1,2) {size: 9\\parity: 9\\node root: $n_r$};
+        \draw[l1, ->, opacity=.5] (v0) -- (inf);
+    \end{scope}
+
+
+    \begin{scope}[scale=0.8, shift={(2.2,.7)}]
+        \draw[l1, opacity=0.1, step=1] (-.9,-.9) grid (3.9,2.9);
+        \node [nodel, fill=white] (w0) at (0,0) {$0$};
+        \node [nodel, fill=white] (w1) at (1,0) {$1$};
+        \node [nodel, fill=white] (w2) at (2,0) {$2$};
+        \node [nodel, fill=white] (w3) at (0,1) {$3$};
+        \node [nodel, fill=white] (w4) at (1,1) {$4$};
+        \node [nodel, fill=white] (w5) at (2,1) {$5$};
+        \node [nodel, fill=white] (w7) at (0,2) {$7$};
+        \node [nodel, fill=white] (w8) at (2,2) {$8$};
+        \node [nodel, fill=white] (w6) at (3,1) {$6$};
+        \draw [l1] (w7) -- (w3) -- (w0) -- (w1) (w3) -- (w4) -- (w5) -- (w8) (w6) -- (w5) -- (w2);
+        \draw [l1] (w0) -- +(-.6,0) (w0) -- +(0, -.6);
+        \draw [l1] (w3) -- +(-.6,0);
+        \draw [l1] (w7) -- +(-.6,0) (w7) -- +(0, .6) (w7) -- +(0.6, 0);
+        \draw [l1] (w4) -- +(0, .6);
+        \draw [l1] (w8) -- +(-.6,0) (w8) -- +(0, .6) (w8) -- +(0.6, 0);
+        \draw [l1] (w6) -- +(0,-.6) (w6) -- +(0, .6) (w6) -- +(0.6, 0);
+        \draw [l1] (w2) -- +(.6,0) (w2) -- +(0, -.6);
+        \draw [l1] (w1) -- +(0,-.6);
+        \draw [l1, mred] (w4) -- (w1) -- (w2);
+    \end{scope}
+
+
+    \begin{scope}[shift={(7,0)}, y=0.9cm]
+        \node at (0.3, 3) {$\nset_r$};
+        \node[even1] (a) at (1, 3) {3};
+        \node[odd1]  (b) at (1, 2) {4};
+        \node[odd1]  (c) at (1, 1) {5};
+        \node[even1] (d) at (1, 0) {6};
+        \node[even1] (e) at (0, 1) {7};
+        \node[even1] (f) at (0, 0) {2};
+        \node[odd1]  (g) at (2, 2) {0};
+        \node[even1] (h) at (2, 1) {1};
+        \node[even1] (i) at (2, 0) {8};
+        \draw[l1] (a) -- (b) -- (c) -- (d);
+        \draw[l1] (b) -- (e);
+        \draw[l1] (c) -- (f);
+        \draw[l1] (c) -- (i);
+        \draw[l1] (a) -- (g) -- (h);
+
+        \draw[l2, ->, dashed, color=mblue] (0, 1.3) -- +(45:0.85) arc (-45:0:.5) -- +(90:.6);
+        \draw[l2, ->, dashed, color=mblue] (0, 0.3) -- +(45:0.85) arc (-45:0:.5) -- +(90:.2);
+        \draw[l2, ->, dashed, color=mblue] (0.75,0.2) -- +(90:.3);
+        \draw[l2, ->, dashed, color=mblue] (1.5,0.2) -- +(135:.4);
+        \draw[l2, ->, dashed, color=mblue] (1.75,1.2) -- +(90:0.5) arc (0:45:.5) -- +(135:0.4);
+        \draw[l2, ->, color=mred] (1.4, 3) -- +(-45:1.1) arc (45:0:0.5) -- +(-90:0.7);
+        \draw[l2, ->, color=mred] (1.3, 2.1) -- +(-90:0.9) arc (180:225:.5) -- +(-45:0.7);
+        \draw[l2, ->, color=mred] (0.6, 0.3) -- +(225:.3);
+        \draw[l2, ->, color=mred] (1.3, 0.3) -- +(-90:.2);
+        % \node[text=mblue] at (0,2.2) {Parity};
+        % \node[text=mred] at (2.6,2.8) {Delay};
+        
+        
+        \begin{scope}[shift={(3,0)}]
+            \path (0,1.5) node[even1, minimum size=10]{} -- +(.5,0) node[anchor=west] {$n_p$ even};
+            \path (0,1) node[odd1 , minimum size=10]{} -- +(.5,0) node[anchor=west] {$n_p$ odd};
+            \draw[l2, ->, color=mblue, dashed] (-.25, .5) -- ++(0.5,0);
+            \draw[l2, ->, color=mred] (-.25, 0) -- ++(0.5,0);
+            \node[color=mblue, anchor=west] at (.5,.5) {Parity};
+            \node[color=mred, anchor=west] at (.5,0) {Delay};
+        \end{scope}
+    \end{scope}
+
+    
 \end{tikzpicture}
 
 
 
-\begin{tikzpicture}[scale=0.9]
-    \node at (1.5,2) {$\nset_o$};
-    \node at (3.5,2) {$\nset_e$};
-    \node (o1) [even, node1] at (1.5, 1) {$n_1$};
-    \node (o2) [even, node1] at (1, 0) {$n_2$};
-    \node (o3) [even, node1] at (2, 0) {$n_o$};
-    \node (e4) [undef] at (3.5,1) {$n_3$};
-    \node (e5) [undef] at (3.5,0) {$n_e$};
-    \draw[l1] (o2) -- (o1) -- (o3) (e4) -- (e5);
-    \draw[l1, dashed] (o3) -- (e5) node[midway,below] (a) {};
-    \draw[l1, <-] (a) -- ++(0,-.5) node[below] {$\codefunc{Join}(n_e, n_o)$};
+\begin{tikzpicture}[scale=0.75]
+    \begin{scope}[shift={(0,-1)}]
+        \node at (1.5,-1) {$\nset_o$};
+        \node at (3.5,-1) {$\nset_e$};
+        \node (o1) [known] at (1.5, 1) {$n_1$};
+        \node (o2) [known] at (1, 0) {$n_2$};
+        \node (o3) [known] at (2, 0) {$n_o$};
+        \node (e4) [undef] at (3.5,1) {$n_3$};
+        \node (e5) [undef] at (3.5,0) {$n_e$};
+        \draw[l1] (o2) -- (o1) -- (o3) (e4) -- (e5);
+        \draw[l1, dashed] (o3) -- (e5) node[midway,below] (a) {};
+        % \draw[l1, <-] (a) -- ++(0,-.5) node[below] {$\codefunc{Join}(n_e, n_o)$};
+    \end{scope}
 
-    \begin{scope}[shift={(5,1)}]
-        \node (o1) [even, node1] at (1.5, 1) {$n_1$};
-        \node (o2) [even, node1] at (1, 0) {$n_2$};
-        \node (o3) [even, node1] at (2, 0) {$n_o$};
+    \begin{scope}[shift={(4.5,0)}]
+        \node (o1) [known] at (1.5, 1) {$n_1$};
+        \node (o2) [known] at (1, 0) {$n_2$};
+        \node (o3) [known] at (2, 0) {$n_o$};
         \node (e4) [undef] at (2,-2) {$n_3$};
         \node (e5) [undef] at (2,-1) {$n_e$};
         \draw[l1] (o2) -- (o1) -- (o3) -- (e5) -- (e4);
-        \draw[l1, ->, dashed, color=mblue] (e4) ++(-.7,0) -- + (0,1);
-        \draw[l1, ->, color=mred] (o3) ++(.7,-.5) -- +(0,-1.5);
+        \draw[l2, ->, dashed, color=mblue] (e4) ++(-.7,0) -- + (0,1);
+        \draw[l2, ->, color=mred] (o3) ++(.7,-.5) -- +(0,-1.5);
     \end{scope}
 
-    \begin{scope}[shift={(11,-1)}]
-        \node (o1) [undef] at (0.75, 0.75) {$n_1$};
-        \node (o2) [undef] at (0, 0) {$n_2$};
-        \node (o3) [undef] at (0, 1.5) {$e_o$};
-        \node (e4) [undef] at (0,3) {$n_3$};
-        \node (e5) [undef] at (0.75,2.25) {$n_e$};
+    \begin{scope}[shift={(9.5,-2)}]
+        \node (o1) [undef] at (0, 0.75) {$n_1$};
+        \node (o2) [undef] at (0.75, 0) {$n_2$};
+        \node (o3) [undef] at (0.75, 1.5) {$n_o$};
+        \node (e4) [undef] at (0.75,3) {$n_3$};
+        \node (e5) [undef] at (0,2.25) {$n_e$};
         \draw[l1] (o2) -- (o1) -- (o3) -- (e5) -- (e4);
-        \draw[l1, <-, dashed, color=mblue] (e4) ++(-.7,0) -- +(0,-3);
-        \draw[l1, ->, color=mred] (e4) ++(1.5,0) -- +(0,-3);
+        \draw[l2, <-, dashed, color=mblue] (e4) ++(-1.5,0) -- +(0,-3);
+        \draw[l2, ->, color=mred] (e4) ++(.75,0) -- +(0,-3);
     \end{scope}
 
-    \node at (0.5,2) {\emph{(a)}};
-    \node at (5.5,2) {\emph{(b)}};
-    \node at (9.5,2) {\emph{(c)}};
+    \node at (1,1) {\emph{(a)}};
+    \node at (5,1) {\emph{(b)}};
+    \node at (8,1) {\emph{(c)}};
+    % \draw[l1, opacity=0.5, ->, text opacity=1] (8.5,-2) -- +(0,-.5) node[midway, right] {$n_3$};
+    % \draw[l1, opacity=0.5, ->, text opacity=1] (6.5,-2) -- +(-.3,-.5) node[midway, left=.1] {New root node = \hspace{0.5cm} $n_1$};
 
-    \begin{scope}[shift={(15,0)}]
-        \path (0, 2) node[even, node1] {} -- +(.5,0) node[anchor=west]{Suspension known};
-        \path (0, 1) node[undef] {} -- +(.5,0) node[anchor=west]{Suspension undefined};
-        \draw[l1, ->, color=mred] (-.25, -1) -- ++(0.5,0);
-        \node[color=mred, anchor=west] at (.5,-1) {Delay};
-        \draw[l1, ->, color=mblue, dashed] (-.25, 0) -- ++(0.5,0);
-        \node[color=mblue, anchor=west] at (.5,0) {Parity};
+    \begin{scope}[shift={(1,1)}]
+        \path (0, 2) node[known, minimum size=10] {} -- +(.5,0) node[anchor=west, align=left]{Suspension known};
+        \path (0, 1.3) node[undef, minimum size=10] {} -- +(.5,0) node[anchor=west, align=left]{Suspension undefined};
+        \draw[l2, ->, color=mblue, dashed] (7.25,2) -- ++(0.5,0);
+        \node[color=mblue, anchor=west] at (8,2) {Parity};
+        \draw[l2, ->, color=mred] (7.25, 1.3) -- ++(0.5,0);
+        \node[color=mred, anchor=west] at (8,1.3) {Delay};
+        
     \end{scope}
 
 \end{tikzpicture}
