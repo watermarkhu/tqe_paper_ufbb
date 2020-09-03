@@ -192,15 +192,15 @@
 % DFS
 \begin{tikzpicture}[x=1cm,y=1cm]
 
-    \node at (-2.75, -0.7) {Cluster-tree (Union-Find)};
-    \node at (3.1, -0.7) {Vertex-tree $\vset$};
-    \node at (9.2,-.7) {Node-tree $\mathcal{N}$ (Node-Suspension)};
+    \node at (-2.75, -0.7) {\emph{(a)} Cluster-tree (Union-Find)};
+    \node at (3.1, -0.7) {\emph{(b)} Vertex-tree $\vset$};
+    \node at (9.2,-.7) {\emph{(c)} Node-tree $\mathcal{N}$ (Node-Suspension)};
 
     \draw[l1, opacity=0.5, ->] (5.5,1) -- +(.5,0);
     \draw[l1, opacity=0.5, ->] (0.5,1) -- +(-.5,0);
 
     \begin{scope}[shift={(-3,0)}]
-        \node at (-1, 2.5) {root};
+        \node at (-1, 2.6) {root};
         \node[draw, l1, minimum size=20]   (v0) at (-1,2){$5$};
         \node[nodem, minimum size=12] (v1) at (-1.5,0){$0$};
         \node[nodem, minimum size=12] (v2) at (-1,0)  {$1$};
@@ -219,7 +219,7 @@
         \draw[l1] (v7) to [out=90, in=295] (v0.305);
         \draw[l1] (v8) to [out=90, in=300] (v0.314);
 
-        \node[draw, l1, align=left, opacity=0.5, text opacity=1] (inf) at (1,2) {size: 9\\parity: 9\\node root: $n_r$};
+        \node[draw, l1, align=left, opacity=0.5, text opacity=1] (inf) at (1,2) {size: 9\\parity: 9\\root node: $n_3$};
         \draw[l1, ->, opacity=.5] (v0) -- (inf);
     \end{scope}
 
@@ -244,12 +244,12 @@
         \draw [l1] (w6) -- +(0,-.6) (w6) -- +(0, .6) (w6) -- +(0.6, 0);
         \draw [l1] (w2) -- +(.6,0) (w2) -- +(0, -.6);
         \draw [l1] (w1) -- +(0,-.6);
-        \draw [l1, mred] (w4) -- (w1) -- (w2);
+        \draw [l1, dotted, mred] (w4) -- (w1) -- (w2);
     \end{scope}
 
 
     \begin{scope}[shift={(7,0)}, y=0.9cm]
-        \node at (0.3, 3) {$\nset_r$};
+        % \node at (0.3, 3) {$\nset_r$};
         \node[even1] (a) at (1, 3) {3};
         \node[odd1]  (b) at (1, 2) {4};
         \node[odd1]  (c) at (1, 1) {5};
@@ -270,21 +270,21 @@
         \draw[l2, ->, dashed, color=mblue] (0.75,0.2) -- +(90:.3);
         \draw[l2, ->, dashed, color=mblue] (1.5,0.2) -- +(135:.4);
         \draw[l2, ->, dashed, color=mblue] (1.75,1.2) -- +(90:0.5) arc (0:45:.5) -- +(135:0.4);
-        \draw[l2, ->, color=mred] (1.4, 3) -- +(-45:1.1) arc (45:0:0.5) -- +(-90:0.7);
-        \draw[l2, ->, color=mred] (1.3, 2.1) -- +(-90:0.9) arc (180:225:.5) -- +(-45:0.7);
-        \draw[l2, ->, color=mred] (0.6, 0.3) -- +(225:.3);
-        \draw[l2, ->, color=mred] (1.3, 0.3) -- +(-90:.2);
+        \draw[l2, ->, color=morange] (1.4, 3) -- +(-45:1.1) arc (45:0:0.5) -- +(-90:0.7);
+        \draw[l2, ->, color=morange] (1.3, 2.1) -- +(-90:0.9) arc (180:225:.5) -- +(-45:0.7);
+        \draw[l2, ->, color=morange] (0.6, 0.3) -- +(225:.3);
+        \draw[l2, ->, color=morange] (1.3, 0.3) -- +(-90:.2);
         % \node[text=mblue] at (0,2.2) {Parity};
-        % \node[text=mred] at (2.6,2.8) {Delay};
+        % \node[text=morange] at (2.6,2.8) {Delay};
         
         
         \begin{scope}[shift={(3,0)}]
             \path (0,1.5) node[even1, minimum size=10]{} -- +(.5,0) node[anchor=west] {$n_p$ even};
             \path (0,1) node[odd1 , minimum size=10]{} -- +(.5,0) node[anchor=west] {$n_p$ odd};
             \draw[l2, ->, color=mblue, dashed] (-.25, .5) -- ++(0.5,0);
-            \draw[l2, ->, color=mred] (-.25, 0) -- ++(0.5,0);
+            \draw[l2, ->, color=morange] (-.25, 0) -- ++(0.5,0);
             \node[color=mblue, anchor=west] at (.5,.5) {Parity};
-            \node[color=mred, anchor=west] at (.5,0) {Delay};
+            \node[color=morange, anchor=west] at (.5,0) {Delay};
         \end{scope}
     \end{scope}
 
@@ -315,7 +315,7 @@
         \node (e5) [undef] at (2,-1) {$n_e$};
         \draw[l1] (o2) -- (o1) -- (o3) -- (e5) -- (e4);
         \draw[l2, ->, dashed, color=mblue] (e4) ++(-.7,0) -- + (0,1);
-        \draw[l2, ->, color=mred] (o3) ++(.7,-.5) -- +(0,-1.5);
+        \draw[l2, ->, color=morange] (o3) ++(.7,-.5) -- +(0,-1.5);
     \end{scope}
 
     \begin{scope}[shift={(9.5,-2)}]
@@ -326,7 +326,7 @@
         \node (e5) [undef] at (0,2.25) {$n_e$};
         \draw[l1] (o2) -- (o1) -- (o3) -- (e5) -- (e4);
         \draw[l2, <-, dashed, color=mblue] (e4) ++(-1.5,0) -- +(0,-3);
-        \draw[l2, ->, color=mred] (e4) ++(.75,0) -- +(0,-3);
+        \draw[l2, ->, color=morange] (e4) ++(.75,0) -- +(0,-3);
     \end{scope}
 
     \node at (1,1) {\emph{(a)}};
@@ -340,8 +340,8 @@
         \path (0, 1.3) node[undef, minimum size=10] {} -- +(.5,0) node[anchor=west, align=left]{Suspension undefined};
         \draw[l2, ->, color=mblue, dashed] (7.25,2) -- ++(0.5,0);
         \node[color=mblue, anchor=west] at (8,2) {Parity};
-        \draw[l2, ->, color=mred] (7.25, 1.3) -- ++(0.5,0);
-        \node[color=mred, anchor=west] at (8,1.3) {Delay};
+        \draw[l2, ->, color=morange] (7.25, 1.3) -- ++(0.5,0);
+        \node[color=morange, anchor=west] at (8,1.3) {Delay};
         
     \end{scope}
 
@@ -356,8 +356,8 @@
         \node[node2, pattern=dots, pattern color=black!20!white] (n2) at (1.5,2) {\small$n_2$};
         \draw[l1] (n1) -- (n2) node[edge, above=0.2cm]{$|(n_1, n_2)|$};
         \node[align=center, fill=white!80!black, rounded corners=2pt, inner sep=0.5mm] at (0.75, 1.3) {\footnotesize node suspension};
-        \draw (0, 0.5) node[odd, nodem]{} +(1,0) node[align=left, anchor=west]{\footnotesize Odd };
-        \draw (0, -0.25) node[even, nodem]{} +(1,0) node[align=left, anchor=west]{\footnotesize Even };
+        \draw (0, 0.5) node[odd, nodem]{} +(.2,0) node[align=left, anchor=west]{\footnotesize $n_p$ odd };
+        \draw (0, -0.25) node[even, nodem]{} +(.2,0) node[align=left, anchor=west]{\footnotesize $n_p$ even };
     \end{scope}
 
     \node at (-.5,1) {\emph{(a)}};
