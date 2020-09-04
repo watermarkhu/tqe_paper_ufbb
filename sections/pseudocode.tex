@@ -1,21 +1,20 @@
 \subsection{Pseudocode}\label{sec:pseudocode}
 
-The full version of the algorithm we have described is given in Algorithm \ref{algo:ufbb}. Note that this pseudocode includes instructions that are shortened versions of the pseudocode of the Union-Find decoder \cite{delfosse2017almost}. This is done for clarity on the additions of the Node-Suspension data structure and protocols on top of the Union-Find pseudocode. The first block  of lines\ref{algo:B1a}-\ref{algo:B1b} initializes the clusters and described the loop of cluster growth. Block 2 contains lines \ref{algo:B2a}-\ref{algo:grow} and describes the DFS's related to the calculation of node parities and delays, and the DFS of the cluster growth. Block 3 contains lines \ref{algo:B3a}-\ref{algo:B3b} described the combined merging protocols of the Union-Find and Node-Suspension data structures. Node that lines \ref{algo:dfa}-\ref{algo:dfb} contain an extra step to ensure that the vertex-trees are always acyclic. The final block in line \ref{algo:B4a} is the peeling decoder \cite{delfosse2017linear}. 
-
+The full version of the algorithm we have described is given in Algorithm \ref{algo:ufbb}. Note that this pseudocode includes instructions that are shortened versions of the pseudocode of the Union-Find decoder \cite{delfosse2017almost}. This is done for clarity on the additions of the Node-Suspension data structure and protocols on top of the Union-Find pseudocode. The first block  of lines\ref{algo:B1a}-\ref{algo:B1b} initializes the clusters and describes the loop of cluster growth. Block 2 contains lines \ref{algo:B2a}-\ref{algo:grow} and describes the DFS's related to the calculation of node parities and delays from all even sub-roots stored at the root node, and the DFS of the cluster growth. Block 3 contains lines \ref{algo:B3a}-\ref{algo:B3b} and describes the combined merging protocols of the Union-Find and Node-Suspension data structures. Node that lines \ref{algo:dfa}-\ref{algo:dfb} contain an extra step to ensure that the vertex-trees are always acyclic. The final block in line \ref{algo:B4a} is the peeling decoder \cite{delfosse2017linear}, which now does not have to create the spanning forest of the grown clusters. 
 \begin{algorithm}[htb]
     \BlankLine
-    \KwData{A graph $G=(\m{V},\m{E})$, an erasure $\m{R} \subseteq \m{E}$ and syndrome $\sigma \subseteq \m{V}$}
+    \KwData{A graph $G=(V,E)$, and syndrome $\sigma \subseteq V$}
     \KwResult{Correction set $\m{C}$}
     \BlankLine
-    Initialize cluster vertex-trees, node-trees and other of UF.\;\label{algo:B1a}
+    Initialize cluster vertex-trees, node-trees and table \emph{Support}.\;\label{algo:B1a}
     Create the list $\m{L}$ of odd clusters.\;
     \While(){$\m{L}$ is not empty}{
       Initialize the fusion list $\m{F}$ as an empty list.\;\label{algo:B1b}
-      \For(){cluster $c\in\m{L}$ \label{algo:B2a}}{
-        \If(){pointer to even sub-root $n_e$ exists}{
-          Apply DFS's to calculate node parities and delays (Equations \eqref{eq:nodeparity}, \eqref{eq:delayequation}) in partition of even sub-tree;\label{algo:pdc}
+      \For(){cluster $\in\m{L}$ \label{algo:B2a}}{
+        \For(){$n \in$ even sub-root list at node root $r$}{
+          Apply DFS's to calculate node parities and delays (Equations \eqref{eq:nodeparity}, \eqref{eq:delayequation}) from $n$ to descendent nodes. Keep track of the largest value for $n_d$ encountered during the delay DFS.\;\label{algo:pdc}
         }
-        Apply DFS from root $n_r$ to all leafs. If $ns=0$ (Equation \eqref{eq:suspension}), grow all boundary edges of vertices in the node a half-edge per the Union-Find decoder, such that grown edges are added to $\m{F}$. If $ns\neq0$, apply $nw=nw+1$ and continue the DFS.\;\label{algo:grow}
+        Apply DFS from root $r$ to all descendents. At each node during the DFS, if $n_s=0$ (Equation \eqref{eq:suspension}), grow all boundary edges of vertices in the node a half-edge per the Union-Find decoder, such that grown edges are added to $\m{F}$, and apply $n_r=n_r+\nicefrac{1}{2}$. If $n_s\neq0$, apply $n_w=n_w+1$ and continue the DFS.\;\label{algo:grow}
       }
       \For(){edge $(u,v) \in \m{F}$\label{algo:B3a}}{
         \eIf(){$\codefunc{Find}(u)\neq\codefunc{Find}(v)$}{
@@ -23,9 +22,9 @@ The full version of the algorithm we have described is given in Algorithm \ref{a
           \eIf(){$u \in n_v$ and $v \in n_v$\label{algo:joina}}{
             Merge node-trees by \codefunc{Join}.\;
           }(){
-            Add $u$ or $v$ to $n_v$ or $n_u$, respectively.\;\label{algo:joinb}
+            Add $u$ to $n_v$ or $v$ to $n_u$.\;\label{algo:joinb}
           }
-        }(\label{algo:dfa}){
+        }($u,v$ in same cluster.\label{algo:dfa}){
           Subtract 1 from $(u,v)$ in \emph{Support}.\;\label{algo:dfb}
         }
       }
@@ -35,4 +34,3 @@ The full version of the algorithm we have described is given in Algorithm \ref{a
     \caption{Union-Find Node-Suspension decoder}\label{algo:ufbb}
   \end{algorithm}
     
-\FloatBarrier
