@@ -305,8 +305,6 @@
         \node[even1] (h) at (2, 1) {1};
         \node[even1] (i) at (2, 0) {8};
 
-
-
         \draw[delay, ->] (a.-30) ++(-30:2.5pt) -- ++(-45:0.73cm) arc (120:-30:10pt) -- ++(-45:0.81cm);
     
         \draw[delay, ->] (a.-75) ++(-75:2.5pt) -- ++(0,-.31cm) arc (75:-30:10pt) node (d4){} -- ++(-45:0.73cm) arc (120:-30:10pt) node (d5){} -- ++(-45:0.81cm);
@@ -329,7 +327,7 @@
 
 
         % \node[text=morange] at (2.6,2.8) {Delay};
-        \node[parameters, anchor=north] (inf2) at (3.6,3.3) {even sub-roots:$[n_4, n_0]$\\$\max_{n \in \nset}{n_d}$};
+        \node[parameters, anchor=north] (inf2) at (3.8,3.3) {sub-roots $\m{S}: [n_4, n_0]$\\$\max_{n \in \nset}{n_d}$};
         \draw[l1, ->, opacity=.5] (a) -- (a-|inf2.west);
         
         

@@ -7,15 +7,19 @@ In this section, we will find the worst-cast time complexity of the Union-Find N
 
 \subsection{Suspension cost}\label{sec:suscomplexity}
 
-The cost of node suspension calculation is equal to the number of nodes traversed in the DFS's of the node parities and node delays. To find this number $N_{sus}(N)$ analytically, we utilize the rules of cluster growth and mergers.
+The cost of node suspension calculation is proportional to $N_{sus}$, the number of nodes traversed in the DFS's of the node parities and node delays. As a result of Odd-Rooted Join, $N_{sus}$ is propotional to the sum of sizes of all even node-trees. Root List Replacement decreases the sum to the most recent even node-trees that are ancestors of grown odd node-trees, which we dub $\mathbf{\kappa}$ \textbf{node-trees}. To find the worst-case time complexity, we maximize $N_{sus}$, which is proportional to the computation time. We take a time-reversed approach of analyzing a cluster; starting from a single cluster that maximally occupies the lattice at the end of growth, and move back in time to find its ancestor clusters. In this process that we call \textbf{cluster fragmentation}, we aim to find the set of cluster mergers that maximizes the number and sizes of $\kappa$ node-trees. 
+
+% The maximization of $N_{sus}$ is in the repetitiveness of the recalculation over some parition of the final node-tree. 
 
 
-\begin{enumerate}[label=\textbf{R\arabic*},ref=R\arabic*]
-  \item Joins between the node-trees between odd and even clusters always retains the root node of the odd cluster. \label{rjoin}
-  \item The DFS's of the node parity and delay calculation are always performed just before cluster growth in an even partition of the node-tree starting from the pointer saved at the root node. \label{rgrow}
-  \item Weight growth states that clusters are grown in the order of sizes of their vertex-trees. \label{rweight}
-\end{enumerate}
-From rules \ref{rjoin} and \ref{rgrow}, we conclude that $N_{sus}$ is proportional to the sum of sizes of all even node-trees during all mergers of the growth process on the lattice. Note that if many clusters merge within the same growth iteration, only the last even cluster counts towards the cost, since \ref{rgrow} ensures that the calculation is not performed on intermediate even partitions. To find the worst-case time complexity, we maximize $N_{sus}$, which is proportional to the computation time. We take a top-down approach of \textbf{cluster fragmentation}; starting from a single cluster that maximally occupies the lattice at the end of growth, and move back in time to find its ancestor clusters and their sizes. The maximization of $N_{sus}$ is in the repetitiveness of the recalculation over some parition of the final node-tree. 
+% \begin{enumerate}[label=P\arabic*,ref=P\arabic*]
+%   \item Joins between the node-trees of odd and even clusters retain the root node of the odd cluster. \label{rjoin}
+%   \item The DFS's of the node parity and delay calculation are performed just before cluster growth in an even partition of the node-tree starting from the pointer saved at the root node. \label{rgrow}
+%   \item The smallest clusters, measured by the number of verties in $\vset$, are grown first. \label{rweight}
+% \end{enumerate}
+
+% From properties \ref{rjoin} and \ref{rgrow}, it can be $N_{sus}$ is proportional to the sum of sizes of all even node-trees during all mergers of the growth process on the lattice. Note that if many clusters merge within the same growth iteration, only the last even cluster counts towards the cost, since \ref{rgrow} ensures that the calculation is not performed on intermediate even partitions.
+
 
 \begin{definition}\label{def:fragmentation}
   Let the \emph{fragmentation} of an odd cluster with node-tree $\pre{k-1}\nset^o$ split it into a set of its ancester node-trees. Here $k-1$ indicates the \emph{fragmentation step number}, where larger step number $k$ refers to an ancestor node-tree of smaller size. Let the fragmentation $f$ be the combination of \emph{intermediate fragmentations} (IF) $f_o$, which fragments an odd node-tree into an even ancestor and an odd ancestor
@@ -71,7 +75,7 @@ Every fragmentation step on an odd cluster $\pre{k-1}\nset$ splits it into three
   The node-tree size of $\pre{k}\nset_0$ must be smaller than $\pre{k}\nset^o_1, \pre{k}\nset^o_2$, such that $R_1 \geq R_0 \leq R_2$. 
 \end{lemma}
 \begin{proof}
-  The intermediate fragmentations must occur in the order of \eqref{eq:pfo} and \eqref{eq:pfe}, as \eqref{eq:pfe} requires an even node-tree that is fragmented by \eqref{eq:pfo}. In terms of cluster growth, the vertex-trees $\vset_1, \vset_2$, corresponding to $\nset^o_1, \pre{k}\nset^o_2$, must merge before the combined vertex-tree can merge with $\vset_0$, which corresponds to $\pre{k}\nset_0$. Declared by rule \ref{rweight}, $\abs{\vset_1}$ and $\abs{\vset_2}$ must be smaller or equal to $\abs{\vset_0}$, such that 
+  The intermediate fragmentations must occur in the order of \eqref{eq:pfo} and \eqref{eq:pfe}, as \eqref{eq:pfe} requires an even node-tree that is fragmented by \eqref{eq:pfo}. In terms of cluster growth, the vertex-trees $\vset_1, \vset_2$, corresponding to $\nset^o_1, \pre{k}\nset^o_2$, must merge before the combined vertex-tree can merge with $\vset_0$, which corresponds to $\pre{k}\nset_0$. Declared by rule [], $\abs{\vset_1}$ and $\abs{\vset_2}$ must be smaller or equal to $\abs{\vset_0}$, such that 
   \begin{equation*}
     \abs{\vset_1}\geq \vset_0 \leq\abs{\vset_2}.
   \end{equation*}
@@ -118,7 +122,7 @@ To grow a cluster represented by a node-tree $\nset$, a depth-first search (DFS)
 \begin{equation}\label{eq:ngrow}
   N_{grow} = 2\sum_{k=1}^{k_{m}}{ \sum_{ \pre{k}\nset_j^o \in \m{F}_k(\pre{0}\nset^o) }{ \abs{\pre{k}\nset_j^o} } }.
 \end{equation}
-We assume again that no trivial vertices are added  to a cluster or $|\nset| = |\vset|$. Determined by rule \ref{rgrow}, $N_{grow}$ is maximized if there are as many as possible mergers to a combined odd node-tree, while a minimum number of ancestor node-trees are involved. This is again achieved through $n_f = 2$. Within each fragmentation step, the DFS's are performed on each of the node-trees $\{\pre{k}\nset^o_0, \pre{k}\nset^o_1, \pre{k}\nset^o_2\}$ if all three clusters are grown. This is the case for $R_0 = R_1 = R_2$ such that $\abs{\vset_0}= \abs{\vset_1}=\abs{\vset_2}$, and all three clusters are grown simultanously (rule \ref{rweight}). 
+We assume again that no trivial vertices are added  to a cluster or $|\nset| = |\vset|$. Determined by rule [], $N_{grow}$ is maximized if there are as many as possible mergers to a combined odd node-tree, while a minimum number of ancestor node-trees are involved. This is again achieved through $n_f = 2$. Within each fragmentation step, the DFS's are performed on each of the node-trees $\{\pre{k}\nset^o_0, \pre{k}\nset^o_1, \pre{k}\nset^o_2\}$ if all three clusters are grown. This is the case for $R_0 = R_1 = R_2$ such that $\abs{\vset_0}= \abs{\vset_1}=\abs{\vset_2}$, and all three clusters are grown simultanously (rule []). 
 
 For these values of $n_f$ and $R$, we can apply Theorem \ref{the:km} for $k_m$. For $|\nset| = |\vset|$, the sum of node-tree sizes in every fragmented set $\m{F}_k$ is exactly $\abs{\pre{0}\nset^o}$, and Equation \eqref{eq:ngrow} becomes an upper bound to $N_{grow}$: 
 \begin{align*}
