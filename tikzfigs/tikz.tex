@@ -22,8 +22,8 @@
 \tikzstyle{even1}=[nodel, minimum size=13pt, pattern=dots, pattern color=mblue!75!white]
 \tikzstyle{lodd}=[odd, pattern = crosshatch dots]
 \tikzstyle{leven}=[even, pattern = crosshatch dots]
-\tikzstyle{enset}=[node1, thick, double, font=\footnotesize]
-\tikzstyle{onset}=[node1, thick, densely dashed, double, font=\footnotesize]
+\tikzstyle{enset}=[node1, thick, double, font=\footnotesize, fill=white]
+\tikzstyle{onset}=[node1, thick, densely dashed, double, font=\footnotesize, fill=white]
 \tikzstyle{subtree}=[node1, opacity=0.3,dotted, font=\footnotesize]
 \tikzstyle{known}=[nodel, pattern=dots, pattern color=green!75!white]
 \tikzstyle{undef}=[nodel, dotted, pattern=dots, pattern color=black!25!white]
@@ -475,65 +475,72 @@
     \end{scope}
 \end{tikzpicture}
 
-\begin{tikzpicture}[node distance=1cm, on grid]
+\begin{tikzpicture}[scale=.9, node distance=1cm, on grid]
 
     \node (a) at (0,0) {};
-    \node (b) [right = 4cm of a] {};
-    \node (c) [right = 4cm of b] {};
+    \node (b) [right = 5cm of a] {};
+    \node (c) [right = 5cm of b] {};
     \node (d) [right = 3cm of c] {};
 
-    \node (b1l) [below left = 1cm and 1.2cm of a] {};
-    \node (b1r) [above right = 3.5cm and 1.2cm of b] {};
+    \node (b1l) [below left = 1.3cm and 1.2cm of a] {};
+    \node (b1r) [above right = 3.2cm and 1.2cm of b] {};
     \path[fill=black!10!white, rounded corners=0.5cm] (b1l) rectangle (b1r);
-    \node (b1t) at ($(a)!0.5!(b)$) {}; \node [above=3cm of b1t] {fragmentation step $k$};
-    \node (b2l) [below left = 1cm and 1.2cm of c] {};
-    \node (b2r) [above right = 3.5cm and 1.2cm of c] {};
+    \node (b1t) at ($(a)!0.5!(b)$) {}; \node [above=2.8cm of b1t] {generation $k$};
+    \node (b2l) [below left = 1.3cm and 1.2cm of c] {};
+    \node (b2r) [above right = 3.2cm and 1.2cm of c] {};
     \path[fill=black!10!white, rounded corners=0.5cm] (b2l) rectangle (b2r);
-    \node [above=3cm of c] {$k-1$};
+    \node [above=2.8cm of c] {$k-1$};
 
-    \begin{scope}[shift={(10.5,0)}]
-        \path (0,2) node[onset]{} -- +(.5,0)node[anchor=west]{odd node-tree};
-        \path (0,1) node[enset]{} -- +(.5,0)node[anchor=west]{even node-tree};
-        \path (0,0) node[subtree]{} -- +(.5,0)node[anchor=west]{subtree};
+    \node (l) [above=.5cm of d] {};
+    \begin{scope}[shift={(l)}]
+        \path[legend] (-.7,-.7) rectangle (3.5,1.7);
+        % \path (0,2) node[enset]{} -- +(.5,0)node[anchor=west]{odd node-tree};
+        \path (0,1) node[enset]{} -- +(.5,0)node[anchor=west]{Node-tree};
+        \path (0,0) node[subtree]{} -- +(.5,0)node[anchor=west]{Sub-tree};
     \end{scope}
 
-    \node (a0) [above = 0 cm of a] {\footnotesize $\pre{k}\mathcal{N}^o_2$};
-    \node (a1) [above = 1 cm of a] {\footnotesize $\pre{k}\mathcal{N}^o_1$};
-    \node (a2) [above = 2 cm of a] {\footnotesize $\pre{k}\mathcal{N}^o_0$};
-    \draw[onset] (a0) circle[radius=.4cm];
-    \draw[onset] (a1) circle[radius=.4cm];
-    \draw[onset] (a2) circle[radius=.4cm];
+    \node (a0) [above = 0 cm of a] {};
+    \node (a1) [above = 1 cm of a] {};
+    \node (a2) [above = 2 cm of a] {};
+    \draw[enset] (a0) circle[radius=.4cm];
+    \draw[enset] (a1) circle[radius=.4cm];
+    \draw[enset] (a2) circle[radius=.4cm];
+    \node at (a0) {\footnotesize $\pre{k}\omega_2$};
+    \node at (a1) {\footnotesize $\pre{k}\omega_1$};
+    \node at (a2) {\footnotesize $\pre{k}\omega_0$};
 
     \foreach \i in {0,1,2}{
             \node (b\i) [above = \i cm of b] {};
         }
-    \node at (b2) {\footnotesize $\pre{k}\mathcal{N}^o_0$};
-    \node at ($(b0)!0.5!(b1)$) {\footnotesize $\pre{k}\mathcal{N}^e_{-1}$};
-    \draw[onset] (b2) circle[radius=0.4cm];
+    \draw[enset] (b2) circle[radius=0.4cm];
+    \node at (b2) {\footnotesize $\pre{k}\omega_0$};
+
+    \draw[enset] (b0) ++(0.5cm,0) -- ++(0, 1.1cm) arc (0:180:0.5cm) -- ++(0, -1.1cm) arc (180:360:0.5cm) -- cycle;
     \draw[subtree] (b1) circle[radius=.4cm];
     \draw[subtree] (b0) circle[radius=.4cm];
-    \node[right = 0.5cm of b] (bc) {};
-    \draw[enset] (bc) -- +(0, 1) arc (0:180:0.5) -- +(0, -1) arc (180:360:0.5) -- cycle;
+    \node at ($(b0)!0.5!(b1)$) {\footnotesize $\pre{k}\epsilon$};
 
     \foreach \i in {0,1,2}{
             \node (c\i) [above =\i cm of c] {};
-            \draw[subtree] (c\i) circle[radius=.4cm];
         }
-    \node[right = 0.5cm of c] (cc1) {}; \node[right = 0.6cm of c] (cc2) {};
-    \draw[subtree] (cc1) -- +(0, 1) arc (0:180:0.5) -- +(0, -1) arc (180:360:0.5) -- cycle;
-    \draw[onset] (cc2) -- +(0, 2) arc (0:180:0.6) -- +(0, -2) arc (180:360:0.6) -- cycle;
-    \node at (c1) {\footnotesize $\pre{k-1}\mathcal{N}^o$};
+
+    \draw[enset] (c0) ++(0.5cm,0) -- +(0, 2.2cm) arc (0:180:0.5cm) -- +(0, -2.2cm) arc (180:360:0.5cm) -- cycle;
+    \node at (c1) {\footnotesize $\pre{k-1}\omega$};
+
+    \draw[subtree] (c2) circle[radius=.4cm];
+    \draw[subtree] (c0) ++(0.4cm,0) -- +(0, 1.2) arc (0:180:0.4) -- +(0, -1.2) arc (180:360:0.4) -- cycle;
+
 
     \node (f1a) [below left = 0.4cm and 0.4cm of c] {}; \node (f1b) [below right = 0.4cm and 0.4cm of b] {};
     \node (f2a) [below left = 0.4cm and 0.4cm of b] {}; \node (f2b) [below right = 0.4cm and 0.4cm of a] {};
     \node (fa) [below = 0.6cm of c] {}; \node (fb) [below = 0.6cm of a] {};
     \draw[l1, ->, dashed] (f1a) .. controls +(225:0.5cm) and +(315:0.5cm) .. (f1b);
     \draw[l1, ->, dashed] (f2a) .. controls +(225:0.5cm) and +(315:0.5cm) .. (f2b);
-    \draw[l1, ->, dashed] (fa)  .. controls +(210:1cm) and +(330:1cm) .. (fb);
+    \draw[l1, ->, dashed] (fa)  .. controls +(210:1.8cm) and +(330:1.8cm) .. (fb);
 
-    \node (ca) at ($(c)!0.5!(a)$) {}; \node [below = 1.5cm of ca] {$f$};
-    \node (cb) at ($(c)!0.5!(b)$) {}; \node [below = 0.4cm of cb] {$f_o$};
-    \node [below = 0.4cm of b1t] {$f_e$};
+    \node (ca) at ($(c)!0.5!(a)$) {}; \node [below = 1cm of ca] {$f(\pre{k-1}\omega)$};
+    \node (cb) at ($(c)!0.5!(b)$) {}; \node [below = 0.4cm of cb] {$f_o(\pre{k-1}\omega)$};
+    \node [below = 0.4cm of b1t] {$f_e(\pre{k}\epsilon)$};
 
     \node (u1lt) at ($(a0)!0.5!(a1)$) {}; \node(u1l) [right=1cm of u1lt] {};
     \node (u1rt) at ($(b0)!0.5!(b1)$) {}; \node(u1r) [left=1cm of u1rt] {};
