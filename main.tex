@@ -1,6 +1,6 @@
 \documentclass{ieeeaccess}
 \usepackage[OT1]{fontenc} 
-\usepackage{amsfonts, amsmath, amssymb, amsthm}
+\usepackage{amsfonts, amsmath, amssymb, amsthm, amsbsy}
 \usepackage{algorithmic}
 \usepackage{graphicx}
 \usepackage{caption}
@@ -73,7 +73,7 @@
 \history{Date of publication xxxx 00, 0000, date of current version xxxx 00, 0000.}
 \doi{10.1109/TQE.2020.DOI}
 
-\title{Quasilinear Time Decoding Algorithm for \\Topological Codes with High Error Threshold}
+\title{Quasilinear Time Decoding Algorithm for \\Topological Codes with High Decoding Performance}
 \author{
     \uppercase{S. Hu}\authorrefmark{1},
     \uppercase{and D. Elkouss\authorrefmark{2}}
@@ -88,10 +88,10 @@
 {S. Hu \headeretal: IEEE Transactions on Quantum Engineering}
 {S. Hu \headeretal: IEEE Transactions on Quantum Engineering}
 
-\corresp{Corresponding author: First A. Author (email: author@ boulder.nist.gov).}
+\corresp{Corresponding author: S. Hu (email: watermarkhu@outlook.com).}
 
 \begin{abstract}
-    Quantum computing has the potential to transcend the information technology as we know it. Small scale quantum systems are already possible today, and the goal is to scale up these quantum architectures to build practical quantum devices. A major limiting factor in quantum computing is the accumulation of errors that may be caused by various sources. A solution is to encode the logical information in a larger amount of physical qubits to increase resilience, thereafter to decode the information with a decoder. A recently proposed decoder dubbed the Union-Find (UF) decoder is fast and almost linear in its worst-case time complexity but has a reduced perfomance compared with the Minimum-Weight Perfect Matching (MWPM) decoder. We propose a modification of the UF decoder that aims to further decrease the weight of the correction operator, similarly to the MWPM decoder. The modified decoder, dubbed the Union-Find Node-Suspension (UFNS) decoder, manages to have an improved performance compared to the UF decoder of any lattice size. For small lattice sizes and also for low error rates, the UFNS decoder performs near identically to the MWPM decoder. We manage to maintain a quasilinear worst-case time complexity of $\m{O}(n\log{n})$. 
+    \input{sections/abstract}
 \end{abstract}
 
 \begin{keywords}

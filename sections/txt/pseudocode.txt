@@ -1,0 +1,38 @@
+Pseudocode
+algorithm[htb]
+  \BlankLine
+  A graph X, and syndrome X
+  Correction set X
+  \BlankLine
+  Initialize cluster vertex-trees, node-trees and table Support.\;
+  Create the list X of odd clusters.\;
+  \While()X is not empty{
+    Initialize the fusion list X as an empty list.\;
+    \For()cluster X {
+      \For()X even sub-root list at node root r{
+        Apply DFS's to calculate node parities and delays (Equations X, X) from n to descendant nodes. Keep track of the largest value for X encountered during the delay DFS.\;
+      
+      Apply DFS from root r to all descendants. At each node during the DFS, if X (Equation X), grow all boundary edges of vertices in the node a half-edge per the Union-Find decoder, such that grown edges are added to X, and apply X. If X, apply X and continue the DFS.\;
+    
+    \For()edge X{
+      \eIf()X{
+        Merge vertex-trees by weighted Union.\;
+        \eIf()X and X{
+          Merge node-trees by Join.\;
+        ()
+          Add u to X or v to X.\;
+        
+      (u,v in same cluster.)
+        Subtract 1 from X in Support.\;
+      
+    
+    Update X with odd clusters\; 
+  
+  Apply the peeling decoder [0].
+  The Union-Find Node-Suspension decoder.
+algorithm
+
+\Figure[hbt](topskip=0pt, botskip=0pt, midskip=0pt)tikzfigs/tikz-figure6.pdf{
+  The fragmentation of node-tree X into its ancestor node-trees, where the prefix X indicates the fragmentation generation. The fragmentation X returns X odd ancestors of generation k. Fragmentation function f can be separated into the partial fragmentation X that returns an odd ancestor X and even ancestor X, and subsequently the partial fragmentation X which returns X odd ancestors of generation k. With X, each partial fragmentation is the opposite of a join operation between two node-trees. Furthermore, note that if X, the vertex-tree sizes related to node trees X, each generation is the opposite of a growth iteration. 
+
+The full version of the algorithm we have described is given in Algorithm X. Note that this pseudocode includes instructions that are shortened versions of the pseudocode of the Union-Find decoder [0]. This is done for clarity on the additions of the Node-Suspension data structure and protocols on top of the Union-Find pseudocode. The first block  of lines X-X initializes the clusters and describes the loop of cluster growth. Block 2 contains lines X-X and describes the DFS's related to the calculation of node parities and delays from all even sub-roots stored at the root node, and the DFS of the cluster growth. Block 3 contains lines X-X and describes the combined merging protocols of the Union-Find and Node-Suspension data structures. Node that lines X-X contain an extra step to ensure that the vertex-trees are always acyclic. The final block in line X is the peeling decoder [0], which now does not have to create the spanning forest of the grown clusters. Similarly to the Union-Find decoder, Weighted Growth is applied such that the smaller cluster is always grown first. 

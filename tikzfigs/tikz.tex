@@ -534,13 +534,13 @@
     \node (f1a) [below left = 0.4cm and 0.4cm of c] {}; \node (f1b) [below right = 0.4cm and 0.4cm of b] {};
     \node (f2a) [below left = 0.4cm and 0.4cm of b] {}; \node (f2b) [below right = 0.4cm and 0.4cm of a] {};
     \node (fa) [below = 0.6cm of c] {}; \node (fb) [below = 0.6cm of a] {};
-    \draw[l1, ->, dashed] (f1a) .. controls +(225:0.5cm) and +(315:0.5cm) .. (f1b);
-    \draw[l1, ->, dashed] (f2a) .. controls +(225:0.5cm) and +(315:0.5cm) .. (f2b);
+    \draw[l1, ->, dashed] (f1a) .. controls +(225:0.9cm) and +(315:0.9cm) .. (f1b);
+    \draw[l1, ->, dashed] (f2a) .. controls +(225:0.9cm) and +(315:0.9cm) .. (f2b);
     \draw[l1, ->, dashed] (fa)  .. controls +(210:1.8cm) and +(330:1.8cm) .. (fb);
 
     \node (ca) at ($(c)!0.5!(a)$) {}; \node [below = 1cm of ca] {$f(\pre{k-1}\omega)$};
-    \node (cb) at ($(c)!0.5!(b)$) {}; \node [below = 0.4cm of cb] {$f_o(\pre{k-1}\omega)$};
-    \node [below = 0.4cm of b1t] {$f_e(\pre{k}\epsilon)$};
+    \node (cb) at ($(c)!0.5!(b)$) {}; \node [below = 0.6cm of cb] {$f_\omega(\pre{k-1}\omega)$};
+    \node [below = 0.6cm of b1t] {$f_\epsilon(\pre{k}\epsilon)$};
 
     \node (u1lt) at ($(a0)!0.5!(a1)$) {}; \node(u1l) [right=1cm of u1lt] {};
     \node (u1rt) at ($(b0)!0.5!(b1)$) {}; \node(u1r) [left=1cm of u1rt] {};
