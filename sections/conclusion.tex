@@ -8,6 +8,9 @@ Recent work that includes the Union-Find decoder focuses on bringing the decoder
 
 The Union-Find decoder manages to decode fast and scale almost-linearly with the input system size. However, these speed-ups come at the cost of a decreased decoding performance. With the Union-Find Node-Suspension decoder, we manage to find a middle ground between the two objectives; high decoding performance that runs in worst-case quasilinear time. For these reasons, it may be a great candidate for physical applications in the near future.
 
+\Figure[b!](topskip=0pt, botskip=0pt, midskip=0pt){tikzfigs/comp_lowerror.pdf}{
+  The decoding rate $d$ for the low-error regime of phenomenological noise for the MWPM, UFNS and bvUF decoders. The UFNS decoding rates are improved from the UF variants and are very similar to MWPM. All $d$ are obtained by Monte Carlo simulations with a minimum of $100.000$ samples. The x-axis scales linearly with $N = L^3$.\label{comp_lowerror}}
+
 \Figure[b!](topskip=0pt, botskip=0pt, midskip=0pt){tikzfigs/comp_lowerror_time.pdf}{
   The mean computation time of the UFNS, bvUF, and MWPM decoders in the low error regime for phenomenological noise for $p_X = \{0.5\%, 1.2\%, 2\%\}$ of the same simulation as in \Cref{comp_lowerror}. In this regime, the UFNS computation times are very comparable to the bvUF decoder. The x-axis scales linearly with $N = L^3$. \label{comp_lowerror_time}}
 

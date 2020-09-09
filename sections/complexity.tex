@@ -5,7 +5,7 @@ In this section, we will find the worst-case time complexity of the Union-Find N
 
 \subsection{Suspension cost}\label{sec:suscomplexity}
 
-The cost of node suspension calculation is proportional to $N_{\text{sus}}$, the number of nodes traversed in the DFSs of the node parities and node delays. As a result of Odd-Rooted Join, $N_{\text{sus}}$ is proportional to the sum of sizes of all even node-trees. Root List Replacement decreases the sum to the most recent even node-trees that are ancestors of grown odd node-trees, which we dub $\mathbf{\Delta}$ \textbf{node-trees}. To find the worst-case time complexity, we maximize $N_{\text{sus}}$, which is proportional to the computation time. We take a time-reversed approach of analyzing a cluster; starting from a single cluster that maximally occupies the lattice at the end of growth, and move back in time to find its ancestor clusters. In this process that we call \textbf{cluster fragmentation}, we aim to find the set of cluster mergers that maximizes the number and sizes of $\Delta$ node-trees. 
+The cost of node suspension calculation is proportional to $N_{\text{sus}}$, the number of nodes traversed in the DFSs of the node parities and node delays. As a result of Odd-Rooted Join, $N_{\text{sus}}$ is proportional to the sum of sizes of all even node-trees. Root List Replacement decreases the sum to the most recent even node-trees that are ancestors of grown odd node-trees, which we dub $\mathbf{\Delta}$ \textbf{node-trees}. To find the worst-case time complexity, we maximize $N_{\text{sus}}$, which is proportional to the computation time. We take a time-reversed approach of analyzing a cluster; starting from a single cluster that maximally occupies the lattice at the end of growth, and move back in time to find its ancestor clusters. In this process that we call \textbf{cluster fragmentation}, we aim to find the combination of cluster mergers that maximizes the number and sizes of $\Delta$ node-trees. 
 
 % The maximization of $N_{\text{sus}}$ is in the repetitiveness of the recalculation over some parition of the final node-tree. 
 
@@ -19,45 +19,45 @@ The cost of node suspension calculation is proportional to $N_{\text{sus}}$, the
 % From properties \ref{rjoin} and \ref{rgrow}, it can be $N_{\text{sus}}$ is proportional to the sum of sizes of all even node-trees during all mergers of the growth process on the lattice. Note that if many clusters merge within the same growth iteration, only the last even cluster counts towards the cost, since \ref{rgrow} ensures that the calculation is not performed on intermediate even partitions.
 
 \begin{definition}\label{def:fragmentation}
-  Let the \textbf{fragmentation} function $f$ on an odd node-tree $\omega$ return $\nu + 1$ of its most recent odd ancestor node-trees on which suspension calculations were performed. Let the prefix on the node-tree indicate the \textbf{fragmentation generation}, such that $f(\pre{k-1}\omega)$ returns $\nu + 1$ node-trees of generation $k$:
+  Let the \textbf{fragmentation} function $F$ on an odd node-tree $\omega$ return $\nu + 1$ of its most recent odd ancestor node-trees on which suspension calculations were performed. Let the prefix on the node-tree indicate the \textbf{fragmentation generation}, such that $F(\pre{k-1}\omega)$ returns $\nu + 1$ node-trees of generation $k$:
   \begin{equation}\label{eq:fstep}
-    f(\{\pre{k-1}\omega\}) = \{\pre{k}\omega_0,\pre{k}\omega_1,...,\pre{k}\omega_{\nu}\}.
+    F(\{\pre{k-1}\omega\}) = \{\pre{k}\omega_0,\pre{k}\omega_1,...,\pre{k}\omega_{\nu}\}.
   \end{equation}
-  Let $f$ be the combination of \textbf{partial fragmentation} functions $f_\omega$ and $f_\epsilon$, where $f_\omega$ fragments an odd node-tree $\pre{k-1}\omega$ into an odd ancestor $\pre{k}\omega_0$ and an even ancestor node-tree $\pre{k}\epsilon$: 
+  Let $F$ be the combination of \textbf{partial fragmentation} functions $F_\omega$ and $F_\epsilon$, where $F_\omega$ fragments an odd node-tree $\pre{k-1}\omega$ into an odd ancestor $\pre{k}\omega_0$ and an even ancestor node-tree $\pre{k}\epsilon$: 
   \begin{equation}\label{eq:pfo}
-    f_\omega(\{\pre{k-1}\omega\}) = \{\pre{k}\epsilon, \pre{k}\omega_0 \},
+    F_\omega(\{\pre{k-1}\omega\}) = \{\pre{k}\epsilon, \pre{k}\omega_0 \},
   \end{equation}
-  and where $f_\epsilon$ further fragments $\pre{k}\epsilon$ into $\nu$ odd ancestors
+  and where $F_\epsilon$ further fragments $\pre{k}\epsilon$ into $\nu$ odd ancestors
   \begin{equation}\label{eq:pfe}
-    f_\epsilon(\{\pre{k}\epsilon\}) =\{\pre{k}\omega_1,...,\pre{k}\omega_{\nu}\}.
+    F_\epsilon(\{\pre{k}\epsilon\}) =\{\pre{k}\omega_1,...,\pre{k}\omega_{\nu}\}.
   \end{equation}
-  % of an odd cluster with node-tree $\pre{k-1}\omega$ split it into a set of its ancester node-trees. Here $k-1$ indicates the \emph{fragmentation step number}, where larger step number $k$ refers to an ancestor node-tree of smaller size. Let the fragmentation $f$ be the combination of \emph{intermediate fragmentations} (IF) $f_\omega$, which fragments an odd node-tree into an even ancestor and an odd ancestor
+  % of an odd cluster with node-tree $\pre{k-1}\omega$ split it into a set of its ancester node-trees. Here $k-1$ indicates the \emph{fragmentation step number}, where larger step number $k$ refers to an ancestor node-tree of smaller size. Let the fragmentation $F$ be the combination of \emph{intermediate fragmentations} (IF) $F_\omega$, which fragments an odd node-tree into an even ancestor and an odd ancestor
 
-  % and $f_\epsilon$, which fragments even node-trees into $\nu$ odd ancestors
+  % and $F_\epsilon$, which fragments even node-trees into $\nu$ odd ancestors
   % \begin{equation}\label{eq:pfe}
   %   f_\epsilon(\{\pre{k}\epsilon\}) = \m{F}^e_k=\{\pre{k}\omega_1,...,\pre{k}\omega_{\nu}\},
   % \end{equation}
   % such that a fragmentation is
 \end{definition}
 
-The fragmentation function can be applied consecutively, such that a set of odd node-trees of generation $k$ is fragmented to ancestors of generation $k+1$. We use the notation $f^{(2)}(\pre{k-1}\omega)$ to indicate that two fragmentations are applied on $\pre{k-1}\omega$ to obtain the ancestors of generation $k+1$. Furthermore, let $f_\omega^{(i)}$ and be equivalent to $f_\omega f^{(i-1)}$. 
+The fragmentation function can be applied consecutively, such that a set of odd node-trees of generation $k$ is fragmented to ancestors of generation $k+1$. We use the notation $F^{(2)}(\pre{k-1}\omega)$ to indicate that two fragmentations are applied on $\pre{k-1}\omega$ to obtain the ancestors of generation $k+1$. Furthermore, let $F_\omega^{(i)}$ and be equivalent to $F_\omega F^{(i-1)}$. 
 
-As a result of Odd-Rooted Join and Root List Replacement, if the cluster of node-tree $\pre{k-1}\omega$ is grown, the DFSs of the parity and delay calculations are performed within $\pre{k}\epsilon$. Therefore, every even node-tree returned by $f_\omega$ is a $\Delta$ node-tree. The value of $N_{\text{sus}}$ can thus be obtained by taking the sum of sizes of all even node-tree in $\pre{k}\m{F}_\omega$ over a series of $\mu$ fragmentations of some odd node-tree $\Omega = \pre{0}\omega$ until there are no more ancestor node-trees:
+As a result of Odd-Rooted Join and Root List Replacement, if the cluster of node-tree $\pre{k-1}\omega$ is grown, the DFSs of the parity and delay calculations are performed within $\pre{k}\epsilon$. Therefore, every even node-tree returned by $F_\omega$ is a $\Delta$ node-tree. The value of $N_{\text{sus}}$ can thus be obtained by taking the sum of sizes of all even node-tree in $F_\omega^{(k)}$ over a series of $\mu$ fragmentations of some odd node-tree $\Omega = \pre{0}\omega$ until there are no more ancestor node-trees:
 \begin{equation}\label{eq:npdc}
   N_{\text{sus}} = 2\sum_{k=1}^\mu{ \sum_{ \pre{k}\epsilon \in f_\omega^{(k)}(\Omega) }{ \abs{\pre{k}\epsilon}} }.
 \end{equation}
 
-To find $N_{\text{sus}}$, we will make two assumptions to simplify \eqref{eq:npdc}. Junction-nodes are initiated on the tangent of two node radii belonging to separate node-trees when merging into one. For increasing fragmentation generation, the total number of nodes in the fragmented set must therefore decrease. By neglecting their existence, \eqref{eq:npdc} becomes
+To find $N_{\text{sus}}$, we will make two assumptions to simplify \Cref{eq:npdc}. Junction-nodes are initiated on the tangent of two node radii belonging to separate node-trees when merging into one. For increasing fragmentation generation, the total number of nodes in the fragmented set must therefore decrease. By neglecting their existence, \Cref{eq:npdc} becomes
 \begin{equation}\label{eq:npdc2}
   N_{\text{sus}} \leq 2\sum_{k=1}^\mu{ \sum_{ \pre{k}\epsilon \in f_\omega^{(k)}(\Omega) }{ \abs{\pre{k}\epsilon}} }.
 \end{equation}
-Furthermore, if only syndrome-nodes exist, $\pre{k-1}\omega$'s size must equal the sum of sizes of its ancestors $f(\pre{k-1}\omega)$. In other words, the size of the ancestor $\pre{k}\omega_i$ can be represented by the \textbf{fragmentation ratio}
+Furthermore, if only syndrome-nodes exist, $\pre{k-1}\omega$'s size must equal the sum of sizes of its ancestors $F(\pre{k-1}\omega)$. In other words, the size of each of the $\nu+1$ ancestors $\pre{k}\omega_i$ can be represented by the \textbf{fragmentation ratio}
 \begin{equation}\label{eq:ratio}
-  \pre{k}R_i = \frac{\abs{\pre{k}\omega_i}}{\abs{\pre{k-1}\omega}}, \hspace{0.5cm} \sum_{i=0}^{\mu}{\pre{k}R_i} = 1,
+  \pre{k}R_i = \frac{\abs{\pre{k}\omega_i}}{\abs{\pre{k-1}\omega}}, \hspace{0.5cm} \sum_{i=0}^{\nu}{\pre{k}R_i} = 1,
 \end{equation}
-Secondly, we assume that vertex-trees do not increase in size, such that $\abs{\nset}=\abs{\vset}$. Normally, the number of nodes in a cluster is bounded by the number of vertices $\abs{\nset}\leq \abs{\vset}$, as non-trivial vertices can be added to the node, which increases the node radius. By this assumption, the vertex-tree can only increase in size due to a merger between clusters, and nodes are effectively not allowed to increase in radius. While this is not possible during realistic cluster growth, using this assumption simplifies \eqref{eq:npdc2}, as we will see later, while not compromising its upper bound. 
+Secondly, we assume that vertex-trees do not increase in size, such that $\abs{\nset}=\abs{\vset}$. Normally, the number of nodes in a cluster is bounded by the number of vertices $\abs{\nset}\leq \abs{\vset}$, as non-trivial vertices can be added to the node, which increases the node radius. By this assumption, the vertex-tree can only increase in size due to a merger between clusters, and nodes are effectively not allowed to increase in radius. While this is not possible during realistic cluster growth, using this assumption simplifies \Cref{eq:npdc2}, as we will see later, while not compromising its upper bound. 
 
-To find the upper bound in $N_{\text{sus}}$, we are now tasked to find: (a) $\nu$, the number of ancestors in $f_\epsilon$, (b) the fragmentation ratios $\{R_0, ..., R_\nu\}$, and (c) the number of fragmentation generations $\mu$. 
+To find the upper bound in $N_{\text{sus}}$, we are now tasked to find: (a) $\nu$, the number of ancestors in $F_\epsilon$, (b) the fragmentation ratios $\{R_0, ..., R_\nu\}$, and (c) the number of fragmentation generations $\mu$. 
 
 \begin{lemma}\label{lem:evenconstant}
   For constant fragmentation ratios $\pre{k}R_i = R_i$, the sum $\sum_{ \pre{k}\epsilon \in f_\omega^{(k)}(\Omega) }{ \abs{\pre{k}\epsilon}}$ is constant for every $k$. 
@@ -67,7 +67,7 @@ To find the upper bound in $N_{\text{sus}}$, we are now tasked to find: (a) $\nu
   \begin{equation*}
     \abs{\pre{1}\epsilon} = (1 - R_0)\abs{\Omega}.
   \end{equation*}
-  For $k=2$, every odd node-tree in $f(\Omega)=\{\pre{1}\omega_0,...,\pre{1}\omega_\nu\}$ is fragmented by $f_\omega$ to an even ancestor $\pre{2}\epsilon_i$ for $i \in \{0,...,\nu \}$, such that 
+  For $k=2$, every odd node-tree in $F(\Omega)=\{\pre{1}\omega_0,...,\pre{1}\omega_\nu\}$ is fragmented by $F_\omega$ to an even ancestor $\pre{2}\epsilon_i$ for $i \in \{0,...,\nu \}$, such that 
   \begin{equation*}
     \sum_{i=0}^{\nu}{\abs{\pre{2}\epsilon_i}}  = \sum_{i=0}^{\nu}{R_i(1 - R_0)\abs{\Omega}}= (1 - R_0)\abs{\Omega}.
   \end{equation*}
@@ -75,23 +75,23 @@ To find the upper bound in $N_{\text{sus}}$, we are now tasked to find: (a) $\nu
 \end{proof}
 
 \begin{theorem}\label{the:fragnumber}
-  The upper bound for $N_{\text{sus}}$ is obtained by setting $\nu=2$ in \eqref{eq:pfe}. 
+  The upper bound for $N_{\text{sus}}$ is obtained by setting $\nu=2$ in \Cref{eq:pfe}. 
 \end{theorem}
 \begin{proof}
-  The sum of even node-tree sizes in every generation is constant per \Cref{lem:evenconstant}. Thus, the upper bound in \eqref{eq:npdc2} is obtained by the largest possible $\mu$. As $\nu$ increases the number of odd node-trees in each $f^{(k)}_\omega$, the average size of these odd node-trees decreases. Since the size of a node-tree is proportional to the number of ancestor generations, we find that 
+  The sum of even node-tree sizes in every generation is constant per \Cref{lem:evenconstant}. Thus, the upper bound in \Cref{eq:npdc2} is obtained by the largest possible $\mu$. As $\nu$ increases the number of odd node-trees in each $F^{(k)}_\omega$, the average size of these odd node-trees decreases. Since the size of a node-tree is proportional to the number of ancestor generations, we find that 
   \begin{equation*}
     \mu \propto \frac{1}{\nu}. 
   \end{equation*}
-  Hence, the upper bound in \eqref{eq:npdc2} exists in the minimal value of $\nu$, which is $\nu = 2$.
+  Hence, the upper bound in \Cref{eq:npdc2} exists in the minimal value of $\nu$, which is $\nu = 2$.
 \end{proof}
 
-Using \Cref{the:fragnumber}, we now find that a fragmentation on an odd cluster $f(\pre{k-1}\omega)$ returns $\{\pre{k}\omega_0, \pre{k}\omega_1, \pre{k}\omega_2\}$, where $\pre{k}\omega_1, \pre{k}\omega_2$ are ancestors of the even node-tree $\pre{k}\epsilon$ returned by $f_\omega(\pre{k-1}\omega)$. 
+Using \Cref{the:fragnumber}, we now find that a fragmentation on an odd cluster $F(\pre{k-1}\omega)$ returns $\{\pre{k}\omega_0, \pre{k}\omega_1, \pre{k}\omega_2\}$, where $\pre{k}\omega_1, \pre{k}\omega_2$ are ancestors of the even node-tree $\pre{k}\epsilon$ returned by $F_\omega(\pre{k-1}\omega)$. 
 
 \begin{lemma}\label{lem:chrono}
   The node-tree size of $\pre{k}\omega_0$ must be smaller than $\pre{k}\omega_1, \pre{k}\omega_2$, such that $R_1 \geq R_0 \leq R_2$. 
 \end{lemma}
 \begin{proof}
-  The partial fragmentations must occur in the order of first \eqref{eq:pfo}, then \eqref{eq:pfe}, as \eqref{eq:pfe} requires an even node-tree that is returned by \eqref{eq:pfo}. In terms of cluster growth, the vertex-trees $\vset_1, \vset_2$, corresponding to $\pre{k}\omega_1, \pre{k}\omega_2$, must merge before the combined vertex-tree can merge with $\vset_0$, which corresponds to $\pre{k}\nset_0$. Declared by Weighted Growth, $\abs{\vset_1}$ and $\abs{\vset_2}$ must be smaller or equal to $\abs{\vset_0}$, such that 
+  The partial fragmentations must occur in the order of first \Cref{eq:pfo}, then \eqref{eq:pfe}, as \eqref{eq:pfe} requires an even node-tree that is returned by \eqref{eq:pfo}. In terms of cluster growth, the vertex-trees $\vset_1, \vset_2$, corresponding to $\pre{k}\omega_1, \pre{k}\omega_2$, must merge before the combined vertex-tree can merge with $\vset_0$, which corresponds to $\pre{k}\nset_0$. As a result of Weighted Growth, $\abs{\vset_1}$ and $\abs{\vset_2}$ must be smaller or equal to $\abs{\vset_0}$, such that 
   \begin{equation*}
     \abs{\vset_1}\geq \vset_0 \leq\abs{\vset_2}.
   \end{equation*}
@@ -113,16 +113,16 @@ Using \Cref{the:fragnumber}, we now find that a fragmentation on an odd cluster 
   Since $ R_1 \geq R_0 \leq R_2$ per \Cref{lem:chrono}, the largest values for $R_1, R_2$ possible are equal to $R_0$.
 \end{proof}
 
-The last unknown parameter in finding the upper bound of $N_{\text{sus}}$ in Equation \eqref{eq:npdc2} is $\mu$.
+The last unknown parameter in finding the upper bound of $N_{\text{sus}}$ in \Cref{eq:npdc2} is $\mu$.
 
 \begin{theorem}\label{the:km}
   For $\nu = 2$ and $R_i = \{\nicefrac{1}{3},\nicefrac{1}{3},\nicefrac{1}{3}\}$, the maximum number of fragmentation generations is $\mu = \log_3{\abs{\Omega}}$.
 \end{theorem}
 \begin{proof}
-  In every generation, all node-trees are fragmented into 3 ancestors that are $\nicefrac{1}{3}$ the size of their descendant. The series of $\mu$ fragmentations is thus simply $\mu$ divisions of the node-tree $\Omega$ in 3 parts until all ancestors have size 1, at which point a node-tree cannot be fragmented.
+  In every generation, all node-trees are fragmented into 3 ancestors that are $\nicefrac{1}{3}$ the size of their common descendant. The series of $\mu$ fragmentations is thus simply $\mu$ divisions of the node-tree $\Omega$ in 3 parts until all ancestors have size 1, at which point a node-tree cannot be fragmented.
 \end{proof}
 
-Collecting \Cref{the:fragnumber,the:ratios,the:km} and filling in Equation \eqref{eq:npdc2}, we find that
+Collecting \Cref{the:fragnumber,the:ratios,the:km} and filling in \Cref{eq:npdc2}, we find that
 
 \begin{align*}
   \nonumber N_{\text{sus}} &\leq 2\sum_{k=1}^\mu{ \sum_{ \pre{k}\epsilon \in f_\omega^{(k)}(\Omega) }{ \abs{\pre{k}\epsilon}}  } \\
@@ -138,7 +138,7 @@ To grow a cluster represented by a node-tree $\nset$, a depth-first search (DFS)
 \begin{equation}\label{eq:ngrow}
   N_{\text{grow}} = 2\sum_{k=1}^\mu{ \sum_{ \pre{k}\omega \in f^{(k)}(\Omega) }{ \abs{\pre{k}\omega}} }.
 \end{equation}
-Again, we assume that no trivial vertices are added to a cluster or $|\nset| = |\vset|$ such that \eqref{eq:ngrow} becomes an upper bound. As a result of Odd-Rooted Join and Root List Replacement, the upper bound is obtained if there are as many fragmentation generations. This is again achieved through $\nu = 2$. For every fragmentation of some odd node-tree $\pre{k-1}\omega$ into $\{\pre{k}\omega_0, \pre{k}\omega_1, \pre{k}\omega_2\}$, all three ancestors add to $N_{\text{grow}}$ if they have grown. As a result of Weighted Growth, this is the case when $R_0 \approx R_1 \approx R_2\approx \nicefrac{1}{3}$ such that $\abs{\vset_0}\approx \abs{\vset_1}\approx\abs{\vset_2}$. For these values of $\nu$ and $R$, we can apply \Cref{the:km} for $\mu$. For $|\nset| = |\vset|$, the sum of node-tree sizes in every fragmented set $\m{F}_k$ is exactly $\abs{\Omega}$, and we find that
+Again, we assume that no trivial vertices are added to a cluster or $|\nset| = |\vset|$ such that \Cref{eq:ngrow} becomes an upper bound. As a result of Odd-Rooted Join and Root List Replacement, the upper bound is obtained if there are as many fragmentation generations. This is again achieved through $\nu = 2$. For every fragmentation of some odd node-tree $\pre{k-1}\omega$ into $\{\pre{k}\omega_0, \pre{k}\omega_1, \pre{k}\omega_2\}$, all three ancestors add to $N_{\text{grow}}$ if they have grown. As a result of Weighted Growth, this is the case when $\abs{\vset_0}\approx \abs{\vset_1}\approx\abs{\vset_2}$ such that $R_0 \approx R_1 \approx R_2\approx \nicefrac{1}{3}$. For these values of $\nu$ and $R$, we can apply \Cref{the:km} for $\mu$. For $|\nset| = |\vset|$, the sum of node-tree sizes in every fragmented set $\m{F}_k$ is exactly $\abs{\Omega}$, and we find that
 \begin{align*}
   \nonumber N_{\text{grow}} &\leq 2\sum_{k=1}^\mu{ \sum_{ \pre{k}\omega \in f^{(k)}(\Omega) }{ \abs{\pre{k}\omega}}  } \\
   \nonumber         &\leq 2\sum_{k=1}^{\log_3{\abs{\Omega}}} \abs{\Omega}\\
