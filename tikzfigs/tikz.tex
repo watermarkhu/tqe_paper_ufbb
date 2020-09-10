@@ -64,7 +64,7 @@
 \newcommand{\akker}{\mathscr{A}}
 \newcommand{\nset}{\mathcal{N}}
 \newcommand{\vset}{\mathcal{V}}
-\newcommand{\pre}[1]{ {}^{#1} }
+\newcommand{\pr}[1]{ {}^{#1} }
 \newcommand{\ceil}[1]{{\left \lceil #1 \right \rceil }}
 \newcommand{\floor}[1]{{\left \lfloor #1 \right \rfloor }}
 
@@ -508,27 +508,27 @@
     \draw[enset] (a0) circle[radius=.4cm];
     \draw[enset] (a1) circle[radius=.4cm];
     \draw[enset] (a2) circle[radius=.4cm];
-    \node at (a0) {\footnotesize $\pre{k}\omega_2$};
-    \node at (a1) {\footnotesize $\pre{k}\omega_1$};
-    \node at (a2) {\footnotesize $\pre{k}\omega_0$};
+    \node at (a0) {\footnotesize $\pr{k}\omega_2$};
+    \node at (a1) {\footnotesize $\pr{k}\omega_1$};
+    \node at (a2) {\footnotesize $\pr{k}\omega_0$};
 
     \foreach \i in {0,1,2}{
             \node (b\i) [above = \i cm of b] {};
         }
     \draw[enset] (b2) circle[radius=0.4cm];
-    \node at (b2) {\footnotesize $\pre{k}\omega_0$};
+    \node at (b2) {\footnotesize $\pr{k}\omega_0$};
 
     \draw[enset] (b0) ++(0.5cm,0) -- ++(0, 1.1cm) arc (0:180:0.5cm) -- ++(0, -1.1cm) arc (180:360:0.5cm) -- cycle;
     \draw[subtree] (b1) circle[radius=.4cm];
     \draw[subtree] (b0) circle[radius=.4cm];
-    \node at ($(b0)!0.5!(b1)$) {\footnotesize $\pre{k}\epsilon$};
+    \node at ($(b0)!0.5!(b1)$) {\footnotesize $\pr{k}\epsilon$};
 
     \foreach \i in {0,1,2}{
             \node (c\i) [above =\i cm of c] {};
         }
 
     \draw[enset] (c0) ++(0.5cm,0) -- +(0, 2.2cm) arc (0:180:0.5cm) -- +(0, -2.2cm) arc (180:360:0.5cm) -- cycle;
-    \node at (c1) {\footnotesize $\pre{k-1}\omega$};
+    \node at (c1) {\footnotesize $\pr{k-1}\omega$};
 
     \draw[subtree] (c2) circle[radius=.4cm];
     \draw[subtree] (c0) ++(0.4cm,0) -- +(0, 1.2) arc (0:180:0.4) -- +(0, -1.2) arc (180:360:0.4) -- cycle;
@@ -541,9 +541,9 @@
     \draw[l1, ->, dashed] (f2a) .. controls +(225:0.9cm) and +(315:0.9cm) .. (f2b);
     \draw[l1, ->, dashed] (fa)  .. controls +(210:1.8cm) and +(330:1.8cm) .. (fb);
 
-    \node (ca) at ($(c)!0.5!(a)$) {}; \node [below = 1cm of ca] {$F(\pre{k-1}\omega)$};
-    \node (cb) at ($(c)!0.5!(b)$) {}; \node [below = 0.6cm of cb] {$F_\omega(\pre{k-1}\omega)$};
-    \node [below = 0.6cm of b1t] {$F_\epsilon(\pre{k}\epsilon)$};
+    \node (ca) at ($(c)!0.5!(a)$) {}; \node [below = 1cm of ca] {$F(\pr{k-1}\omega)$};
+    \node (cb) at ($(c)!0.5!(b)$) {}; \node [below = 0.6cm of cb] {$F_\omega(\pr{k-1}\omega)$};
+    \node [below = 0.6cm of b1t] {$F_\epsilon(\pr{k}\epsilon)$};
 
     \node (u1lt) at ($(a0)!0.5!(a1)$) {}; \node(u1l) [right=1cm of u1lt] {};
     \node (u1rt) at ($(b0)!0.5!(b1)$) {}; \node(u1r) [left=1cm of u1rt] {};
