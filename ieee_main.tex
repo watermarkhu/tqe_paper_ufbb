@@ -16,11 +16,9 @@
 \usepackage{nicefrac}
 \usepackage{mathtools}
 \usepackage{graphicx}
-\usepackage[font={sf,scriptsize,stretch=0.84}, labelfont={bf,color=accessblue}]{caption}
-\usepackage[style=ieee, sorting=none]{biblatex}
 \usepackage[linesnumbered, ruled, vlined]{algorithm2e}
-
-\addbibresource{cit.bib}
+\usepackage{cite}
+\usepackage{url}
 
 % Set table
 \newcolumntype{L}[1]{>{\hsize=#1\hsize\raggedright\arraybackslash}X}%
@@ -37,7 +35,6 @@
 % Set new commands
 \let\oldemptyset\emptyset
 \let\emptyset\varnothing
-\newcommand{\codefunc}[1]{\texttt{#1}}
 \newcommand{\m}[1]{\mathcal{#1}}
 \newcommand{\n}[1]{\mathscr{#1}}
 \newcommand{\bound}{\mathscr{B}}
@@ -48,7 +45,10 @@
 \newcommand{\ceil}[1]{{\left \lceil #1 \right \rceil }}
 \newcommand{\floor}[1]{{\left \lfloor #1 \right \rfloor }}
 \DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
-
+\DeclareMathOperator{\Find}{Find}
+\DeclareMathOperator{\Union}{Union}
+\DeclareMathOperator{\Nodejoin}{Join}
+\DeclareMathOperator{\Support}{Support}
 
 % Set algorithm2e package settings
 \SetAlgoCaptionLayout{centerline}
@@ -67,12 +67,12 @@
 
 
 \begin{document}
-\history{Date of publication xxxx 00, 0000, date of current version xxxx 00, 0000.}
+\history{Date of publication xxxx 00, 0000, date of current version \today}
 \doi{10.1109/TQE.2020.DOI}
 
-\title{Quasilinear-Time Decoding Algorithm for \\Topological Codes with High Decoding Performance}
+\title{Quasilinear-Time Decoding Algorithm for Topological Codes with High Decoding Performance}
 \author{
-    \uppercase{S. Hu}\authorrefmark{1},
+    \uppercase{M. S. Hu}\authorrefmark{1},
     \uppercase{and D. Elkouss\authorrefmark{2}}
 }
 \address[1]{Department of Physics, Delft University of Technology (email: watermarkhu@outlook.com)}
@@ -84,27 +84,32 @@
 {S. Hu \headeretal: IEEE Transactions on Quantum Engineering}
 {S. Hu \headeretal: IEEE Transactions on Quantum Engineering}
 
-\corresp{Corresponding author: S. Hu (email: watermarkhu@outlook.com).}
+\corresp{Corresponding author: M. S. Hu (email: watermarkhu@outlook.com).}
 
 \begin{abstract}
-    \input{sections/abstract}
+    \input{sec_abstract}
 \end{abstract}
 
 \begin{keywords}
     Quantum Computing, Quantum Error Correction, Surface Code
 \end{keywords}
 
-\titlepgskip=-15pt
+\titlepgskip=-30pt
 \maketitle
 
-\input{sections/introduction}
-\input{sections/ufbb}
-\input{sections/pseudocode}
-\input{sections/complexity}
-\input{sections/performance}
-\input{sections/conclusion}
+\input{sec_introduction}
+\input{sec_ufbb}
+\input{sec_pseudocode}
+\input{sec_complexity}
+\input{sec_performance}
+\input{sec_conclusion}
 
 \FloatBarrier
-\printbibliography
+
+\bibliographystyle{IEEEtran}
+\bibliography{cit}
+% \printbibliography
+
 \EOD
+
 \end{document}

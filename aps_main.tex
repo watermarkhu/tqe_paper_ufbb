@@ -19,8 +19,6 @@
 \usepackage{nicefrac}
 \usepackage{mathtools}
 \usepackage[linesnumbered, ruled, vlined]{algorithm2e}
-% \usepackage[style=phys, sorting=none]{biblatex}
-% \addbibresource{cit.bib}
 
 % Set table
 \newcolumntype{L}[1]{>{\hsize=#1\hsize\raggedright\arraybackslash}X}%
@@ -37,7 +35,6 @@
 % Set new commands
 \let\oldemptyset\emptyset
 \let\emptyset\varnothing
-\newcommand{\codefunc}[1]{\texttt{#1}}
 \newcommand{\m}[1]{\mathcal{#1}}
 \newcommand{\n}[1]{\mathscr{#1}}
 \newcommand{\bound}{\mathscr{B}}
@@ -48,7 +45,10 @@
 \newcommand{\ceil}[1]{{\left \lceil #1 \right \rceil }}
 \newcommand{\floor}[1]{{\left \lfloor #1 \right \rfloor }}
 \DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
-
+\DeclareMathOperator{\Find}{Find}
+\DeclareMathOperator{\Union}{Union}
+\DeclareMathOperator{\Nodejoin}{Join}
+\DeclareMathOperator{\Support}{Support}
 
 % Set algorithm2e package settings
 \SetAlgoCaptionLayout{centerline}
@@ -121,17 +121,17 @@
 
 
     \begin{abstract}
-        \input{sections/abstract}
+        \input{sec_abstract}
     \end{abstract}
 
     \maketitle
 
-    \input{sections/introduction}
-    \input{sections/ufbb}
-    \input{sections/pseudocode}
-    \input{sections/complexity}
-    \input{sections/performance}
-    \input{sections/conclusion}
+    \input{sec_introduction}
+    \input{sec_ufbb}
+    \input{sec_pseudocode}
+    \input{sec_complexity}
+    \input{sec_performance}
+    \input{sec_conclusion}
     \FloatBarrier
     \bibliographystyle{apsrev}
     \bibliography{cit}

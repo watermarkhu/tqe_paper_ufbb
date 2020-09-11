@@ -263,4 +263,4 @@ TSWLatexianTemp*
 .vscode/
 .build/
 !fig/*
-!tikzfigs/*.pdf
+!figures/*.pdf

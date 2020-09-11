@@ -4,6 +4,8 @@
 \usepackage{tikz}
 \usepackage{alphalph}
 \usepackage{nicefrac}
+\usepackage{amsmath}
+
 \usetikzlibrary{external,shapes,calc,math,patterns,arrows,positioning,fadings}
 \tikzexternalize[optimize=false]
 
@@ -53,8 +55,6 @@
 \definecolor{mcyan}{HTML}{17BECF}
 
 % Set new commands
-\newcommand{\codeword}[1]{\texttt{\textcolor{MidnightBlue}{#1}}}
-%\newcommand{\codefunc}[1]{\texttt{\textcolor{OliveGreen}{#1}}}
 \let\oldemptyset\emptyset
 \let\emptyset\varnothing
 \newcommand{\codefunc}[1]{\texttt{#1}}
@@ -67,7 +67,10 @@
 \newcommand{\pr}[1]{ {}^{#1} }
 \newcommand{\ceil}[1]{{\left \lceil #1 \right \rceil }}
 \newcommand{\floor}[1]{{\left \lfloor #1 \right \rfloor }}
-
+\DeclareMathOperator{\Find}{Find}
+\DeclareMathOperator{\Union}{Union}
+\DeclareMathOperator{\Nodejoin}{Join}
+\DeclareMathOperator{\Support}{Support}
 
 \begin{document}
 
@@ -358,7 +361,7 @@
         \node (e5) [undef] at (3.5,0) {$n_e$};
         \draw[l1] (o2) -- (o1) -- (o3) (e4) -- (e5);
         \draw[l1, dashed] (o3) -- (e5) node[midway,below] (a) {};
-        % \draw[l1, <-] (a) -- ++(0,-.5) node[below] {$\codefunc{Join}(n_e, n_o)$};
+        % \draw[l1, <-] (a) -- ++(0,-.5) node[below] {$\Nodejoin(n_e, n_o)$};
     \end{scope}
 
     \begin{scope}[shift={(4.5,0)}]
@@ -549,8 +552,8 @@
     \node (u1rt) at ($(b0)!0.5!(b1)$) {}; \node(u1r) [left=1cm of u1rt] {};
     \node (u2lt) at ($(b1)!0.5!(b2)$) {}; \node(u2l) [right=1cm of u2lt] {};
     \node (u2rt) at ($(c1)!0.5!(c2)$) {}; \node(u2r) [left=1cm of u2rt] {};
-    \draw[l1, ->] (u1l) -- (u1r) node[midway,above] {\codefunc{Join}};
-    \draw[l1, ->] (u2l) -- (u2r) node[midway,above, text width = 2cm, align=center] {\codefunc{Join}};
+    \draw[l1, ->] (u1l) -- (u1r) node[midway,above] {$\Nodejoin$};
+    \draw[l1, ->] (u2l) -- (u2r) node[midway,above, text width = 2cm, align=center] {$\Nodejoin$};
 
 \end{tikzpicture}
 \end{document}
