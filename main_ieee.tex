@@ -1,0 +1,55 @@
+\documentclass{ieeeaccess}
+\usepackage[OT1]{fontenc} 
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{cite}
+\usepackage{url}
+\input{main_preamble}
+
+\begin{document}
+\history{Date of publication xxxx 00, 0000, date of current version \today}
+\doi{10.1109/TQE.2020.DOI}
+
+\title{Quasilinear-Time Decoding Algorithm for Topological Codes with High Decoding Performance}
+\author{
+    \uppercase{M. S. Hu}\authorrefmark{1},
+    \uppercase{and D. Elkouss\authorrefmark{2}}
+}
+\address[1]{Department of Physics, Delft University of Technology (email: watermarkhu@outlook.com)}
+\address[2]{QuTech, Delft University of Technology, Lorentzweg 1, 2628CJ Delft, The Netherlands (email: d.elkousscoronas@qutech.nl)}
+
+\tfootnote{This work was partially supported by the Netherlands Organization for Scientific Research (NWO/OCW), as part of the Quantum Software Consortium program (project number 024.003.037/3368), and by the Unitary Fund.}
+
+\markboth
+{S. Hu \headeretal: IEEE Transactions on Quantum Engineering}
+{S. Hu \headeretal: IEEE Transactions on Quantum Engineering}
+
+\corresp{Corresponding author: M. S. Hu (email: watermarkhu@outlook.com).}
+
+\begin{abstract}
+    \input{sec_abstract}
+\end{abstract}
+
+\begin{keywords}
+    Quantum Computing, Quantum Error Correction, Surface Code
+\end{keywords}
+
+\titlepgskip=-30pt
+\maketitle
+
+\input{sec_introduction}
+\input{sec_ufbb}
+\input{sec_pseudocode}
+\input{sec_complexity}
+\input{sec_performance}
+\input{sec_conclusion}
+
+\FloatBarrier
+
+\bibliographystyle{IEEEtran}
+\bibliography{cit}
+% \printbibliography
+
+\EOD
+
+\end{document}

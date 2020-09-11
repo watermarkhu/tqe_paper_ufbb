@@ -1,70 +1,8 @@
 \documentclass[twocolumn,pra,nofootinbib]{revtex4}
-
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[english]{babel}
-\usepackage{amsfonts}
-\usepackage{amsmath}
-\usepackage{amssymb}
-\usepackage{amsthm}
-\usepackage{amsbsy}
-\usepackage{placeins}
-\usepackage{setspace}
-\usepackage{tabularx}
-\usepackage{hhline}
-\usepackage{multirow}
-\usepackage{enumitem}
-\usepackage{textcomp}
-\usepackage{cleveref}
-\usepackage{nicefrac}
-\usepackage{mathtools}
-\usepackage[linesnumbered, ruled, vlined]{algorithm2e}
-
-% Set table
-\newcolumntype{L}[1]{>{\hsize=#1\hsize\raggedright\arraybackslash}X}%
-\newcolumntype{R}[1]{>{\hsize=#1\hsize\raggedleft\arraybackslash}X}%
-\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}%
-\newcommand{\gc}{\cellcolor[gray]{0.9}}
-
-% Set theorems
-\newtheorem{definition}{Definition}[section]
-\newtheorem{lemma}{Lemma}[section]
-\newtheorem{theorem}{Theorem}[section]
-\newtheorem{proposition}{Proposition}[section]
-
-% Set new commands
-\let\oldemptyset\emptyset
-\let\emptyset\varnothing
-\newcommand{\m}[1]{\mathcal{#1}}
-\newcommand{\n}[1]{\mathscr{#1}}
-\newcommand{\bound}{\mathscr{B}}
-\newcommand{\akker}{\mathscr{A}}
-\newcommand{\nset}{\mathcal{N}}
-\newcommand{\vset}{\mathcal{V}}
-\newcommand{\pr}[1]{ {}^{#1} }
-\newcommand{\ceil}[1]{{\left \lceil #1 \right \rceil }}
-\newcommand{\floor}[1]{{\left \lfloor #1 \right \rfloor }}
-\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
-\DeclareMathOperator{\Find}{Find}
-\DeclareMathOperator{\Union}{Union}
-\DeclareMathOperator{\Nodejoin}{Join}
-\DeclareMathOperator{\Support}{Support}
-
-% Set algorithm2e package settings
-\SetAlgoCaptionLayout{centerline}
-\setlength{\algoheightrule}{1pt}
-\setlength{\algotitleheightrule}{1pt}
-\setlength{\interspacetitleboxruled}{.5em}
-\SetStartEndCondition{ }{}{}
-\SetKwProg{Fn}{def}{\string:}{}
-\SetKw{KwTo}{in}
-\SetKwFor{For}{for}{\string:}{}
-\SetKwIF{If}{ElseIf}{Else}{if}{ then}{else if}{else}{}
-\SetKwFor{While}{while}{ do}{}
-\SetInd{0.1em}{0.5em}
-\SetAlgoNoEnd\DontPrintSemicolon
-\SetAlFnt{\small}
-
+\input{main_preamble}
 
 \makeatletter
     \def\thefigure{\@arabic\c@figure}
@@ -135,5 +73,4 @@
     \FloatBarrier
     \bibliographystyle{apsrev}
     \bibliography{cit}
-    % \printbibliography
 \end{document}

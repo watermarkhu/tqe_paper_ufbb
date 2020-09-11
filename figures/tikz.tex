@@ -3,8 +3,7 @@
 \usepackage{etoolbox}
 \usepackage{tikz}
 \usepackage{alphalph}
-\usepackage{nicefrac}
-\usepackage{amsmath}
+\input{../preamble.tex}
 
 \usetikzlibrary{external,shapes,calc,math,patterns,arrows,positioning,fadings}
 \tikzexternalize[optimize=false]
@@ -54,23 +53,6 @@
 \definecolor{mlime}{HTML}{BCBD22}
 \definecolor{mcyan}{HTML}{17BECF}
 
-% Set new commands
-\let\oldemptyset\emptyset
-\let\emptyset\varnothing
-\newcommand{\codefunc}[1]{\texttt{#1}}
-\newcommand{\m}[1]{\mathcal{#1}}
-\newcommand{\n}[1]{\mathscr{#1}}
-\newcommand{\bound}{\mathscr{B}}
-\newcommand{\akker}{\mathscr{A}}
-\newcommand{\nset}{\mathcal{N}}
-\newcommand{\vset}{\mathcal{V}}
-\newcommand{\pr}[1]{ {}^{#1} }
-\newcommand{\ceil}[1]{{\left \lceil #1 \right \rceil }}
-\newcommand{\floor}[1]{{\left \lfloor #1 \right \rfloor }}
-\DeclareMathOperator{\Find}{Find}
-\DeclareMathOperator{\Union}{Union}
-\DeclareMathOperator{\Nodejoin}{Join}
-\DeclareMathOperator{\Support}{Support}
 
 \begin{document}
 
