@@ -4,7 +4,7 @@
   \KwData{A graph $G=(V,E)$, and syndrome $\sigma \subseteq V$}
   \KwResult{Correction set $\m{C}$}
   \BlankLine
-  Initialize cluster vertex-trees, node-trees and table $\Support$.\;\label{algo:B1a}
+  Initialize cluster vertex-trees and node-trees.\;\label{algo:B1a}% and table $\Support$
   Create the list $\m{L}$ of odd clusters.\;
   \While(){$\m{L}$ is not empty}{
     Initialize the fusion list $\m{F}$ as an empty list.\;\label{algo:B1b}
@@ -12,18 +12,20 @@
       \For(){$n \in\m{R}$ at node root $r$}{
         Apply DFSs to calculate node parities and delays (Equations \eqref{eq:nodeparity}, \eqref{eq:delayequation}) from $n$ to descendant nodes. Keep track of the largest value for $n_d$ encountered during the delay DFS.\;\label{algo:pdc}
       }
-      Apply DFS from root $r$ to all descendants. At each node during the DFS, if $\m{s}(n)=0$ (\Cref{eq:suspension}), grow all boundary edges of vertices in the node a half-edge per the Union-Find decoder, such that grown edges are added to $\m{F}$, and apply $n_r=n_r+\nicefrac{1}{2}$. If $\m{s}(n)\neq0$, apply $n_w=n_w+1$ and continue the DFS.\;\label{algo:grow}
+      Apply DFS from root $r$ to all descendants. At each node during the DFS, if $\m{s}(n)=0$ (\Cref{eq:suspension}), grow all boundary edges of vertices in the node a half-edge per the Union-Find decoder, such that grown edges are added to $\m{F}$, and apply $n_r=n_r+\nicefrac{1}{2}$. \;\label{algo:grow}
+      %If $\m{s}(n)\neq0$, apply $n_w=n_w+1$ and continue the DFS.
     }
     \For(){edge $(u,v) \in \m{F}$\label{algo:B3a}}{
       \eIf(){$\Find(u)\neq\Find(v)$}{
         Merge vertex-trees by Weighted $\Union$.\;
         \eIf(){$u \in n_u$ and $v \in n_v$\label{algo:joina}}{
-          Merge node-trees by Odd-Rooted $\Nodejoin$. If resulting node-tree with root $r$ is odd, add even subroot (either $n_u$ or $n_v$) to list $\m{R}$ at $r$.\;
+          Merge node-trees by Odd-Rooted $\Nodejoin$. If resulting node-tree with root $r$ is odd, \david{add even subroot (either $n_u$ or $n_v$) to list $\m{R}$ at $r$}.\;
         }($u$ or $v$ does not belong to a cluster){
           Add $u$ to $n_v$ or $v$ to $n_u$.\;\label{algo:joinb}
         }
       }($u,v$ in same cluster.\label{algo:dfa}){
-        Subtract 1 from $(u,v)$ in $\Support$.\;\label{algo:dfb}
+        %Subtract 1 from $(u,v)$ in $\Support$.\;
+        Remove $(u,v)$ from vertex-tree to keep it acyclic. \david{and from lattice?}\;\label{algo:dfb} 
       }
     }
     Update $\m{L}$ with odd clusters\; \label{algo:B3b}
