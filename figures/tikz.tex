@@ -3,17 +3,26 @@
 \usepackage{etoolbox}
 \usepackage{tikz}
 \usepackage{alphalph}
-\input{../preamble.tex}
+\input{../main_preamble.tex}
+
+% !TEX program = pdflatex
+% !TEX options = -shell-escape -synctex=1 -interaction=nonstopmode -file-line-error -output-directory=%OUTDIR% "%DOC%"
 
 \usetikzlibrary{external,shapes,calc,math,patterns,arrows,positioning,fadings}
+\tikzset{%
+  external/system call={pdflatex \tikzexternalcheckshellescape --halt-on-error --interaction=batchmode --output-directory=./build --jobname "\image" "\texsource"},
+  /pgf/images/include external/.code={%
+    \includegraphics{./build/#1}%
+  },
+}
 \tikzexternalize[optimize=false]
 
 \tikzstyle{l1}=[line width=0.9]
 \tikzstyle{l2}=[line width=0.5]
-\tikzstyle{node}=[circle,, draw=black, minimum size=25pt, l1, inner sep= 5pt]
+\tikzstyle{node}=[circle, draw=black, minimum size=25pt, l1, inner sep= 5pt]
 \tikzstyle{nodel}=[circle, draw=black, minimum size=15pt, l1, inner sep= 0pt]
 \tikzstyle{nodem}=[circle, draw=black, minimum size=12pt, l1, inner sep= 0pt]
-\tikzstyle{tnode}=[nodel, minimum size=0.8 cm, fill=white]
+\tikzstyle{tnode}=[circle, draw=black, minimum size=20pt, l1, inner sep= 0pt, fill=white]
 \tikzstyle{node1}=[circle, draw=black, minimum size=20pt, l1, inner sep= 2pt]
 \tikzstyle{node2}=[circle, draw=black, minimum size=14pt, l1, inner sep= 0pt, fill=white!70!black]
 \tikzfading[name=fade right, left color=transparent!0, right color=transparent!100]
@@ -65,12 +74,12 @@
     \draw[l1] (0,1) -- (0,-1);
     \draw[l1] (2,1) -- (2,-1);
     \draw[l1] (4,1) -- (4,-1);
-    \node[node, fill=white!70!mblue, text opacity=1] at (0,0) (1) {$v_0$};
-    \node[node, fill=white, draw=mblue, dashed] at (0,2) (2) {$v_0'$};
-    \node[node, fill=white!70!mred, text opacity=1] at (2,0) (3){$v_1$};
-    \node[node, fill=white, draw=mred,dotted] at (2,2) (4) {$v_1'$};
-    \node[node, fill=white!70!mgreen, text opacity=1] at (4,0) (5) {$v_2$};
-    \node[node, fill=white, draw=mgreen, dashdotted] at (4,2) (6) {$v_2'$};
+    \node[node, fill=white!70!mblue, text opacity=1] at (0,0) (1) {$a$};
+    \node[node, fill=white, draw=mblue, dashed] at (0,2) (2) {$a'$};
+    \node[node, fill=white!70!mred, text opacity=1] at (2,0) (3){$b$};
+    \node[node, fill=white, draw=mred,dotted] at (2,2) (4) {$b'$};
+    \node[node, fill=white!70!mgreen, text opacity=1] at (4,0) (5) {$c$};
+    \node[node, fill=white, draw=mgreen, dashdotted] at (4,2) (6) {$c'$};
 
     \draw[l1, dashed, mblue] (1) -- (2);
     \draw[l1, dashed, mblue, transform canvas={yshift=3pt}] (3) -- (5);
@@ -92,9 +101,9 @@
     \end{scope}
     \path[pattern=dots , pattern color=mred] (2,1) arc (90:450:1);
 
-    \node[node, fill=white!70!mblue] at (0,0) (0) {$v_0$};
-    \node[node, fill=white!70!mred] at (2,0) (1) {$v_1$};
-    \node[node, fill=white!70!mgreen] at (4,0) (5) {$v_2$};
+    \node[node, fill=white!70!mblue] at (0,0) (0) {$a$};
+    \node[node, fill=white!70!mred] at (2,0) (1) {$b$};
+    \node[node, fill=white!70!mgreen] at (4,0) (5) {$c$};
     \node[node, fill=white] at (-2,0) (2) {};
     \node[node, fill=white] at (0,2) (3) {};
     \node[node, fill=white] at (0,-2) (4) {};
@@ -117,12 +126,13 @@
 
     \begin{scope}[shift={(0, -4)}]
         \node at (-3, 0) {$\mathcal{N}$};
-        \node[node, pattern=horizontal lines, pattern color=mblue] at (0,0) (d) {$1$};
-        \node[node1, inner sep=0, pattern=dots , pattern color=mred] at (2,0) (e) {$\nicefrac{1}{2}$};
-        \node[node, pattern=vertical lines, pattern color=mgreen] at (4,0) (f) {$1$};
-        \node at (0,-1) {$n_0$};
-        \node at (2,-1) {$n_1$};
-        \node at (4,-1) {$n_2$};
+        \node at (-3,-1) {$N_r:$};
+        \node[node, pattern=horizontal lines, pattern color=mblue] at (0,0) (d) {$A$};
+        \node[node1, inner sep=0, pattern=dots , pattern color=mred] at (2,0) (e) {$B$};
+        \node[node, pattern=vertical lines, pattern color=mgreen] at (4,0) (f) {$C$};
+        \node at (0,-1) {$1$};
+        \node at (2,-1) {$$\nicefrac{1}{2}$$};
+        \node at (4,-1) {$1$};
         \draw[l1] (d) -- (e) -- (f);
     \end{scope}
 \end{tikzpicture}
@@ -133,6 +143,7 @@
     
     \node at (-3, 2) {$\mathcal{V}$};
     \node at (-3, -3) {$\mathcal{N}$};
+    \node at (-3, -4) {$N_r:$};
     \begin{scope}[shift={(-1, 0)}, scale=1.5]
         \draw[l1, opacity=0.1, step=1] (-1.5,-1.5) grid (5.5,1.5); 
         \node at (0,0) (0) {}; \node at (2,0) (1) {}; \node at (4,0) (2) {};
@@ -140,18 +151,18 @@
         \path[pattern=vertical lines, pattern color=mred, rounded corners=10pt, rotate around={45:(1)}] (0.9,-1.1) rectangle (3.1,1.1);
         \path[pattern=horizontal lines, pattern color=mgreen, rounded corners=10pt, rotate around={45:(2)}] (2.9,-1.1) rectangle (5.1,1.1);
 
-        \node[tnode, fill=white!70!mblue] at (0) (v0) {$v_1$};
+        \node[tnode, fill=white!70!mblue] at (0) (v0) {$a$};
         \node[tnode] at (-1,0) (v0l) {};
         \node[tnode] at (0,1) (v0u) {};
         \node[tnode] at (0,-1) (v0d) {};
 
-        \node[tnode, fill=white!70!mred] at (1) (v1) {$v_3$};
-        \node[tnode] at (1,0) (v1l) {$v_{2}$};
+        \node[tnode, fill=white!70!mred] at (1) (v1) {$c$};
+        \node[tnode] at (1,0) (v1l) {$b$};
         \node[tnode] at (2,1) (v1u) {};
         \node[tnode] at (2,-1) (v1d) {};
 
-        \node[tnode, fill=white!70!mgreen] at (2) (v2) {$v_5$};
-        \node[tnode] at (3,0) (v2l) {$v_{4}$};
+        \node[tnode, fill=white!70!mgreen] at (2) (v2) {$e$};
+        \node[tnode] at (3,0) (v2l) {$d$};
         \node[tnode] at (5,0) (v2r) {};
         \node[tnode] at (4,1) (v2u) {};
         \node[tnode] at (4,-1) (v2d) {};
@@ -163,18 +174,18 @@
     \end{scope}
 
     \begin{scope}[shift={(-1, -3)}, scale=1.5]
-        \node[tnode, pattern=horizontal lines, pattern color=mblue] at (0,0) (n0) {1};
+        \node[tnode, pattern=horizontal lines, pattern color=mblue] at (0,0) (n0) {$\dot{A}$};
         \node[nodel, pattern=horizontal lines, pattern color=mblue!50!white, line width=0] at (1,0) {};
-        \node[nodel, pattern=vertical lines,   pattern color=mred!50!white] at (1,0) (j01) {0};
-        \node[tnode, pattern=vertical lines , pattern color=mred] at (2,0) (n1) {1};
+        \node[nodel, pattern=vertical lines,   pattern color=mred!50!white] at (1,0) (j01) {$\check{B}$};
+        \node[tnode, pattern=vertical lines , pattern color=mred] at (2,0) (n1) {$\dot{C}$};
         \node[nodel, pattern=vertical lines,   pattern color=mred!50!white, line width=0] at (3,0) {};
-        \node[nodel, pattern=horizontal lines, pattern color=mgreen!50!white] at (3,0) (j12) {0};
-        \node[tnode, pattern=horizontal lines, pattern color=mgreen] at (4,0) (n2) {1};
-        \node at (0,-.7) {$s_0$};
-        \node at (1,-.7) {$j_{1}$};
-        \node at (2,-.7) {$s_2$};
-        \node at (3,-.7) {$j_{3}$};
-        \node at (4,-.7) {$s_4$};
+        \node[nodel, pattern=horizontal lines, pattern color=mgreen!50!white] at (3,0) (j12) {$\check{D}$};
+        \node[tnode, pattern=horizontal lines, pattern color=mgreen] at (4,0) (n2) {$\dot{E}$};
+        \node at (0,-.7) {1};
+        \node at (1,-.7) {0};
+        \node at (2,-.7) {1};
+        \node at (3,-.7) {0};
+        \node at (4,-.7) {1};
         \draw[l1] (n0) -- (j01) -- (n1) -- (j12) -- (n2);
     \end{scope}
 \end{tikzpicture}
