@@ -264,3 +264,4 @@ TSWLatexianTemp*
 .build/
 !fig/*
 !figures/*.pdf
+!figures/build/*.pdf
