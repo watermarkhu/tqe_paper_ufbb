@@ -34,7 +34,7 @@ The PMW can be utilized to prioritize the growth of vertices with low PMW such t
 \subsection{Node-Partitioning data structure}\label{sec:nodeset}
 Fortunately, the PMW can be \david{approximated} efficiently. For this we introduce the \textbf{Node-Partitioning} data structure for a cluster $C$.
 
-Let the sub-graph $\vset\subseteq C$ be a spanning-tree of $C$ if it is a connected acyclic sub-graph that includes all vertices of $C$ and a minimum number of edges. A node-tree $\nset$ is a partition of the spanning-tree $\vset$, such that each element of the partition --- which we call a \textbf{node} --- represents a set of adjacent vertices that lie within a certain distance --- the \textbf{node radius} --- from the \textbf{primer vertex}, which initializes the node and lies at its center. The node-tree is an undirected acyclic graph, and its edges $\m{E}_i$ have lengths equal to the distance (edges in $\vset$) between the primer vertices of neighboring nodes. 
+Let the sub-graph $\vset\subseteq C$ be a spanning-tree of $C$ if it is a connected acyclic sub-graph that includes all vertices of $C$ and a minimum number of edges. A node-tree $\nset$ is a partition of the spanning-tree $\vset$, such that each element of the partition --- which we call a \textbf{node} --- represents a set of adjacent vertices that lie within a certain distance --- the \textbf{node radius} $\rho$ --- from the \textbf{primer vertex}, which initializes the node and lies at its center. The node-tree is an undirected acyclic graph, and its edges $\m{E}_i$ have lengths equal to the distance (edges in $\vset$) between the primer vertices of neighboring nodes. 
 
 
 %\begin{definition}
@@ -43,7 +43,7 @@ Let the sub-graph $\vset\subseteq C$ be a spanning-tree of $C$ if it is a connec
 
 %Consider the cluster of non-trivial vertices $V_i=\{v_0,v_1,v_2\}$ and edges $E_i = \{(v_0,v_1), (v_1, v_2)\}$ from \Cref{fig0}. We had found previously that vertices $v_0, v_2$ have a lower PMW compared to $v_1$ by 1 edge. The growth of $v_0$ and $v_2$ could be prioritized, such that new vertices are added to the cluster on the boundary of $v_0$ and $v_2$. If all newly added vertices are trivial, the cluster would be described by \Cref{fig1}. If we repeat the PMW calculation, we now find that the PMWs of the new vertices connected to $v_0$ are equal. The same holds for the vertices connected to $v_2$.
 
-Suppose every non-trivial vertex is the primer vertex of a node, all vertices within a node that lie at distance $r$ to the primer vertex are either boundary vertices to the cluster and have equal PMW, or lie within the radius of another node. Additionally, a growth iteration can be represented as an increase in the node radius by $\frac{1}{2}$. The weight of a matching in $\vset$ is thus equal to the weight of the same matching in $\nset$. For the example in \Cref{fig1}, the PMW of all boundary vertices of $A$, henceforth just the PMW of $A$, is $A_r + (B,C) +1$. The partitioning of $\vset$ to $\nset$ thus allows us to compute the PMW using parameters of the reduced node-tree. We dub all nodes that have non-trivial vertices as primer vertices \textbf{syndrome-nodes} $\dot{N}$. Additionally, trivial vertices that lie on equal radii of two or more different nodes initiate a different type \textbf{junction-nodes} $\check{N}$. A cluster with a node-tree comprised of both node types is depicted in \Cref{fig2}. 
+Suppose every non-trivial vertex is the primer vertex of a node, all vertices within a node that lie at distance $r$ to the primer vertex are either boundary vertices to the cluster and have equal PMW, or lie within the radius of another node. Additionally, a growth iteration can be represented as an increase in the node radius by $\frac{1}{2}$. The weight of a matching in $\vset$ is thus equal to the weight of the same matching in $\nset$. For the example in \Cref{fig1}, the PMW of all boundary vertices of $A$, henceforth just the PMW of $A$, is $\rho_A + \abs{(B,C)} +1$. The partitioning of $\vset$ to $\nset$ thus allows us to compute the PMW using parameters of the reduced node-tree. We dub all nodes that have non-trivial vertices as primer vertices \textbf{syndrome-nodes} $\dot{N}$. Additionally, trivial vertices that lie on equal radii of two or more different nodes initiate a different type \textbf{junction-nodes} $\check{N}$. A cluster with a node-tree comprised of both node types is depicted in \Cref{fig2}. 
 
 \Figure[htb](topskip=0pt, botskip=0pt, midskip=0pt){figures/build/tikz-figure2.pdf}{
 Two different node types. Syndrome-nodes $N$ have a non-trivial vertex or syndrome at its center. Vertices that lie on the radii of two existing nodes initialize a junction-node $\check{N}$ in the node-tree. Vertex $b$ lies on equal distances to primer vertices $a$ of node $\dot{A}$ and $c$ of $\dot{C}$, and vertex $d$ to primer vertices $c$ of $\dot{C}$ and $e$ of $\dot{E}$. Therefore, vertices $b$ and $d$ initiate junction-nodes $\check{B}$ and $\check{D}$, respectively, in the merged node-tree. \label{fig2}}
@@ -55,53 +55,53 @@ The Node-Partitioning data structure does not replace but coexists with the Unio
 
 \subsection{Node parity and delay}\label{sec:paritydelay}
 
-The Node-Partitioning data structure allows for prioritizing the growth of \emph{nodes} with low PWM, instead of \emph{vertices}. To quantize this priority, we define the \textbf{node delay} $N_\delta$, the number of growth iterations for a node to wait for all nodes in the node-tree to have equal PWM: 
+The Node-Partitioning data structure allows for prioritizing the growth of \emph{nodes} with low PWM, instead of \emph{vertices}. To quantize this priority, we define the \textbf{node delay} $\delta_N$, the number of growth iterations for a node to wait for all nodes in the node-tree to have equal PWM: 
 \begin{equation}
-    N_\delta = 2\left(\text{PMW}(N) - \min_{X\in\nset}{\text{PMW}(X)}\right).
+    \delta_N = 2\left(\text{PMW}(N) - \min_{X\in\nset}{\text{PMW}(X)}\right).
 \end{equation}
-To grow a cluster, we loop over all nodes in $\nset$ and grow all boundary vertices of $N$ if $N_\delta=0$. However, to find $N_\delta$, the PMW of all nodes in $\nset$ must be known, which is no trivial task as the entire tree must be considered for the calculation in every node. Furthermore, the PWM of a node changes as it and its cluster grows. 
+To grow a cluster, we loop over all nodes in $\nset$ and grow all boundary vertices of $N$ if $\delta_N=0$. However, to find $\delta_N$, the PMW of all nodes in $\nset$ must be known, which is no trivial task as the entire tree must be considered for the calculation in every node. Furthermore, the PWM of a node changes as it and its cluster grows. 
 
-Instead, we will compute for the difference in node delay between a node and its parent. Let any node $R\in\nset$ be the \textbf{root node} of the node tree. As $\nset$ is an acyclic tree, $R$ defines the parent-child relations for all the nodes in $\nset$, where any node can only have a single parent, but multiple children. Let $M\geq N$ denote that $M$ is the parent $N$ and let $R > N$ denote that $R$ is an ancestor of $N$. The difference in node delay between $N$ and its parent $M$, labelled as $N_\Delta$, is then
-    %n_d = m_d + \Big\lfloor 2C\big(n_r-m_r - (-1)^{n_p}\abs{(n,m)}\big )\Big\rfloor
+Instead, we will compute for the difference in node delay between a node and its parent. Let any node $R\in\nset$ be the \textbf{root node} of the node tree. As $\nset$ is an acyclic tree, $R$ defines the parent-child relations for all the nodes in $\nset$, where any node can only have a single parent, but multiple children. Let $M\geq N$ denote that $M$ is the parent $N$ and let $R > N$ denote that $R$ is an ancestor of $N$. The difference in node delay between $N$ and its parent $M$, labelled as $\Delta_N$, is then
+    %n_d = m_d + \Big\lfloor 2C\big(n_r-\rho_M - (-1)^{n_p}\abs{(n,m)}\big )\Big\rfloor
 \begin{multline}\label{eq:pmwdif}
-    N_\Delta = N_\delta - M_\delta = \\
-    2\Big(N_r-M_r - (-1)^{N_p}\abs{(N,M)}\Big), \hspace{.3cm} N\leq M,
+    \Delta_N = \delta_N - \delta_M = \\
+    2\Big(\rho_N-M_r - (-1)^{\pi_N}\abs{(N,M)}\Big), \hspace{.3cm} N\leq M,
 \end{multline}
-where $N_p$ is the \textbf{node parity}. Immediately after, a \textbf{pseudo-delay} $\tilde{N_\delta} = N_\delta - R_\delta$, where $R$ is the root of $\nset$, can be calculated by
+where $\pi_N$ is the \textbf{node parity} of $N$. Immediately after, a \textbf{pseudo-delay} $\tilde{\delta_N} = \delta_N - \delta_R$, where $R$ is the root of $\nset$, can be calculated by
 \begin{equation}\label{eq:pseudodelay}
-    \tilde{N_\delta} = \tilde{M_\delta} + N_\Delta, \hspace{.3cm} N\leq M.
+    \tilde{\delta_N} = \tilde{\delta_M} + \Delta_N, \hspace{.3cm} N\leq M.
 \end{equation}
-From the pseudo-delay, we can go back to $N_p$ by subtracting the minimal value within $\nset$, similarly to \Cref{eq:pmwdif}
+From the pseudo-delay, we can go back to $\pi_N$ by subtracting the minimal value within $\nset$, similarly to \Cref{eq:pmwdif}
 \begin{equation}\label{eq:delaypseudo}
-    N_\delta = \tilde{N_\delta} - \min_{X \in \nset}{\tilde{X_\delta}}. 
+    \delta_N = \tilde{\delta_N} - \min_{X \in \nset}{\tilde{\delta_X}}. 
 \end{equation}
 
 \Cref{eq:pmwdif} can be easily explained through an example of the cluster in \Cref{fig1}. The PMW's of $A, B, C$ are respectively 
 \begin{eqnarray}
-    \nonumber \text{PMW}(A) &=& A_r + \abs{(B, C)}, \\
-    \nonumber \text{PMW}(B) &=& B_r + \abs{(A, B)} + \abs{(B, C)}, \\
-    \nonumber \text{PMW}(C) &=& C_r + \abs{(A, B)}.
+    \nonumber \text{PMW}(A) &=& \rho_A + \abs{(B, C)}, \\
+    \nonumber \text{PMW}(B) &=& \rho_B + \abs{(A, B)} + \abs{(B, C)}, \\
+    \nonumber \text{PMW}(C) &=& \rho_C + \abs{(A, B)}.
 \end{eqnarray}
 Take $A\geq B\geq C$. The differences in node delay are thus 
 \begin{eqnarray}
-    \nonumber B_\Delta &= B_\delta - A_\delta =& 2\left(B_r - A_r + \abs{(A, B)}\right), \\
-    \nonumber C_\Delta &= C_\delta - B_\delta =& 2\left(C_r - B_r - \abs{(B, C)}\right).
+    \nonumber \Delta_B &= \delta_B - \delta_A =& 2\left(\rho_B - \rho_A + \abs{(A, B)}\right), \\
+    \nonumber \Delta_C &= \delta_C - \delta_B =& 2\left(\rho_C - \rho_B - \abs{(B, C)}\right).
 \end{eqnarray}
 The node parity thus decides on the sign of the third term of \Cref{eq:pmwdif}. In fact, the node parity is the number of descendant syndrome-nodes modulo 2. If the number of descendant syndrome-nodes of $N$ is even, a matching on $N$ will not require $(N,M)$, with $M\geq N$. If the number of descendant nodes is odd, $(N,M)$ is required. Alternatively, The node parity of a node can also be calculated via the node parities of its children nodes. We define the node parity for syndrome-nodes and junction-nodes. 
 \begin{align}
-    \dot{N}_p &= \hspace{.6cm}\left(\hspace{.2cm} \sum_{\mathclap{\forall N \leq \dot{N}}} (1+N_p) \right ) \bmod 2, \label{eq:snodeparity}\\
-    \check{N}_p &= 1 - \left(\hspace{.2cm} \sum_{\mathclap{\forall N \leq \check{N}}} (1+N_p) \right) \bmod 2. \label{eq:jnodeparity}
+    \pi_{\dot{N}} &= \hspace{.6cm}\left(\hspace{.2cm} \sum_{\mathclap{\forall N \leq \dot{N}}} (1+\pi_N) \right ) \bmod 2, \label{eq:snodeparity}\\
+    \pi_{\check{N}} &= 1 - \left(\hspace{.2cm} \sum_{\mathclap{\forall N \leq \check{N}}} (1+\pi_N) \right) \bmod 2. \label{eq:jnodeparity}
 \end{align}
 
-With \Cref{eq:pmwdif,eq:pseudodelay,eq:delaypseudo,eq:snodeparity,eq:jnodeparity}, it now becomes clear that once the root of $\nset$ is picked, the node parities and differences in node delays can be calculated through two depth-first searches (DFS) of $\nset$. In the first DFS we calculate the node parity $N_p$ a via tail-recursive function, and in the second we calculate the pseudo-delay $\tilde{N_\delta}$ via a head-recursive function. In the second DFS, the minimal pseudo-delay within $\nset$ can be kept track of by comparison for \Cref{eq:delaypseudo}. 
+With \Cref{eq:pmwdif,eq:pseudodelay,eq:delaypseudo,eq:snodeparity,eq:jnodeparity}, it now becomes clear that once the root of $\nset$ is picked, the node parities and differences in node delays can be calculated through two depth-first searches (DFS) of $\nset$. In the first DFS we calculate the node parity $\pi_N$ a via tail-recursive function, and in the second we calculate the pseudo-delay $\tilde{\delta_N}$ via a head-recursive function. In the second DFS, the minimal pseudo-delay within $\nset$ can be kept track of by comparison for \Cref{eq:delaypseudo}. 
 
 \subsection{Growing node-trees}\label{sec:grownodetrees}
 
-A single growth iteration, which is applied in the Union-Find decoder by adding half-edges to all boundary vertices of the cluster, is now replaced by another DFS of $\nset$ from the same root as before. During this DFS, conditionally grow a node --- adding half-edges to the boundary vertices in the current node and adding 1 to its radius $N_r$ --- if $N_\delta = 0$. This requires us to save the list of boundary vertices to each node (\Cref{fig3}c). When the delays $N_\delta$ for all nodes in $\nset$ are zero, all nodes are grown simultaneously within the same iteration. 
+A single growth iteration, which is applied in the Union-Find decoder by adding half-edges to all boundary vertices of the cluster, is now replaced by another DFS of $\nset$ from the same root as before. During this DFS, conditionally grow a node --- adding half-edges to the boundary vertices in the current node and adding 1 to its radius $\rho_N$ --- if $\delta_N = 0$. This requires us to save the list of boundary vertices to each node (\Cref{fig3}c). When the delays $\delta_N$ for all nodes in $\nset$ are zero, all nodes are grown simultaneously within the same iteration. 
 
-As the node radii increase, the values for $N_\delta$ across $\nset$ change. This would mean that the DFS's of node parity and delay need to be done after each growth iteration. Luckily, if no new nodes are added to $\nset$ after a growth iteration, which is the case if no mergers occur between clusters, $N_p$ on iteration $t+\theta$ can be calculated via previous values of pseudo-delays in iteration $t$ by the introduction of the node \textbf{wait} parameter $N_w$. During the growth DFS, if $N_\delta \neq 0$, add 1 to $N_w$. If no nodes are added to $\nset$, the node delay in the next iteration are
+As the node radii increase, the values for $\delta_N$ across $\nset$ change. This would mean that the DFS's of node parity and delay need to be done after each growth iteration. Luckily, if no new nodes are added to $\nset$ after a growth iteration, which is the case if no mergers occur between clusters, $\pi_N$ on iteration $t+\theta$ can be calculated via previous values of pseudo-delays in iteration $t$ by the introduction of the node \textbf{wait} parameter $\omega_N$. During the growth DFS, if $\delta_N \neq 0$, add 1 to $\omega_N$. If no nodes are added to $\nset$, the node delay in the next iteration are
 \begin{multline}\label{eq:suspension}
-    N_\delta(t+\theta) = \tilde{N_\delta(t)} - \min_{X \in \nset(t)}{\tilde{X_\delta}} - N_w(t+\theta-1),  \\
+    \delta_N(t+\theta) = \tilde{\delta_N(t)} - \min_{X \in \nset(t)}{\tilde{\delta_X}} - \omega_N(t+\theta-1),  \\
     \hspace{.3cm} N \in \nset, \hspace{.3cm} \nset(t+\theta) = \nset(t).  
 \end{multline}
 
@@ -133,5 +133,5 @@ An unfortunate effect of the Node-Suspension data structure, which we dub parity
 %Parity inversion defines a trade-off in the Node-Suspension data structure: `A node must wait as many iterations as it is suspended to reach equilibrium in Potential Matching Weight in the node-tree. However, after Parity Inversion, the node suspension for previously prioritized nodes increases linearly with the number of iterations waited by the suspended nodes pre-inversion.' As a compromise, 
 To compensate the effect of parity inversion, we redefine the node delay as \textbf{half} the number of growth iterations needed for all nodes in the node-tree to reach equal PMW. This can be done by setting $C=0.5$ in \Cref{eq:delayequation}. With this choice, the node delay becomes: 
 \begin{equation*}
-    n_d = m_d + \floor{n_r-m_r}- (-1)^{n_p}\abs{(n,m)}. \tag{\ref{eq:delayequation}'}
+    n_d = m_d + \floor{n_r-\rho_M}- (-1)^{n_p}\abs{(n,m)}. \tag{\ref{eq:delayequation}'}
 \end{equation*}
