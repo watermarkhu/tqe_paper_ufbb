@@ -1,7 +1,7 @@
-\section{Union-Find Node-Suspension decoder}\label{sec:ufbb}
-In this section, we describe the \emph{Union-Find Node-Suspension} decoder. We first introduce the concept of the potential matching weight in \Cref{sec:matchingweight}. The Union-Find Node-Suspension decoder uses the potential matching weight as a heuristic to prioritize cluster growth. We introduce the node-tree data structure required for this decoder in \Cref{sec:nodeset}, and describe how to approximate the potential matching weight leveraging the node-tree in \Cref{sec:paritydelaysus,sec:nodejoin,sec:inversion}. The algorithm is described in \Cref{sec:pseudocode}. 
+\section{Union-Find Node-Delay decoder}\label{sec:ufbb}
+In this section, we describe the \emph{Union-Find Node-Delay} decoder. We first introduce the concept of the potential matching weight in \Cref{sec:matchingweight}. The Union-Find Node-Delay decoder uses the potential matching weight as a heuristic to prioritize cluster growth. We introduce the node-tree data structure required for this decoder in \Cref{sec:nodeset}, and describe how to approximate the potential matching weight leveraging the node-tree in \Cref{sec:paritydelay}. In \Cref{sec:grownodetrees,sec:nodejoin,sec:inversion}, we find ways to further reduce the number of calculations needed in the approximation. The algorithm is described in \Cref{sec:pseudocode}. 
 
-\subsection{Potential matching weight}\label{sec:matchingweight}
+\subsection{Potential Matching Weight}\label{sec:matchingweight}
 
 \Figure[htb](topskip=0pt, botskip=0pt, midskip=0pt){figures/build/tikz-figure0.pdf}{
     A cluster with vertices $\{a,b,c\}$ with potential matching weights $\{2\frac{1}{2}, 3\frac{1}{2}, 2\frac{1}{2}\}$. The line style and color of the colored edges correspond to the matching in the hypothetical union with an external vertex $v'$ of the same line style and color.\label{fig0}}
@@ -53,17 +53,11 @@ The Node-Partitioning data structure does not replace but coexists with the Unio
 \Figure[hbt](topskip=0pt, botskip=0pt, midskip=0pt){figures/build/tikz-figure3.pdf}{
     The relevant data structures. \emph{(a)} The cluster-tree of the Union-Find data structure. The path from a vertex to the root of the cluster-tree is traversed to find the root element in order to differentiate between clusters. The root node of the node-tree is now additionally stored at the root of the cluster-tree. \emph{(b)} The vertex-tree $\vset$ with 9 non-trivial vertices. As $\vset$ is strictly acyclic, the cluster's edges must be maintained such that no cycles are created. This is done during growth by removing edges (red dotted lines) if a cycle is detected. \emph{(c)} The node-tree $\nset$, which currently has the same number of elements as $\vset$, as all vertices are non-trivial. Two depth-first searches are required to compute node parities (head recursively) and delays (tail recursively) in $\nset$.\label{fig3}}
 
-% In the original Union-Find decoder, a spanning-forest $F$ is created after cluster growth from $G_e$, a sub-graph of $G$ comprised of all even parity clusters. In the improved algorithm, acyclic node-trees $\nset$ must be maintained during growth for recalculation after PMW changes, and spanning-trees $\vset$ must thus be maintained during growth by removing edges from a cluster if a cycle is detected. The resulting set of spanning-trees is equivalent to the spanning-forest $F$. % as it is con multiple breadth-first searches from each non-trivial vertex in the cluster within $G_e$. 
-% The relevant data structures are depicted in \Cref{fig3}.
+\subsection{Node parity and delay}\label{sec:paritydelay}
 
-% For this, we need to maintain the reduced set of edges $E^\vset_i \subseteq E_i$ of the vertex-trees $\vset_i$ for every cluster, which can be done in constant time (see Algorithm \ref{algo:ufbb}). In the UF decoder, vertex-trees $\m{V}_i$ are not maintained, such that the graph associated with each cluster is not acyclic \cite{delfosse2017almost}. Instead, a spanning forest $F$ of all clusters is created \cite{delfosse2017linear} after growth. Each connected element within $F$ is also an acyclic graph. The difference is that while a single depth-first search or breadth-first-search creates $F$, $\vset$ is equivalent to multiple breadth-first searches from each non-trivial vertex within the cluster, where the search of every breadth occurs during a growth iteration. The relevant data structures are depicted in \Cref{fig3}. 
-
-
-\subsection{Node parity and delay}\label{sec:paritydelaysus}
-
-The Node-Partitioning data structure allows for prioritizing the growth of \emph{nodes} with low PWM, instead of \emph{vertices}. To quantize this priority, we define the \textbf{node delay} $N_\delta$, the number of growth iterations for a node to wait for all nodes in the node-tree to have equal PWM. 
+The Node-Partitioning data structure allows for prioritizing the growth of \emph{nodes} with low PWM, instead of \emph{vertices}. To quantize this priority, we define the \textbf{node delay} $N_\delta$, the number of growth iterations for a node to wait for all nodes in the node-tree to have equal PWM: 
 \begin{equation}
-    N_\delta = 2\left(\text{PMW}(N) - \min_{X\in\nset}{\text{PMW}(X)}\right),  N \in \nset 
+    N_\delta = 2\left(\text{PMW}(N) - \min_{X\in\nset}{\text{PMW}(X)}\right).
 \end{equation}
 To grow a cluster, we loop over all nodes in $\nset$ and grow all boundary vertices of $N$ if $N_\delta=0$. However, to find $N_\delta$, the PMW of all nodes in $\nset$ must be known, which is no trivial task as the entire tree must be considered for the calculation in every node. Furthermore, the PWM of a node changes as it and its cluster grows. 
 
@@ -78,7 +72,7 @@ where $N_p$ is the \textbf{node parity}. Immediately after, a \textbf{pseudo-del
     \tilde{N_\delta} = \tilde{M_\delta} + N_\Delta, \hspace{.3cm} N\leq M.
 \end{equation}
 From the pseudo-delay, we can go back to $N_p$ by subtracting the minimal value within $\nset$, similarly to \Cref{eq:pmwdif}
-\begin{equation}
+\begin{equation}\label{eq:delaypseudo}
     N_\delta = \tilde{N_\delta} - \min_{X \in \nset}{\tilde{X_\delta}}. 
 \end{equation}
 
@@ -94,50 +88,25 @@ Take $A\geq B\geq C$. The differences in node delay are thus
     \nonumber C_\Delta &= C_\delta - B_\delta =& 2\left(C_r - B_r - \abs{(B, C)}\right).
 \end{eqnarray}
 The node parity thus decides on the sign of the third term of \Cref{eq:pmwdif}. In fact, the node parity is the number of descendant syndrome-nodes modulo 2. If the number of descendant syndrome-nodes of $N$ is even, a matching on $N$ will not require $(N,M)$, with $M\geq N$. If the number of descendant nodes is odd, $(N,M)$ is required. Alternatively, The node parity of a node can also be calculated via the node parities of its children nodes. We define the node parity for syndrome-nodes and junction-nodes. 
-\begin{align}\label{eq:nodeparity}
-    \dot{N}_p &= \hspace{.6cm}\left(\hspace{.2cm} \sum_{\mathclap{\forall N \leq \dot{N}}} (1+N_p) \right ) \bmod 2,\\
-    \check{N}_p &= 1 - \left(\hspace{.2cm} \sum_{\mathclap{\forall N \leq \check{N}}} (1+N_p) \right) \bmod 2.
+\begin{align}
+    \dot{N}_p &= \hspace{.6cm}\left(\hspace{.2cm} \sum_{\mathclap{\forall N \leq \dot{N}}} (1+N_p) \right ) \bmod 2, \label{eq:snodeparity}\\
+    \check{N}_p &= 1 - \left(\hspace{.2cm} \sum_{\mathclap{\forall N \leq \check{N}}} (1+N_p) \right) \bmod 2. \label{eq:jnodeparity}
 \end{align}
 
-% Instead, we will compute for the \textbf{node suspension} $\m{s}(n)$ --- the number of growth iterations needed for a node to reach the maximum PMW in the node-tree --- which relates closely to the PMW. For example, the node suspension for the nodes $\{n_0, n_1, n_2\}$ associated with the vertices $\{v_0, v_1, v_2\}$ in \Cref{fig0} is $\{0, 2, 0\}$, and $\{0, 1, 0\}$ in \Cref{fig1}.
+With \Cref{eq:pmwdif,eq:pseudodelay,eq:delaypseudo,eq:snodeparity,eq:jnodeparity}, it now becomes clear that once the root of $\nset$ is picked, the node parities and differences in node delays can be calculated through two depth-first searches (DFS) of $\nset$. In the first DFS we calculate the node parity $N_p$ a via tail-recursive function, and in the second we calculate the pseudo-delay $\tilde{N_\delta}$ via a head-recursive function. In the second DFS, the minimal pseudo-delay within $\nset$ can be kept track of by comparison for \Cref{eq:delaypseudo}. 
 
-% The Node-Suspension data structure allows calculating the node suspension of all nodes in a node-tree $\nset$ by two intermediate steps. In each step, a depth-first-search (DFS) of $\nset$ is applied from its root node $r$ (\Cref{fig3}c).
-With \Cref{eq:pmwdif,eq:pseudodelay,eq:nodeparity}, it now becomes clear that once the root of $\nset$ is picked, the node parities and differences in node delays can be calculated through two depth-first searches (DFS) of $\nset$. In the first DFS we calculate the node parity $N_p$ a via tail-recursive function, and in the second we calculate the pseudo-delay $\tilde{N_\delta}$ via a head-recursive function. In the second DFS, the minimal pseudo-delay within $\nset$ can be kept track of by comparison. 
+\subsection{Growing node-trees}\label{sec:grownodetrees}
 
-% \begin{align}\label{eq:nodeparity}
-%     s_p &= \hspace{.6cm}\big( \sum_{\mathclap{n \in \text{ children of } s}} (1+n_p) \big ) \bmod 2,\\
-%     j_p &= 1 - \big(\sum_{\mathclap{n \in \text{ children of } j}} (1+n_p) \big) \bmod 2.
-% \end{align}
+A single growth iteration, which is applied in the Union-Find decoder by adding half-edges to all boundary vertices of the cluster, is now replaced by another DFS of $\nset$ from the same root as before. During this DFS, conditionally grow a node --- adding half-edges to the boundary vertices in the current node and adding 1 to its radius $N_r$ --- if $N_\delta = 0$. This requires us to save the list of boundary vertices to each node (\Cref{fig3}c). When the delays $N_\delta$ for all nodes in $\nset$ are zero, all nodes are grown simultaneously within the same iteration. 
 
-% With the node parities it would be possible in principle to calculate recursively the potential matching weights. In fact, as we show in the appendix, it holds that the difference of the potential matching weight of a node and its parent in the node tree is given by:
-% \begin{equation}\label{eq:pmwdif}
-%     %n_d = m_d + \Big\lfloor 2C\big(n_r-m_r - (-1)^{n_p}\abs{(n,m)}\big )\Big\rfloor
-%     \Delta_C(n,m)=C\left(n_r-m_r - (-1)^{n_p}\abs{(n,m)}\right)
-% \end{equation}
-% with $C=2$.
+As the node radii increase, the values for $N_\delta$ across $\nset$ change. This would mean that the DFS's of node parity and delay need to be done after each growth iteration. Luckily, if no new nodes are added to $\nset$ after a growth iteration, which is the case if no mergers occur between clusters, $N_p$ on iteration $t+\theta$ can be calculated via previous values of pseudo-delays in iteration $t$ by the introduction of the node \textbf{wait} parameter $N_w$. During the growth DFS, if $N_\delta \neq 0$, add 1 to $N_w$. If no nodes are added to $\nset$, the node delay in the next iteration are
+\begin{multline}\label{eq:suspension}
+    N_\delta(t+\theta) = \tilde{N_\delta(t)} - \min_{X \in \nset(t)}{\tilde{X_\delta}} - N_w(t+\theta-1),  \\
+    \hspace{.3cm} N \in \nset, \hspace{.3cm} \nset(t+\theta) = \nset(t).  
+\end{multline}
 
-%In the second DFS, we let the potential matching weight of the root node $m_d=1$ and calculate recursively $\Delta_C(n,m)$ together with the node weights of each node $n_d=m_d+\Delta_C(n,m)$. We call them node delays because they indicfor all edges of the tree. for the difference in node suspension of a node $n$ with its parent $m$; $\Delta = \m{s}(n) - \m{s}(m)$. We can choose an arbitrary \textbf{node delay} $n_d$ --- the node suspension minus the maximum node suspension in the node-tree --- for the root node $r$ such as $r_d=0$ and add the suspension difference $\Delta$ during each step to obtain $n_d$ for every node. This node delay of a node $n$ only depends on the node radii of itself and its parent $m$, the length of edge $(n,m)$, and its parity $n_p$. 
-%\begin{equation}\label{eq:delayequation}
-    %n_d = m_d + \Big\lfloor 2C\big(n_r-m_r - (-1)^{n_p}\abs{(n,m)}\big )\Big\rfloor
-%    n_d = m_d +  2\left(n_r-m_r - (-1)^{n_p}\abs{(n,m)}\right)
-%\end{equation}
-
-%Here, the \textbf{inversion constant} $C$ deals with the inversion of node parities in a node-tree during merges of clusters explained in \ref{sec:nodejoin}. 
-
-% \begin{equation*}
-%     N_\delta = \tilde{N_\delta} - \min_{X \in \nset}{\tilde{X_\delta}}. 
-% \end{equation*}
-
-\subsection{Growing node-trees}
-
-The maximum node delay in $\nset$ can be maintained during the second DFS of the node-tree, and the node suspension itself is calculated during cluster growth. A single growth iteration, which is applied in the UF decoder by adding half-edges to all boundary vertices of the cluster, is now replaced by another DFS of $\nset$. During this DFS, we calculate the suspension $\m{s}(n)$ for a node, and conditionally grow it --- adding half-edges to the boundary vertices in the current node and adding 1 to its radius $n_r$ --- if $\m{s}(n) = 0$. This requires us to save the list of boundary vertices to each node (\Cref{fig3}c). When all $\m{s}(n)$ in $\nset$ are zero, all nodes are grown simultaneously within the same iteration. 
-
-If the node-tree does not change after a growth iteration, which is the case if no mergers occur between clusters, the node suspensions decrease in an expected manner: For all nodes that are not suspended from growth, their node suspensions decrease with 1 in the next growth iteration. Due to this behavior, we can reuse the node delays $n_d$ to calculate $\m{s}(n)$ for the next growth iteration by introducing another node parameter $n_w$, the number of iterations a node has \textbf{waited}. Each time a node is suspended from growth, we add 1 to $n_w$. The node suspension in subsequent iterations is then
-\begin{equation}\label{eq:suspension}
-    \m{s}(n) = n_d - \min_{x \in \nset}{x_d} - n_w. 
-\end{equation}
-Note that we have not stated which node in $\nset$ should be the root node. In fact, any node in $\nset$ could have been picked as the root of the node-tree. The only requirement is that the DFS of cluster growth must be performed along the same direction as the DFSs of the parity and delay calculations. If no cluster mergers occur, the node delays can be reused in the node suspension calculation prior to node growth. The node-tree is constructed by storing all neighbors of a node to a list. This way, the DFSs' direction can be determined by simply saving the root node, the starting point of the DFSs, to the cluster. All node variables are depicted in \Cref{fig3}c. 
-In the next section, we expand upon this idea of "reusing" some intermediate parameters to calculate the node suspensions after a cluster merger.  
+% Note that we have not stated which node in $\nset$ should be the root node. In fact, any node in $\nset$ could have been picked as the root of the node-tree. The only requirement is that the DFS of cluster growth must be performed along the same direction as the DFSs of the parity and delay calculations. If no cluster mergers occur, the node delays can be reused in the node suspension calculation prior to node growth. The node-tree is constructed by storing all neighbors of a node to a list. This way, the DFSs' direction can be determined by simply saving the root node, the starting point of the DFSs, to the cluster. All node variables are depicted in \Cref{fig3}c. 
+% In the next section, we expand upon this idea of "reusing" some intermediate parameters to calculate the node suspensions after a cluster merger.  
 
 
 \subsection{Joining node-trees}\label{sec:nodejoin}
