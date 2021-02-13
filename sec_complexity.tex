@@ -40,6 +40,10 @@ The cost of node suspension calculation is proportional to $N_{\text{sus}}$, the
   % such that a fragmentation is
 \end{definition}
 
+\Figure[hbt](topskip=0pt, botskip=0pt, midskip=0pt){figures/build/tikz-figure6.pdf}{
+  The \emph{fragmentation} of node-tree $\pr{k-1}\omega$ into its ancestor node-trees, where the prefix $k-1$ indicates the \emph{fragmentation generation}. The fragmentation $f(\pr{k-1}\omega)$ returns $\nu+1$ odd ancestors of generation $k$. Fragmentation function $f$ can be separated into the \emph{partial fragmentation} $f_\omega(\pr{k-1}\omega)$ that returns an odd ancestor $\pr{k}\omega_0$ and even ancestor $\pr{k}\epsilon$, and subsequently the partial fragmentation $f_\epsilon(\pr{k}\epsilon)$, which returns $\nu$ odd ancestors of generation $k$. With $\nu=2$, each partial fragmentation is the opposite of a join operation between two node-trees. Furthermore, note that if $\abs{\vset_0} = \abs{\vset_1} = \abs{\vset_2}$, the vertex-tree sizes related to node trees $\pr{k}\omega_0, \pr{k}\omega_1, \pr{k}\omega_2$, each generation is the opposite of a growth iteration. \label{fig6}}
+
+
 The fragmentation function can be applied consecutively, such that a set of odd node-trees of generation $k$ is fragmented to ancestors of generation $k+1$. We use the notation $F^{(2)}(\pr{k-1}\omega)$ to indicate that two fragmentations are applied on $\pr{k-1}\omega$ to obtain the ancestors of generation $k+1$. Furthermore, let $F_\omega^{(i)}$ and be equivalent to $F_\omega F^{(i-1)}$. 
 
 As a result of Odd-Rooted Join and Root List Replacement, if the cluster of node-tree $\pr{k-1}\omega$ is grown, the DFSs of the parity and delay calculations are performed within $\pr{k}\epsilon$. Therefore, every even node-tree returned by $F_\omega$ is a $\Delta$ node-tree. The value of $N_{\text{sus}}$ can thus be obtained by taking the sum of sizes of all even node-tree in $F_\omega^{(k)}$ over a series of $\mu$ fragmentations of some odd node-tree $\Omega = \pr{0}\omega$ until there are no more ancestor node-trees:
