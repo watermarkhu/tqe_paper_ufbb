@@ -38,7 +38,7 @@
 \tikzstyle{known}=[nodel, pattern=dots, pattern color=green!75!white]
 \tikzstyle{undef}=[nodel, dotted, pattern=dots, pattern color=black!25!white]
 \tikzstyle{edge}=[above,midway,font=\tiny]
-\tikzstyle{smallarrow} = [draw, single arrow, shape border rotate=270, minimum height=0.25cm, minimum width=0.35cm, single arrow head extend=0.01cm, inner sep=0]
+\tikzstyle{smallarrow} = [draw, single arrow, rotate=270, minimum height=0.2cm, minimum width=0.2cm, single arrow head extend=0.01cm, inner sep=0pt]
 \tikzstyle{legend} = [fill=mgrey, fill opacity=.1, rounded corners]
 \tikzstyle{parameters} = [draw, l1, align=left, opacity=0.5, text opacity=1, font=\footnotesize]
 \tikzstyle{delay} = [l2, densely dashed, color=mpink]
@@ -235,7 +235,7 @@
     \begin{scope}[shift={(9.2,-1.7)}]
         \node at (0,0) {\emph{(c)} Node-tree $\mathcal{N}$ (Node-Partitioning)};
         \node[even1, pattern color=mgrey] (n) at (-2.6,.8){$N$};
-        \node[parameters, anchor=west, align=left] (ni) at (-2,.8){boundary vertices, neighbors nodes,\\ $\rho_N$, $\pi_N$, $\tilde{\delta_N}$, $\omega_N$}; 
+        \node[parameters, anchor=west, align=left] (ni) at (-2,.8){boundary vertices, neighbors nodes,\\ $\rho_N$, $\pi_N$, $\tilde{\delta_N}$, $\gamma_N$}; 
         \draw[l1, opacity=0.5, ->] (n) -- (ni);
     \end{scope}
 
@@ -412,7 +412,9 @@
     \end{scope}
 
     \node at (-.5,1) {\emph{(a)}};
-    \node[smallarrow, label={[label distance=-3.6mm]0:\tiny 1}] at (4, -1.3) {};
+    \node[smallarrow] at (2, -1.3) {};
+    \node at (4,-1.3) {\footnotesize 1. grow, merge}; 
+    \node[smallarrow] at (6, -1.3) {};
 
     \foreach \x in {0,3,6}{\DLINE{\x}{0}{2}{0}}
     \foreach \x in {0,2,3,5,6,8}{\draw (\x,0) node [even, nodem] (a\x) {\tiny$\nicefrac{1}{2}$} ++(0,-.7) node (ad\x) {0};}
@@ -421,7 +423,11 @@
     \draw[l1] (a0) -- (a1) node[edge]{1} -- (a2) node[edge]{1} (a3) -- (a4) node[edge]{1} -- (a5) node[edge]{1} (a6) -- (a7) node[edge]{1} -- (a8) node[edge]{1};
 
     \begin{scope}[shift={(0,-2)}]
-        \node[smallarrow, label={[label distance=-3.6mm]0:\tiny 2}] at (4, -1.3) {};
+        \node[smallarrow] at (2, -1.3) {};
+        \node at (4,-1.3) {\footnotesize 2. parity and delay}; 
+        \node[smallarrow] at (6, -1.3) {};
+
+
         \foreach \x in {0,3,6}{\DLINE{\x}{0}{2}{0}}
         \foreach \x in {0,2,3,5,6,8}{\draw (\x,0) node [even] (e\x) {\small1} ++(0,-.7) node {0};}
         \foreach \x in {1,4,7}{      \draw (\x,0) node [odd, nodem]  (e\x) {\tiny$\nicefrac{1}{2}$} ++(0,-.7) node {1};}
@@ -441,16 +447,20 @@
 
     \begin{scope}[shift={(12.5,0)}]
         \node at (-.5,1) {\emph{(b)}};
-        \node[smallarrow, label={[label distance=-3.6mm]0:\tiny 1}] at (4, -1.3) {};
+        \node[smallarrow] at (2, -1.3) {};
+        \node at (4,-1.3) {\footnotesize 1. grow, merge}; 
+        \node[smallarrow] at (6, -1.3) {};
 
         \foreach \x in {0,3,6}{\DLINE{\x}{0}{2}{0}}
         \foreach \x in {0,2,3,5,6,8}{\draw (\x,0) node [even, nodem] (c\x) {\tiny$\nicefrac{1}{2}$} ++(0,-.7) node {0};}
-        \foreach[count=\i] \x in {1,4,7}{      \draw (\x,0) node [odd, nodem]  (c\x) {\tiny$\nicefrac{1}{2}$} ++(0,-.7) node (cd\x) {2};
+        \foreach[count=\i] \x in {1,4,7}{      \draw (\x,0) node [odd, nodem]  (c\x) {\tiny$\nicefrac{1}{2}$} ++(0,-.7) node (cd\x) {1};
                 \node at (\x,0.7) {$\nset_{\alphalph{\i}}$};}
         \draw[l1] (c0) -- (c1) node[edge]{1} -- (c2) node[edge]{1} (c3) -- (c4) node[edge]{1} -- (c5) node[edge]{1} (c6) -- (c7) node[edge]{1} -- (c8) node[edge]{1};
 
         \begin{scope}[shift={(0,-2)}]
-            \node[smallarrow, label={[label distance=-3.6mm]0:\tiny 2}] at (4, -1.3) {};
+            \node[smallarrow] at (2, -1.3) {};
+            \node at (4,-1.3) {\footnotesize 2. parity and delay}; 
+            \node[smallarrow] at (6, -1.3) {};
             \foreach \x in {0,3,6}{\DLINE{\x}{0}{2}{0}}
             \foreach \x in {0,2,3,5,6,8}{\draw (\x,0) node [even] (c\x) {\small1} ++(0,-.7) node {0};}
             \foreach \x in {1,4,7}{      \draw (\x,0) node [odd, nodem]  (c\x) {\tiny$\nicefrac{1}{2}$} ++(0,-.7) node {0};}
@@ -499,27 +509,27 @@
     \draw[enset] (a0) circle[radius=.4cm];
     \draw[enset] (a1) circle[radius=.4cm];
     \draw[enset] (a2) circle[radius=.4cm];
-    \node at (a0) {\footnotesize $\pr{k}\omega_2$};
-    \node at (a1) {\footnotesize $\pr{k}\omega_1$};
-    \node at (a2) {\footnotesize $\pr{k}\omega_0$};
+    \node at (a0) {\footnotesize $\pr{k}\gamma_2$};
+    \node at (a1) {\footnotesize $\pr{k}\gamma_1$};
+    \node at (a2) {\footnotesize $\pr{k}\gamma_0$};
 
     \foreach \i in {0,1,2}{
             \node (b\i) [above = \i cm of b] {};
         }
     \draw[enset] (b2) circle[radius=0.4cm];
-    \node at (b2) {\footnotesize $\pr{k}\omega_0$};
+    \node at (b2) {\footnotesize $\pr{k}\gamma_0$};
 
     \draw[enset] (b0) ++(0.5cm,0) -- ++(0, 1.1cm) arc (0:180:0.5cm) -- ++(0, -1.1cm) arc (180:360:0.5cm) -- cycle;
     \draw[subtree] (b1) circle[radius=.4cm];
     \draw[subtree] (b0) circle[radius=.4cm];
-    \node at ($(b0)!0.5!(b1)$) {\footnotesize $\pr{k}\epsilon$};
+    \node at ($(b0)!0.5!(b1)$) {\footnotesize $\pr{k}\theta$};
 
     \foreach \i in {0,1,2}{
             \node (c\i) [above =\i cm of c] {};
         }
 
     \draw[enset] (c0) ++(0.5cm,0) -- +(0, 2.2cm) arc (0:180:0.5cm) -- +(0, -2.2cm) arc (180:360:0.5cm) -- cycle;
-    \node at (c1) {\footnotesize $\pr{k-1}\omega$};
+    \node at (c1) {\footnotesize $\pr{k-1}\gamma$};
 
     \draw[subtree] (c2) circle[radius=.4cm];
     \draw[subtree] (c0) ++(0.4cm,0) -- +(0, 1.2) arc (0:180:0.4) -- +(0, -1.2) arc (180:360:0.4) -- cycle;
@@ -532,9 +542,9 @@
     \draw[l1, ->, dashed] (f2a) .. controls +(225:0.9cm) and +(315:0.9cm) .. (f2b);
     \draw[l1, ->, dashed] (fa)  .. controls +(210:1.8cm) and +(330:1.8cm) .. (fb);
 
-    \node (ca) at ($(c)!0.5!(a)$) {}; \node [below = 1cm of ca] {$F(\pr{k-1}\omega)$};
-    \node (cb) at ($(c)!0.5!(b)$) {}; \node [below = 0.6cm of cb] {$F_\omega(\pr{k-1}\omega)$};
-    \node [below = 0.6cm of b1t] {$F_\epsilon(\pr{k}\epsilon)$};
+    \node (ca) at ($(c)!0.5!(a)$) {}; \node [below = 1cm of ca] {$\m{F}(\pr{k-1}\gamma)$};
+    \node (cb) at ($(c)!0.5!(b)$) {}; \node [below = 0.6cm of cb] {$\m{F}_\gamma(\pr{k-1}\gamma)$};
+    \node [below = 0.6cm of b1t] {$\m{F}_\theta(\pr{k}\theta)$};
 
     \node (u1lt) at ($(a0)!0.5!(a1)$) {}; \node(u1l) [right=1cm of u1lt] {};
     \node (u1rt) at ($(b0)!0.5!(b1)$) {}; \node(u1r) [left=1cm of u1rt] {};
