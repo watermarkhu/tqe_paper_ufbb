@@ -263,6 +263,5 @@ TSWLatexianTemp*
 
 .vscode/
 .build/
-!fig/*
-!figures/*.pdf
-!figures/build/*.pdf
+!figures/python/*.pdf
+!figures/tikz/build/*.pdf
