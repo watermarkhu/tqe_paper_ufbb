@@ -28,10 +28,18 @@
 \newtheorem{proposition}{Proposition}[section]
 
 % Set new commands
+\DeclareFontFamily{OT1}{pzc}{}
+\DeclareFontShape{OT1}{pzc}{m}{it}{<-> s * [1.10] pzcmi7t}{}
+\DeclareMathAlphabet{\mathpzc}{OT1}{pzc}{m}{it}
 \newcommand{\m}[1]{\mathcal{#1}}
 \newcommand{\n}[1]{\mathscr{#1}}
 \newcommand{\nset}{\mathcal{N}}
 \newcommand{\vset}{\mathcal{V}}
+\newcommand{\nup}{\mathpzc{n}_\uparrow}
+\newcommand{\ndown}{\mathpzc{n}_\downarrow}
+\newcommand{\mup}{\mathpzc{m}_\uparrow}
+\newcommand{\mdown}{\mathpzc{m}_\downarrow}
+
 \newcommand{\pr}[1]{ {}^{#1} }
 \newcommand{\ceil}[1]{{\left \lceil #1 \right \rceil }}
 \newcommand{\floor}[1]{{\left \lfloor #1 \right \rfloor }}

@@ -3,6 +3,8 @@ In this section, we describe the \emph{Union-Find Partitioned-Growth} decoder. W
 
 \subsection{Potential Matching Weight}\label{sec:matchingweight}
 
+$\nup, \ndown, \mup, \mdown, n,m \nset$
+
 \Figure[htb](topskip=0pt, botskip=0pt, midskip=0pt){figures/tikz/build/main-figure0.pdf}{
     A cluster with vertices $\{a,b,c\}$ with potential matching weights $\{2\frac{1}{2}, 3\frac{1}{2}, 2\frac{1}{2}\}$. The line style and color of the colored edges correspond to the matching in the hypothetical union with an external vertex $v'$ of the same line style and color.\label{fig0}}
 
@@ -60,17 +62,21 @@ The Partitioned-Growth data structure allows for prioritizing the growth of \emp
 \begin{equation}\label{eq:delayequation}
     \delta_N = 2\left(\text{PMW}(N) - \min_{X\in\nset}{\text{PMW}(X)}\right).
 \end{equation}
+
 To grow a cluster, we loop over all nodes in $\nset$ and grow all boundary vertices of $N$ if $\delta_N=0$. However, to find $\delta_N$, the PMW of all nodes in $\nset$ must be known, which is no trivial task as the entire tree must be considered for the calculation in every node. Furthermore, the PWM of a node changes as it and its cluster grows. 
 
-Instead, we will compute for the difference in node delay between a node and its parent. Let any node $\mathbf{R}\in\nset$ be the \textbf{root node} of the node tree. As $\nset$ is an acyclic tree, $\mathbf{R}$ defines the parent-child relations for all the nodes in $\nset$, where any node can only have a single parent, but multiple children. Let $M\geq N$ denote that $M$ is the parent $N$ and let $O > N$ denote that $O$ is an ancestor of $N$. The difference in node delay between $N$ and its parent $M$, labelled as $\Delta_N$, is then
+Instead, we will compute for the difference in node delay. Let any node $\mathbf{R}\in\nset$ be the \textbf{root node} of the node tree. As $\nset$ is an acyclic tree, $\mathbf{R}$ defines the parent-child relations for all the nodes in $\nset$, where any node can only have a single parent, but multiple children. Let $M\geq N$ denote that M is the parent of N. Futhermore, let $\nset_M$ be the sub-tree consisting of all ancestors of $M$ and all descendant branches excluding the branch starting from $(M,N)$, and $\nset_N$ be the sub-tree consisting of all descendant branches of $N$.
+
+
+The difference in node delay between $N$ and its parent $M$, labelled as $\Delta_N$, is then
     %n_d = m_d + \Big\lfloor 2C\big(n_r-\rho_M - (-1)^{n_p}\abs{(n,m)}\big )\Big\rfloor
 \begin{multline}\label{eq:pmwdif}
-    \Delta_N = \delta_N - \delta_M = \\
+    \delta_N - \delta_M = \\
     2\Big(\rho_N-\rho_M - (-1)^{\pi_N}\abs{(N,M)}\Big), \hspace{.3cm} N\leq M,
 \end{multline}
 where $\pi_N$ is the \textbf{node parity} of $N$. Immediately after, a \textbf{pseudo-delay} $\tilde{\delta_N} = \delta_N - \delta_R$, where $R$ is the root of $\nset$, can be calculated by
 \begin{equation}\label{eq:pseudodelay}
-    \tilde{\delta_N} = \tilde{\delta_M} + \Delta_N, \hspace{.3cm} N\leq M.
+    \tilde{\delta_N} = \tilde{\delta_M} + (\delta_N - \delta_M), \hspace{.3cm} N\leq M.
 \end{equation}
 From the pseudo-delay, we can go back to $\pi_N$ by subtracting the minimal value within $\nset$, similarly to \Cref{eq:pmwdif}
 \begin{equation}\label{eq:delaypseudo}
@@ -135,7 +141,7 @@ An unfortunate effect, which we dub \textbf{parity inversion}, causes a decrease
 To compensate the effect of parity inversion, we redefine the node delay as \textbf{half} the number of growth iterations needed for all nodes in the node-tree to reach equal PMW. This changes \Cref{eq:delayequation,eq:pmwdif} to 
 \begin{align}
     \delta_N &= \text{PMW}(N) - \min_{X\in\nset}{\text{PMW}(X)}, \hspace{.3cm} N \in \nset, \tag{\ref{eq:delayequation}'}  \\
-    \Delta_N &= \rho_N-\rho_M - (-1)^{\pi_N}\abs{(N,M)}, \hspace{.3cm} N\leq M. \tag{\ref{eq:pmwdif}'}\label{eq:pmwdifnew}
+    \delta_N - \delta_M &= \rho_N-\rho_M - (-1)^{\pi_N}\abs{(N,M)}, \hspace{.3cm} N\leq M. \tag{\ref{eq:pmwdif}'}\label{eq:pmwdifnew}
 \end{align}
 
 \subsection{Algorithm description}\label{sec:pseudocode}
