@@ -6,7 +6,10 @@ We benchmark the performance of our own variants of the Union-Find decoder, as w
 
 First, we show that $p_{\text{th}}$ can be increased, and the matching weight $\abs{\m{C}}$ can be decreased within the Union-Find decoder \textbf{without} the Partitioned-Growth data structure. We compare distinct variants of our implementation of the Union-Find decoder, that either implements Weighted Growth via bucket sort or no Weighted Growth, and either constructs a forest $F$ of grown clusters post-growth, which is the case in the original Union-Find decoder, or maintains acyclic vertex-trees $\vset$ during cluster growth. The latter is achieved by applying lines \ref{algo:dfa}-\ref{algo:dfb} of Algorithm \ref{algo:ufbb} in the UF decoder. The labels used for each variant are listed in \Cref{tab:uftable}. The full descriptions for each of the variants can be found in \cite{markthesis}.
 
-\begin{table}[htbp]
+\Figure[b](topskip=0pt, botskip=0pt, midskip=0pt){figures/python/comp_matching_weight.pdf}{
+  The matching weight $\abs{\m{C}}$ of the Union-Find decoder variants (Table \ref{tab:uftable}) and the UFPG decoder, normalized to the minimum weight $\min{\abs{\m{C}}}$ of the Minimum-Weight Perfect Matching decoder. All weights are obtained by Monte Carlo simulations on $p_X=0.098$ with a minimum of $100.000$ samples. The x-axis scales linearly with $N = L^2$. \label{comp_weight}}
+
+\begin{table}[htb]
   \centering
   \begin{tabularx}{\linewidth} { | R{2} || C{.5} | C{.5} | }
     \hline
@@ -20,10 +23,11 @@ First, we show that $p_{\text{th}}$ can be increased, and the matching weight $\
   \caption{Abbreviated names for the variants of the Union-Find decoder.}\label{tab:uftable}
 \end{table}
 
-\Figure[htb!](topskip=0pt, botskip=0pt, midskip=0pt){figures/python/comp_matching_weight.pdf}{
-  The matching weight $\abs{\m{C}}$ of the Union-Find decoder variants (Table \ref{tab:uftable}) and the UFPG decoder, normalized to the minimum weight $\min{\abs{\m{C}}}$ of the Minimum-Weight Perfect Matching decoder. All weights are obtained by Monte Carlo simulations on $p_X=0.098$ with a minimum of $100.000$ samples. The x-axis scales linearly with $N = L^2$. \label{comp_weight}}
 
-\begin{table}[htbp]
+\Figure[bt](topskip=0pt, botskip=0pt, midskip=0pt){figures/python/threshold_ufpg.pdf}{
+  The decoding rates $d$ of \emph{(a)} the UFPG decoder and \emph{(c)} the bvUF and MWPM decoders, obtained via Monte Carlo simulations with a minimum of 100.000 samples per lattice size per error rate. \emph{(a)} The decoding rates of the UFPG decoder do not cross in a single point, such that there is no apparent code threshold. \emph{(b)} The intersections of threshold curves of subsequent lattice sizes are the so-called threshold coordinates, which follow a trend in $(p_X, d)$ space as the lattice sizes increase. \emph{(c)} The threshold coordinates of the UFPG decoder occupy the region in $(p_X, d)$ space of the MWPM decoder. \label{threshold_ufpg}}
+  
+\begin{table}[htb]
   \centering
   \begin{tabularx}{\linewidth} { | R{1} || C{1} | C{1} | C{1} | C{1} | }
     \hline
@@ -45,10 +49,8 @@ First, we show that $p_{\text{th}}$ can be increased, and the matching weight $\
   \caption{Threshold error rates $p_{\text{th}}$ and threshold decoding success rates $d_{\text{th}}$ for the implementations of the  Union-Find decoder of \Cref{tab:uftable}.}\label{tab:ufndfwug}
 \end{table}
 
-\Figure[htb](topskip=0pt, botskip=0pt, midskip=0pt){figures/python/threshold_ufpg.pdf}{
-  The decoding rates $d$ of \emph{(a)} the UFPG decoder and \emph{(c)} the bvUF and MWPM decoders, obtained via Monte Carlo simulations with a minimum of 100.000 samples per lattice size per error rate. \emph{(a)} The decoding rates of the UFPG decoder do not cross in a single point, such that there is no apparent code threshold. \emph{(b)} The intersections of threshold curves of subsequent lattice sizes are the so-called threshold coordinates, which follow a trend in $(p_X, d)$ space as the lattice sizes increase. \emph{(c)} The threshold coordinates of the UFPG decoder occupy the region in $(p_X, d)$ space of the MWPM decoder. \label{threshold_ufpg}}
 
-\Figure[htb!](topskip=0pt, botskip=0pt, midskip=0pt){figures/python/comp_time.pdf}{
+\Figure[t](topskip=0pt, botskip=0pt, midskip=0pt){figures/python/comp_time.pdf}{
   The mean computation time of the UFPG, bvUF, and MWPM decoders near the threshold error rate. All weights are obtained by Monte Carlo simulations for $p_X=0.098$ with a minimum of $100.000$ samples. The x-axis scales linearly with $N = L^2$.\label{comp_time}}
 
 The values for $p_{\text{th}}$ and $d_{\text{th}}$ for each variant, including the Minimum-Weight Perfect Matching (MWPM) decoder, are listed in \Cref{tab:ufndfwug}. Weighted Growth has the expected behavior of increasing $p_{\text{th}}$. While there is no major increase in $p_{\text{th}}$ from the $\vset$-variants over the $F$-variants, a significant increase in $d_{\text{th}}$ can be observed. We suspect that the acyclic graphs of $\vset$ have shorter branches in between junctions compared to $F$, which leads to a decreased matching weight and increased $d_{\text{th}}$. We plot the matching weight $\abs{\m{C}}$ of the UF variants, normalized to the minimum weight of the MWPM decoder for $p_X = 0.098$ in \Cref{comp_weight}. Here we see a correlation between a decrease in $\abs{\m{C}}$ and increase in performance: both Weighted Growth and maintaining $\vset$ during growth increase performance and decrease matching weight. Furthermore, the matching weight in $\vset$-variants have a relatively low and constant factor over the minimum weight, which improves upon the $L$-dependent behavior of $F$-variants.
