@@ -58,55 +58,59 @@ The Partitioned-Growth data structure allows for prioritizing the growth of \emp
 
 To grow a cluster, we loop over all nodes in $\nset$ and grow all boundary vertices of $N$ if $\delta_N=0$. However, to find $\delta_N$, the PMW of all nodes in $\dot{\nset}$ must be known, which is no trivial task as the entire tree must be considered for the calculation in every node. Furthermore, the PWM of a node changes as it and its cluster grow. Instead, we will compute for the difference in node delay between child node and its parent. 
 
-Let any node $\mathbf{R}\in\dot{\nset}$ be the \textbf{root node} of the node tree. As $\dot{\nset}$ is an acyclic tree, $\mathbf{R}$ defines the parent-child relations for all the nodes in $\dot{\nset}$, where any node can only have a single parent, but multiple children. Let $M\geq N$ denote that M is the parent of N. Furthermore, let $\nset_M$ be the subtree consisting of all ancestors of $M$ and all descendant branches excluding the branch starting from $(M,N)$, and $\nset_N$ be the subtree consisting of all descendant branches of $N$. With this notation, any odd-parity node-tree of $\abs{\dot{\nset}}\geq 3$ can be simplified to $\{\nset_M,M,N,\nset_N\}$, where $(\nset_M, M)$ and $(N, \nset_N)$ can represent any number of edges on $\dot{\nset}$, depending on the number branches they represent. Based on the node types of $N, M$ and the parity (number of syndrome-nodes) in $\nset_N$, we can deduce the parity of $\nset_M$, since $\dot{\nset}$ must be odd. 
+Let any node $\mathbf{R}\in\dot{\nset}$ be the \textbf{root node} of the node tree. As $\dot{\nset}$ is an acyclic tree, $\mathbf{R}$ defines the parent-child relations for all the nodes in $\dot{\nset}$, where any node can only have a single parent, but multiple children. Let $P\geq Q$ denote that $P$ is the parent of $Q$. Furthermore, let $\nset_P$ be the subtree consisting of all ancestors of $P$ and all descendant branches excluding the branch starting from $(P,Q)$, and $\nset_Q$ be the subtree consisting of all descendant branches of $Q$. With this notation, any odd-parity node-tree of $\abs{\dot{\nset}}\geq 3$ can be simplified to $\{\nset_P,P,Q,\nset_Q\}$, where $(\nset_P, P)$ and $(Q, \nset_Q)$ can represent any number of edges on $\dot{\nset}$, depending on the number branches they represent. Based on the node types of $P,Q$ and the parity (number of syndrome-nodes) in $\nset_Q$, we can deduce the parity of $\nset_P$, since $\dot{\nset}$ must be odd. 
 
-If subtree $\nset_N$ is of even parity, denoted by $\overbar{\nset_N}$, it must consist of a combination of some number of even branches and an even number odd branches, where the parity of the branch refers to the parity of the number of syndrome-nodes. For a hypothetical merger to even parity on either $N$ or $M$, the matching of nodes within $\overbar{\nset_N}$ must be equivalently within $\overbar{\nset_N}$, since an even number of odd branches connect to $N$. If subtree $\nset_N$ is of odd parity, denoted by $\dot{\nset_N}$, it must consist of a combination of some number of even branches and an odd number of odd branches. For a hypothetical merger to even parity on either $N$ or $M$, there must always be a matching between the single odd branch within $\dot{\nset_N}$ with either $N$, $M$, or the next syndrome-node in $\nset_M$. The same is true of an even or odd $\nset_M$.
+If subtree $\nset_Q$ is of even parity, denoted by $\overbar{\nset_Q}$, it must consist of a combination of some number of even branches and an even number odd branches, where the parity of the branch refers to the parity of the number of syndrome-nodes. For any even branch $\bar{b}$ the matching must be within $\bar{b}$, since there is a single edge $(Q,\bar{b})$ that cannot support two matches out of $\bar{b}$. If an odd branch $\dot{b}_1$ matches outside $\overbar{\nset_Q}$ on edge $(Q, \dot{b}_1)$, there must exist another odd branch $\dot{b}_2$ that must match with another node $N \notin \overbar{\nset_Q}$  via $(Q, \dot{b}_2)$, which is equivalent to a match between $\dot{b}_1$ and $\dot{b}_2$. For a hypothetical merger to even parity on either $Q$ or $P$, the matching of nodes within $\overbar{\nset_Q}$ must be \emph{equivalently} within $\overbar{\nset_Q}$. The same is true of an even $\nset_P$.
 
-Using this strategy, we can deduce the required edges for a matching during a merger on $N$ and $M$ and find the difference in node delays $\delta_N - \delta_M$. For example, if both $N,M$ are syndrome-nodes and $\nset_N$ is even, $\nset_M$ must be odd. The potential matching weights on $\dot{M},\dot{N}$ are thus
+If subtree $\nset_Q$ is of odd parity, denoted by $\dot{\nset_Q}$, it must consist of a combination of some number of even branches and an odd number of odd branches. For a hypothetical merger to even parity on either $Q$ or $P$, there must always be a matching between the single odd branch within $\dot{\nset_Q}$ with either $Q$, $P$, or the next syndrome-node in $\nset_P$. The same is true of an odd $\nset_P$.
+
+Using this strategy, we can deduce the required edges for a matching during a merger on $Q$ and $P$ and find the difference in node delays $\delta_Q - \delta_P$. For example, if both $P,Q$ are syndrome-nodes and $\nset_Q$ is even, $\nset_P$ must be odd. The potential matching weights on $\dot{P},\dot{Q}$ are thus
 \begin{align*}
-  \text{PMW}(\dot{M}) &= \rho_{\dot{M}} + \abs{(\dot{\nset_M},\dot{M})} + \abs{(\dot{M}, \dot{N})} + C \\
-  \text{PMW}(\dot{N}) &= \rho_{\dot{N}} + \abs{(\dot{\nset_M},\dot{M})} + C,
+  \text{PMW}(\dot{P}) &= \rho_{\dot{P}} + \abs{(\dot{\nset_P},\dot{P})} + \abs{(\dot{P}, \dot{Q})} + C \\
+  \text{PMW}(\dot{Q}) &= \rho_{\dot{Q}} + \abs{(\dot{\nset_P},\dot{P})} + C,
 \end{align*}
-where $C$ is a constant equal to the weight of the matching with the subtrees $\dot{\nset_M}$ and $\overbar{\nset_N}$. Filling these values into \Cref{eq:delayequation} we find that the difference in delay is 
+where $C$ is a constant equal to the weight of the matching with the subtrees $\dot{\nset_P}$ and $\overbar{\nset_Q}$. Filling these values into \Cref{eq:delayequation} we find that the difference in delay is 
 \begin{equation*}
-  \delta_{\dot{N}} - \delta_{\dot{M}} = 2\left(\rho_{\dot{N}} - \rho_{\dot{M}} - \abs{(\dot{M}, \dot{N})}\right).
+  \delta_{\dot{Q}} - \delta_{\dot{P}} = 2\left(\rho_{\dot{Q}} - \rho_{\dot{P}} - \abs{(\dot{P}, \dot{Q})}\right).
 \end{equation*}
 
-Similarly, the difference in node delay can be deduced for any combination of node types of $N,M$ and parity of $\nset_N$ (see \Cref{fig:nmcombi}):
+Similarly, the difference in node delay can be deduced for any combination of node types of $P,Q$ and parity of $\nset_Q$ (see \Cref{fig:nmcombi}):
 \begin{align*}
-  \frac{1}{2}(\delta_N-\delta_M) &= \rho_N - \rho_M - \abs{(M,N)}  &\dot{M}, \dot{N}, \overbar{\nset_N} \\
-  &= \rho_N - \rho_M + \abs{(M,N)}  &\dot{M}, \dot{N}, \dot{\nset_N} \\
-  &= \rho_N - \rho_M + \abs{(M,N)}  &\dot{M}, \bar{N}, \overbar{\nset_N} \\
-  &= \rho_N - \rho_M - \abs{(M,N)}  &\dot{M}, \bar{N}, \dot{\nset_N} \\
-  &= \rho_N - \rho_M - \abs{(M,N)}  &\bar{M}, \dot{N}, \overbar{\nset_N} \\
-  &= \rho_N - \rho_M + \abs{(M,N)}  &\bar{M}, \dot{N}, \dot{\nset_N} \\
-  &= \rho_N - \rho_M + \abs{(M,N)}  &\bar{M}, \bar{N}, \overbar{\nset_N} \\
-  &= \rho_N - \rho_M - \abs{(M,N)}  &\bar{M}, \bar{N}, \dot{\nset_N} \\
+  \frac{1}{2}(\delta_Q-\delta_P) &= \rho_Q - \rho_P - \abs{(P,Q)}  &\dot{P}, \dot{Q}, \overbar{\nset_Q} \\
+  &= \rho_Q - \rho_P + \abs{(P,Q)}  &\dot{P}, \dot{Q}, \dot{\nset_Q} \\
+  &= \rho_Q - \rho_P + \abs{(P,Q)}  &\dot{P}, \bar{Q}, \overbar{\nset_Q} \\
+  &= \rho_Q - \rho_P - \abs{(P,Q)}  &\dot{P}, \bar{Q}, \dot{\nset_Q} \\
+  &= \rho_Q - \rho_P - \abs{(P,Q)}  &\bar{P}, \dot{Q}, \overbar{\nset_Q} \\
+  &= \rho_Q - \rho_P + \abs{(P,Q)}  &\bar{P}, \dot{Q}, \dot{\nset_Q} \\
+  &= \rho_Q - \rho_P + \abs{(P,Q)}  &\bar{P}, \bar{Q}, \overbar{\nset_Q} \\
+  &= \rho_Q - \rho_P - \abs{(P,Q)}  &\bar{P}, \bar{Q}, \dot{\nset_Q} \\
 \end{align*}
 which can be simplified to 
-    %n_d = m_d + \Big\lfloor 2C\big(n_r-\rho_M - (-1)^{n_p}\abs{(n,m)}\big )\Big\rfloor
+    %n_d = m_d + \Big\lfloor 2C\big(n_r-\rho_P - (-1)^{n_p}\abs{(n,m)}\big )\Big\rfloor
 \begin{multline}\label{eq:pmwdif}
-    \delta_N - \delta_M = \\
-    2\Big(\rho_N-\rho_M - (-1)^{\pi_N}\abs{(M,N)}\Big), \hspace{.3cm} N\leq M,
+    \delta_Q - \delta_P = \\
+    2\Big(\rho_Q-\rho_P - (-1)^{\pi_Q}\abs{(P,Q)}\Big), \hspace{.3cm} Q\leq P,
 \end{multline}
 where $\pi_N$ is the \textbf{node parity} of $N$, the number of descendant syndrome-nodes modulo 2. Alternatively, The node parity of a node can also be calculated via the node parities of its children nodes. We define the node parity for syndrome-nodes and junction-nodes. 
 \begin{align}
-    \pi_{\dot{M}} &= \hspace{.6cm}\left(\hspace{.2cm} \sum_{\mathclap{\forall N \leq \dot{M}}} (1+\pi_N) \right ) \bmod 2, \label{eq:snodeparity}\\
-    \pi_{\bar{M}} &= 1 - \left(\hspace{.2cm} \sum_{\mathclap{\forall N \leq \bar{M}}} (1+\pi_N) \right) \bmod 2. \label{eq:jnodeparity}
+    \pi_{\dot{P}} &= \hspace{.6cm}\left(\hspace{.2cm} \sum_{\mathclap{\forall Q \leq \dot{P}}} (1+\pi_Q) \right ) \bmod 2, \label{eq:snodeparity}\\
+    \pi_{\bar{P}} &= 1 - \left(\hspace{.2cm} \sum_{\mathclap{\forall Q \leq \bar{P}}} (1+\pi_Q) \right) \bmod 2. \label{eq:jnodeparity}
 \end{align}
 
 \Figure[tb](topskip=0pt, botskip=0pt, midskip=0pt){figures/tikz/build/main-figure3.pdf}{
-  Any odd-parity node-tree of $\abs{\dot{\nset}}\geq 3$ can be simplified to $\{\nset_M,M,N,\nset_N\}$, where $\nset_M$ is the subtree consisting of all ancestors of $M$ and all descendant branches excluding the branch starting from $(M,N)$, $\nset_N$ is the subtree consisting of all descendant branches of $N$, and $(\nset_M, M), (N, \nset_N)$ can represent any number of edges on $\dot{\nset}$. The figure shows which edges are part of the matching for a hypothetical merger on either $M$ (cyan edges) or $N$ (magenta edges), for any combination of node types of $N,M$ and the parity of $\nset_N$.
+  Any odd-parity node-tree of $\abs{\dot{\nset}}\geq 3$ can be simplified to $\{\nset_P,P,Q,\nset_Q\}$, where $\nset_P$ is the subtree consisting of all ancestors of $P$ and all descendant branches excluding the branch starting from $(P,Q)$, $\nset_Q$ is the subtree consisting of all descendant branches of $Q$, and $(\nset_P, P), (Q, \nset_Q)$ can represent any number of edges on $\dot{\nset}$. The figure shows which edges are part of the matching for a hypothetical merger on either $P$ (cyan edges) or $Q$ (magenta edges), for any combination of node types of $P,Q$ and the parity of $\nset_Q$, similarly to \Cref{eq:pmwdif}.
   \label{fig:nmcombi}}
 
-Immediately after, a \textbf{pseudo-delay} $\tilde{\delta_N} = \delta_N - \delta_\mathbf{R}$, where $\mathbf{R}$ is the root of $\nset$, can be calculated by
-\begin{equation}\label{eq:pseudodelay}
-    \tilde{\delta_N} = \tilde{\delta_M} + (\delta_N - \delta_M), \hspace{.3cm} N\leq M.
-\end{equation}
-From the pseudo-delay, we can go back to $\delta_N$ by subtracting the minimal value within $\nset$, similarly to \Cref{eq:pmwdif}
+Let the \textbf{pseudo-delay} be $\tilde{\delta}_N = \delta_N - \delta_\mathbf{R}$, where $\mathbf{R}$ is the root of $\nset$. Whereas $\delta_\mathbf{R}$ is unknown, $\tilde{\delta}_\mathbf{R}$ is always zero. The delay $\delta_N$ of node $N$ can be computed from $\tilde{\delta}_N$ of all pseudo-delays within the node-tree is known by subtracting the minimal $\tilde{\delta}$.
 \begin{equation}\label{eq:delaypseudo}
-    \delta_N = \tilde{\delta_N} - \min_{X \in \nset}{\tilde{\delta_X}}. 
+  \delta_N = \tilde{\delta}_N - \min_{X \in \nset}{\tilde{\delta}_X}
 \end{equation}
+
+The pseudo-delays of all nodes in a node-tree can be calculated by a depth-first search from root $\mathbf{R}$ to all descendant nodes by the difference $\delta_Q - \delta_P$ of node $Q$ and its parent $P$. 
+\begin{equation}\label{eq:pseudodelay}
+    \tilde{\delta}_Q = \tilde{\delta}_P + (\delta_Q - \delta_P), \hspace{.3cm} Q\leq P.
+\end{equation}
+
 
 % \Cref{eq:pmwdif} can be easily explained through an example of the cluster in \Cref{fig:pmw}. The PMW's of $A, B, C$ are respectively 
 % \begin{align}
@@ -120,7 +124,7 @@ From the pseudo-delay, we can go back to $\delta_N$ by subtracting the minimal v
 %     \nonumber \Delta_C &= \delta_C - \delta_B =& 2\left(\rho_C - \rho_B - \abs{(B, C)}\right).
 % \end{align}
 
-With \Cref{eq:pmwdif,eq:pseudodelay,eq:delaypseudo,eq:snodeparity,eq:jnodeparity}, it now becomes clear that once the root of $\nset$ is picked, the node parities and differences in node delays can be calculated through two depth-first searches (DFS) of $\nset$. In the so-called \emph{parity DFS} we calculate the node parity $\pi_N$ a via tail-recursive function using \Cref{eq:snodeparity,eq:jnodeparity}. In the \emph{delay DFS} we calculate the pseudo-delay $\tilde{\delta_N}$ via a head-recursive function using \Cref{eq:pmwdif,eq:pseudodelay}. During this second DFS, the minimal pseudo-delay within $\nset$ can be kept track of by comparison for calculating the node delay $\delta_N$ at a later instance during the \emph{growth DFS}. 
+With \Cref{eq:pmwdif,eq:pseudodelay,eq:delaypseudo,eq:snodeparity,eq:jnodeparity}, it now becomes clear that once the root of $\nset$ is picked, the node parities and differences in node delays can be calculated through two depth-first searches (DFS) of $\nset$. In the so-called \emph{parity DFS} we calculate the node parity $\pi_N$ a via tail-recursive function using \Cref{eq:snodeparity,eq:jnodeparity}. In the \emph{delay DFS} we calculate the pseudo-delay $\tilde{\delta}_N$ via a head-recursive function using \Cref{eq:pmwdif,eq:pseudodelay}. During this second DFS, the minimal pseudo-delay within $\nset$ can be kept track of by comparison for calculating the node delay $\delta_N$ at a later instance during the \emph{growth DFS}. 
 
 \subsection{Growing node-trees}\label{sec:grownodetrees}
 
@@ -128,7 +132,7 @@ A single growth iteration, which is applied in the Union-Find decoder by adding 
 
 As the node radii increase, the values for $\delta_N$ across $\nset$ change. This would mean that the DFS's of node parity and delay need to be done after each growth iteration. Luckily, if no new nodes are added to $\nset$ after a growth iteration, which is the case if no mergers occur between clusters, $\pi_N$ on iteration $t+\theta$ can be calculated via previous values of pseudo-delays in iteration $t$ by the introduction of the node \textbf{wait} parameter $\omega_N$. During the growth DFS, if $\delta_N \neq 0$, add 1 to $\omega_N$. If no nodes are added to $\nset$, the node delay in the next iteration are
 \begin{multline}\label{eq:delay}
-    \delta_N(t+\theta) = \tilde{\delta_N(t)} - \min_{X \in \nset(t)}{\tilde{\delta_X}} - \omega_N(t+\theta-1),  \\
+    \delta_N(t+\theta) = \tilde{\delta}_N(t) - \min_{X \in \nset(t)}{\tilde{\delta}_X} - \omega_N(t+\theta-1),  \\
     \hspace{.3cm} N \in \nset, \hspace{.3cm} \nset(t+\theta) = \nset(t).  
 \end{multline}
 
@@ -166,8 +170,8 @@ An unfortunate effect, which we dub \textbf{parity inversion}, causes a decrease
 %Parity inversion defines a trade-off in the Partitioned-Growth data structure: `A node must wait as many iterations as it is suspended to reach equilibrium in Potential Matching Weight in the node-tree. However, after Parity Inversion, the node suspension for previously prioritized nodes increases linearly with the number of iterations waited by the suspended nodes pre-inversion.' As a compromise, 
 To compensate the effect of parity inversion, we redefine the node delay as \textbf{half} the number of growth iterations needed for all nodes in the node-tree to reach equal PMW. This changes \Cref{eq:delayequation,eq:pmwdif} to:
 \begin{align}
-    \delta_N &= \text{PMW}(N) - \min_{X\in\nset}{\text{PMW}(X)}, \hspace{.3cm} N \in \nset, \tag{\ref{eq:delayequation}'}  \\
-    \delta_N - \delta_M &= \rho_N-\rho_M - (-1)^{\pi_N}\abs{(N,M)}, \hspace{.3cm} N\leq M. \tag{\ref{eq:pmwdif}'}\label{eq:pmwdifnew}
+    \delta_N &= \text{PMW}(N) - \min_{X\in\nset}{\text{PMW}(X)}, & N \in \nset, \tag{\ref{eq:delayequation}'}  \\
+    \delta_Q - \delta_P &= \rho_Q-\rho_P - (-1)^{\pi_Q}\abs{(P,Q)}, & Q\leq P. \tag{\ref{eq:pmwdif}'}\label{eq:pmwdifnew}
 \end{align}
 
 \subsection{Algorithm description}\label{sec:pseudocode}
@@ -185,7 +189,7 @@ The full version of the algorithm we have described is given in Algorithm \ref{a
     Initialize the fusion list $\m{F}$ as an empty list.\;\label{algo:B1b}
     \For(){cluster $\in\m{L}$ \label{algo:B2a}}{
       \For(){$N \in\m{R}$ at root node $\mathbf{R}$ of $\nset$}{
-        Apply DFSs to calculate node parities and delays (\Cref{eq:pseudodelay,eq:snodeparity,eq:jnodeparity}) from $N$ to all descendant nodes. Keep track of $\min_{X \in \nset}{\tilde{\delta_X}}$ during the delay DFS.\;\label{algo:pdc}
+        Apply DFSs to calculate node parities and delays (\Cref{eq:pseudodelay,eq:snodeparity,eq:jnodeparity}) from $N$ to all descendant nodes. Keep track of $\min_{X \in \nset}{\tilde{\delta}_X}$ during the delay DFS.\;\label{algo:pdc}
       }
       Apply DFS from root $\mathbf{R}$ to all descendants. At each node $N$ during the DFS, if $\delta_N=0$ (\Cref{eq:delay}), grow all boundary edges of vertices in the node a half-edge per the Union-Find decoder, such that grown edges are added to $\m{F}$, and apply $\rho_N=\rho_N +\nicefrac{1}{2}$. \;\label{algo:grow}
       %If $\m{s}(n)\neq0$, apply $n_w=n_w+1$ and continue the DFS.

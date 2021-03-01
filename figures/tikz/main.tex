@@ -192,78 +192,78 @@
 \end{tikzpicture}
 
 
-% N M combinations
+% P Q combinations
 \begin{tikzpicture}[scale=1]
     \begin{scope}[shift={(0,3)}]
-        \node[nodenm, densely dashed]    (nM) at (0,0) {$\dot{\nset_M}$};
-        \node[nodenm, draw=mcyan] (M) at (1,0) {$\dot{M}$};
-        \node[nodenm, draw=mpink] (N) at (2,0) {$\dot{N}$};
-        \node[nodenm, densely dashed]    (nN) at (3,0) {$\overbar{\nset_N}$};
-        \draw[l2] (nN) -- (N) -- (M) -- (nM);
-        \draw[l2, mcyan, transform canvas={yshift=0.18em}] (N) -- (M) -- (nM);
-        \draw[l2, mpink, transform canvas={yshift=-.18em}] (M) -- (nM);
+        \node[nodenm, densely dashed]    (nP) at (0,0) {$\dot{\nset_P}$};
+        \node[nodenm, draw=mcyan] (P) at (1,0) {$\dot{P}$};
+        \node[nodenm, draw=mpink] (Q) at (2,0) {$\dot{Q}$};
+        \node[nodenm, densely dashed]    (nQ) at (3,0) {$\overbar{\nset_Q}$};
+        \draw[l2] (nQ) -- (Q) -- (P) -- (nP);
+        \draw[l2, mcyan, transform canvas={yshift=0.18em}] (Q) -- (P) -- (nP);
+        \draw[l2, mpink, transform canvas={yshift=-.18em}] (P) -- (nP);
     \end{scope}
     \begin{scope}[shift={(0,2)}]
-        \node[nodenm, densely dashed]    (nM) at (0,0) {$\overbar{\nset_M}$};
-        \node[nodenm, draw=mcyan] (M) at (1,0) {$\dot{M}$};
-        \node[nodenm, draw=mpink] (N) at (2,0) {$\dot{N}$};
-        \node[nodenm, densely dashed]    (nN) at (3,0) {$\dot{\nset_N}$};
-        \draw[l2] (nN) -- (N) -- (M) -- (nM);
-        \draw[l2, mcyan, transform canvas={yshift=0.18em}] (N) -- (nN);
-        \draw[l2, mpink, transform canvas={yshift=-.18em}] (M) -- (N) -- (nN);
+        \node[nodenm, densely dashed]    (nP) at (0,0) {$\overbar{\nset_P}$};
+        \node[nodenm, draw=mcyan] (P) at (1,0) {$\dot{P}$};
+        \node[nodenm, draw=mpink] (Q) at (2,0) {$\dot{Q}$};
+        \node[nodenm, densely dashed]    (nQ) at (3,0) {$\dot{\nset_Q}$};
+        \draw[l2] (nQ) -- (Q) -- (P) -- (nP);
+        \draw[l2, mcyan, transform canvas={yshift=0.18em}] (Q) -- (nQ);
+        \draw[l2, mpink, transform canvas={yshift=-.18em}] (P) -- (Q) -- (nQ);
     \end{scope}
     \begin{scope}[shift={(0,1)}]
-        \node[nodenm, densely dashed]    (nM) at (0,0) {$\overbar{\nset_M}$};
-        \node[nodenm, draw=mcyan] (M) at (1,0) {$\dot{M}$};
-        \node[nodenm, draw=mpink] (N) at (2,0) {$\bar{N}$};
-        \node[nodenm, densely dashed]    (nN) at (3,0) {$\overbar{\nset_N}$};
-        \draw[l2] (nN) -- (N) -- (M) -- (nM);
-        \draw[l2, mpink, transform canvas={yshift=-.18em}] (M) -- (N);
+        \node[nodenm, densely dashed]    (nP) at (0,0) {$\overbar{\nset_P}$};
+        \node[nodenm, draw=mcyan] (P) at (1,0) {$\dot{P}$};
+        \node[nodenm, draw=mpink] (Q) at (2,0) {$\bar{Q}$};
+        \node[nodenm, densely dashed]    (nQ) at (3,0) {$\overbar{\nset_Q}$};
+        \draw[l2] (nQ) -- (Q) -- (P) -- (nP);
+        \draw[l2, mpink, transform canvas={yshift=-.18em}] (P) -- (Q);
     \end{scope}
     \begin{scope}[shift={(0,0)}]
-        \node[nodenm, densely dashed]    (nM) at (0,0) {$\dot{\nset_M}$};
-        \node[nodenm, draw=mcyan] (M) at (1,0) {$\dot{M}$};
-        \node[nodenm, draw=mpink] (N) at (2,0) {$\bar{N}$};
-        \node[nodenm, densely dashed]    (nN) at (3,0) {$\dot{\nset_N}$};
-        \draw[l2] (nN) -- (N) -- (M) -- (nM);
-        \draw[l2, mcyan, transform canvas={yshift=0.18em}] (nN) -- (N) -- (M) -- (nM);
-        \draw[l2, mpink, transform canvas={yshift=-.18em}] (M) -- (nM) (N) -- (nN);
+        \node[nodenm, densely dashed]    (nP) at (0,0) {$\dot{\nset_P}$};
+        \node[nodenm, draw=mcyan] (P) at (1,0) {$\dot{P}$};
+        \node[nodenm, draw=mpink] (Q) at (2,0) {$\bar{Q}$};
+        \node[nodenm, densely dashed]    (nQ) at (3,0) {$\dot{\nset_Q}$};
+        \draw[l2] (nQ) -- (Q) -- (P) -- (nP);
+        \draw[l2, mcyan, transform canvas={yshift=0.18em}] (nQ) -- (Q) -- (P) -- (nP);
+        \draw[l2, mpink, transform canvas={yshift=-.18em}] (P) -- (nP) (Q) -- (nQ);
     \end{scope}
 
     \begin{scope}[shift={(4.5,3)}]
-        \node[nodenm, densely dashed]    (nM) at (0,0) {$\overbar{\nset_M}$};
-        \node[nodenm, draw=mcyan] (M) at (1,0) {$\bar{M}$};
-        \node[nodenm, draw=mpink] (N) at (2,0) {$\dot{N}$};
-        \node[nodenm, densely dashed]    (nN) at (3,0) {$\overbar{\nset_N}$};
-        \draw[l2] (nN) -- (N) -- (M) -- (nM);
-        \draw[l2, mcyan, transform canvas={yshift=0.18em}] (N) -- (M);
+        \node[nodenm, densely dashed]    (nP) at (0,0) {$\overbar{\nset_P}$};
+        \node[nodenm, draw=mcyan] (P) at (1,0) {$\bar{P}$};
+        \node[nodenm, draw=mpink] (Q) at (2,0) {$\dot{Q}$};
+        \node[nodenm, densely dashed]    (nQ) at (3,0) {$\overbar{\nset_Q}$};
+        \draw[l2] (nQ) -- (Q) -- (P) -- (nP);
+        \draw[l2, mcyan, transform canvas={yshift=0.18em}] (Q) -- (P);
     \end{scope}
     \begin{scope}[shift={(4.5,2)}]
-        \node[nodenm, densely dashed]    (nM) at (0,0) {$\dot{\nset_M}$};
-        \node[nodenm, draw=mcyan] (M) at (1,0) {$\bar{M}$};
-        \node[nodenm, draw=mpink] (N) at (2,0) {$\dot{N}$};
-        \node[nodenm, densely dashed]    (nN) at (3,0) {$\dot{\nset_N}$};
-        \draw[l2] (nN) -- (N) -- (M) -- (nM);
-        \draw[l2, mcyan, transform canvas={yshift=0.18em}] (nM) -- (M) (N) -- (nN);
-        \draw[l2, mpink, transform canvas={yshift=-.18em}] (nM) -- (M) -- (N) -- (nN);
+        \node[nodenm, densely dashed]    (nP) at (0,0) {$\dot{\nset_P}$};
+        \node[nodenm, draw=mcyan] (P) at (1,0) {$\bar{P}$};
+        \node[nodenm, draw=mpink] (Q) at (2,0) {$\dot{Q}$};
+        \node[nodenm, densely dashed]    (nQ) at (3,0) {$\dot{\nset_Q}$};
+        \draw[l2] (nQ) -- (Q) -- (P) -- (nP);
+        \draw[l2, mcyan, transform canvas={yshift=0.18em}] (nP) -- (P) (Q) -- (nQ);
+        \draw[l2, mpink, transform canvas={yshift=-.18em}] (nP) -- (P) -- (Q) -- (nQ);
     \end{scope}
     \begin{scope}[shift={(4.5,1)}]
-        \node[nodenm, densely dashed]    (nM) at (0,0) {$\dot{\nset_M}$};
-        \node[nodenm, draw=mcyan] (M) at (1,0) {$\bar{M}$};
-        \node[nodenm, draw=mpink] (N) at (2,0) {$\bar{N}$};
-        \node[nodenm, densely dashed]    (nN) at (3,0) {$\overbar{\nset_N}$};
-        \draw[l2] (nN) -- (N) -- (M) -- (nM);
-        \draw[l2, mcyan, transform canvas={yshift=0.18em}] (nM) -- (M);
-        \draw[l2, mpink, transform canvas={yshift=-.18em}] (nM) -- (M) -- (N);
+        \node[nodenm, densely dashed]    (nP) at (0,0) {$\dot{\nset_P}$};
+        \node[nodenm, draw=mcyan] (P) at (1,0) {$\bar{P}$};
+        \node[nodenm, draw=mpink] (Q) at (2,0) {$\bar{Q}$};
+        \node[nodenm, densely dashed]    (nQ) at (3,0) {$\overbar{\nset_Q}$};
+        \draw[l2] (nQ) -- (Q) -- (P) -- (nP);
+        \draw[l2, mcyan, transform canvas={yshift=0.18em}] (nP) -- (P);
+        \draw[l2, mpink, transform canvas={yshift=-.18em}] (nP) -- (P) -- (Q);
     \end{scope}
     \begin{scope}[shift={(4.5,0)}]
-        \node[nodenm, densely dashed]    (nM) at (0,0) {$\overbar{\nset_M}$};
-        \node[nodenm, draw=mcyan] (M) at (1,0) {$\bar{M}$};
-        \node[nodenm, draw=mpink] (N) at (2,0) {$\bar{N}$};
-        \node[nodenm, densely dashed]    (nN) at (3,0) {$\dot{\nset_N}$};
-        \draw[l2] (nN) -- (N) -- (M) -- (nM);
-        \draw[l2, mcyan, transform canvas={yshift=0.18em}] (nN) -- (N) -- (M);
-        \draw[l2, mpink, transform canvas={yshift=-.18em}] (N) -- (nN);
+        \node[nodenm, densely dashed]    (nP) at (0,0) {$\overbar{\nset_P}$};
+        \node[nodenm, draw=mcyan] (P) at (1,0) {$\bar{P}$};
+        \node[nodenm, draw=mpink] (Q) at (2,0) {$\bar{Q}$};
+        \node[nodenm, densely dashed]    (nQ) at (3,0) {$\dot{\nset_Q}$};
+        \draw[l2] (nQ) -- (Q) -- (P) -- (nP);
+        \draw[l2, mcyan, transform canvas={yshift=0.18em}] (nQ) -- (Q) -- (P);
+        \draw[l2, mpink, transform canvas={yshift=-.18em}] (Q) -- (nQ);
     \end{scope}
 \end{tikzpicture}
 
