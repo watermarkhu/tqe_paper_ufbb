@@ -271,147 +271,77 @@
 % DFS
 \begin{tikzpicture}[x=1cm,y=1cm]
 
-    % \node at (-2.75, -1.7) {\emph{(a)} Cluster-tree (Union-Find)};
-    % \node at (3.1, -1.7) {\emph{(b)} Vertex-tree $\vset$};
-    % \node at (9.2,-1.7) {\emph{(c)} Node-tree $\mathcal{N}$ (Partitioned-Growth)};
-    % \begin{scope}[scale=0.8, shift={(2.2,.7)}]
-    %     \draw[l2, opacity=0.1, step=1] (-.9,-.9) grid (3.9,2.9);
-    %     \node [nodel, fill=white] (w0) at (0,0) {$0$};
-    %     \node [nodel, fill=white] (w1) at (1,0) {$1$};
-    %     \node [nodel, fill=white] (w2) at (2,0) {$2$};
-    %     \node [nodel, fill=white] (w3) at (0,1) {$3$};
-    %     \node [nodel, fill=white] (w4) at (1,1) {$4$};
-    %     \node [nodel, fill=white] (w5) at (2,1) {$5$};
-    %     \node [nodel, fill=white] (w7) at (0,2) {$7$};
-    %     \node [nodel, fill=white] (w8) at (2,2) {$8$};
-    %     \node [nodel, fill=white] (w6) at (3,1) {$6$};
-    %     \draw [l2] (w7) -- (w3) -- (w0) -- (w1) (w3) -- (w4) -- (w5) -- (w8) (w6) -- (w5) -- (w2);
-    %     \draw [l2] (w0) -- +(-.6,0) (w0) -- +(0, -.6);
-    %     \draw [l2] (w3) -- +(-.6,0);
-    %     \draw [l2] (w7) -- +(-.6,0) (w7) -- +(0, .6) (w7) -- +(0.6, 0);
-    %     \draw [l2] (w4) -- +(0, .6);
-    %     \draw [l2] (w8) -- +(-.6,0) (w8) -- +(0, .6) (w8) -- +(0.6, 0);
-    %     \draw [l2] (w6) -- +(0,-.6) (w6) -- +(0, .6) (w6) -- +(0.6, 0);
-    %     \draw [l2] (w2) -- +(.6,0) (w2) -- +(0, -.6);
-    %     \draw [l2] (w1) -- +(0,-.6);
-    %     \draw [l2, dotted, mred] (w4) -- (w1) -- (w2);
-    % \end{scope}
-    % \draw[l2, opacity=0.5, ->] (5.5,1) -- +(.5,0);
-    % \draw[l2, opacity=0.5, ->] (0.5,1) -- +(-.5,0);
+    \node at (-3.5, -1.7) {\emph{(a)} Cluster-tree};
+    \node at (3.2, -1.7) {\emph{(b)} Spanning-tree $\vset$}; 
+    \node at (9.2,-1.7) {\emph{(c)} Node-tree $\mathcal{N}$};
 
-    \draw[l2, opacity=0.5, ->] (5.5,1) -- +(.5,0);
-    \draw[l2, opacity=0.5, ->] (0,1) -- +(-.5,0);
-    \begin{scope}[shift={(-2.75, -1.7)}]
-        \node at (0,0) {\emph{(a)} Cluster-tree (Union-Find)};
-        \node[nodem, minimum size=12] (v) at (-1.8,.8){$v$};
-        \node[parameters, anchor=west] (vi) at (-1.2,.8){parent vertex, node $N$}; 
-        \draw[l2, opacity=0.5, ->] (v) -- (vi);
+    \begin{scope}[scale=0.8, shift={(2,0)}]
+        \draw[l2, opacity=0.1, step=1] (-.5,-.5) grid (4.5,3.5);
+        \node [nodel, fill=white!75!black] (wa) at (1, 1) {$a$};
+        \node [nodel, fill=white!75!black] (wb) at (2, 2) {$b$};
+        \node [nodel, fill=white!75!black] (wc) at (3, 1) {$c$};
+        \node [nodel, fill=white] (wd) at (2, 1) {$d$};
+        \node [nodel, fill=white] (we) at (1, 0) {$e$};
+        \node [nodel, fill=white] (wf) at (0, 1) {$f$};
+        \node [nodel, fill=white] (wg) at (1, 2) {$g$};
+        \node [nodel, fill=white] (wh) at (2, 3) {$h$};
+        \node [nodel, fill=white] (wi) at (3, 2) {$i$};
+        \node [nodel, fill=white] (wj) at (4, 1) {$j$};
+        \node [nodel, fill=white] (wk) at (3, 0) {$k$};
+        
+        \draw[l2] (we) -- (wa) -- (wf) (wk) -- (wc) -- (wj) (wa) -- (wd) -- (wb) -- (wh) (wg) -- (wb) -- (wi) -- (wc);
+        \draw[l2, dotted, mred] (wg) -- (wa) (wd) -- (wc);
+
+        \draw[l2, opacity=0.5, ->] (-1, 1) -- +(-1,0);
+        \draw[l2, opacity=0.5, ->] (5, 1) -- +(1,0);
+
     \end{scope}
-    \begin{scope}[shift={(2.8, -1.7)}]
-        \node at (0,0) {\emph{(b)} Spanning-tree $\vset$};
+
+    \begin{scope}[scale=0.8, shift={(-7,0)}]
+        \node[nodem, minimum size=12] (va) at (1.5 ,3) {$a$};
+        \node[nodem, minimum size=12] (vf) at (2.8,2) {$f$};
+        \node[nodem, minimum size=12] (ve) at (2.15,2) {$e$};
+        \node[nodem, minimum size=12] (vb) at (1.5 ,2) {$b$};
+        \node[nodem, minimum size=12] (vd) at (0.85,2) {$d$};
+        
+        \node[nodem, minimum size=12] (vc) at (0.85,1) {$c$};
+        \node[nodem, minimum size=12] (vg) at (1.5 ,1) {$g$};
+        \node[nodem, minimum size=12] (vh) at (2.15,1) {$h$};
+        \node[nodem, minimum size=12] (vi) at (2.8, 1) {$i$};
+        
+        \node[nodem, minimum size=12] (vj) at (0.85,0) {$j$};
+        \node[nodem, minimum size=12] (vk) at (1.5 ,0) {$k$};
+
+        \draw[l2] (va) -- (vd) (va) -- (vb) (va) -- (ve) (va) -- (vf);
+        \draw[l2] (vb) -- (vc) (vb) -- (vh) (vb) -- (vi) (vb) -- (vg) ;
+        \draw[l2] (vc) -- (vk) (vc) -- (vj);
+
+        \node[parameters] (inf) at (4.5,3) {size: 11, parity: 3\\root node $\mathbf{R}_\nset: \dot{B}$};
+        \draw[l2, ->, opacity=.5] (va) -- (inf);
+
+        \node[nodem, minimum size=12] (v) at (0.85,-1){$v$};
+        \node[parameters, anchor=west] (vinfo) at (1.25,-1) {parent vertex, node $N$}; 
+        \draw[l2, opacity=0.5, ->] (v) -- (vinfo);
     \end{scope}
-    \begin{scope}[shift={(9.2,-1.7)}]
-        \node at (0,0) {\emph{(c)} Node-tree $\mathcal{N}$ (Partitioned-Growth)};
-        \node[even1, pattern color=mgrey] (n) at (-2.6,.8){$N$};
-        \node[parameters, anchor=west, align=left] (ni) at (-2,.8){boundary vertices, neighbors nodes,\\ $\rho_N$, $\pi_N$, $\tilde{\delta_N}$, $\gamma_N$}; 
+
+    \begin{scope}[scale=0.8, shift={(9,0)}]
+
+        \node[nodel, minimum size=15] (nb) at (1, 2.5) {$\dot{B}$};
+        \node[nodel, minimum size=15] (nd) at (0.5, 1.5) {$\bar{D}$};
+        \node[nodel, minimum size=15] (ni) at (1.5, 1.5) {$\bar{I}$};
+        \node[nodel, minimum size=15] (na) at (0.5, 0.5) {$\dot{A}$};
+        \node[nodel, minimum size=15] (nc) at (1.5, 0.5) {$\dot{C}$};
+        \draw[l2] (na) -- (nd) -- (nb) -- (ni) -- (nc);
+
+        \node[parameters, anchor=north] (inf2) at (3.8,3.3) {subroots $\m{R}: [\bar{D}, \bar{I}]$\\$\min_{N \in \nset}{\tilde{\delta}_N}$};
+        \draw[l2,->, opacity=.5] (nb) -- (nb-|inf2.west);
+
+        \node[nodel, minimum size=15] (n) at (1,-.75){$N$};
+        \node[parameters, anchor=west, align=left] (ni) at (2,-.75){neighboring nodes,\\ boundary vertices,\\$\rho_N$, $\pi_N$, $\tilde{\delta}_N$, $\gamma_N$}; 
         \draw[l2, opacity=0.5, ->] (n) -- (ni);
+
     \end{scope}
 
-    \begin{scope}[scale=1, shift={(1.2,0)}]
-        \draw[l2, opacity=0.1, step=1] (-.9,-.9) grid (3.9,2.9);
-        \node [nodel, fill=white] (w0) at (0,0) {$a$};
-        \node [nodel, fill=white] (w1) at (1,0) {$b$};
-        \node [nodel, fill=white] (w2) at (2,0) {$c$};
-        \node [nodel, fill=white] (w3) at (0,1) {$d$};
-        \node [nodel, fill=white] (w4) at (1,1) {$e$};
-        \node [nodel, fill=white] (w5) at (2,1) {$f$};
-        \node [nodel, fill=white] (w7) at (0,2) {$g$};
-        \node [nodel, fill=white] (w8) at (2,2) {$h$};
-        \node [nodel, fill=white] (w6) at (3,1) {$i$};
-        \draw [l2] (w7) -- (w3) -- (w0) -- (w1) (w3) -- (w4) -- (w5) -- (w8) (w6) -- (w5) -- (w2);
-        \draw [l2] (w0) -- +(-.6,0) (w0) -- +(0, -.6);
-        \draw [l2] (w3) -- +(-.6,0);
-        \draw [l2] (w7) -- +(-.6,0) (w7) -- +(0, .6) (w7) -- +(0.6, 0);
-        \draw [l2] (w4) -- +(0, .6);
-        \draw [l2] (w8) -- +(-.6,0) (w8) -- +(0, .6) (w8) -- +(0.6, 0);
-        \draw [l2] (w6) -- +(0,-.6) (w6) -- +(0, .6) (w6) -- +(0.6, 0);
-        \draw [l2] (w2) -- +(.6,0) (w2) -- +(0, -.6);
-        \draw [l2] (w1) -- +(0,-.6);
-        \draw [l2, dotted, mred] (w4) -- (w1) -- (w2);
-    \end{scope}
-
-    \begin{scope}[shift={(-3,0)}]
-        \node at (-1, 2.6) {root};
-        \node[draw, l2, minimum size=20]   (v0) at (-1,2){$e$};
-        \node[nodem, minimum size=12] (v1) at (-1.5,0){$a$};
-        \node[nodem, minimum size=12] (v2) at (-1,0)  {$b$};
-        \node[nodem, minimum size=12] (v3) at (-.5,0) {$c$};
-        \node[nodem, minimum size=12] (v4) at (0,0)   {$d$};
-        \node[nodem, minimum size=12] (v5) at (.5,0)  {$f$};
-        \node[nodem, minimum size=12] (v6) at (1,0)   {$g$};
-        \node[nodem, minimum size=12] (v7) at (1.5,0) {$h$};
-        \node[nodem, minimum size=12] (v8) at (2,0)   {$i$};
-        \draw[l2] (v1) to [out=90, in=270] (v0.226);
-        \draw[l2] (v2) to [out=90, in=270] (v0.235);
-        \draw[l2] (v3) to [out=90, in=275] (v0.245);
-        \draw[l2] (v4) to [out=90, in=280] (v0.262);
-        \draw[l2] (v5) to [out=90, in=285] (v0.278);
-        \draw[l2] (v6) to [out=90, in=290] (v0.295);
-        \draw[l2] (v7) to [out=90, in=295] (v0.305);
-        \draw[l2] (v8) to [out=90, in=300] (v0.314);
-
-        \node[parameters] (inf) at (1,2) {size: 9\\parity: 9\\root node: $D$};
-        \draw[l2, ->, opacity=.5] (v0) -- (inf);
-    \end{scope}
-
-    \begin{scope}[shift={(7,0)}, scale=0.9]
-        % \node at (0.3, 3) {$\nset_r$};
-        \node[even1] (a) at (0, 3) {$D$};
-        \node[odd1]  (b) at (0, 2) {$E$};
-        \node[odd1]  (c) at (1, 1) {$F$};
-        \node[even1] (d) at (1, 0) {$G$};
-        \node[even1] (e) at (0, 1) {$H$};
-        \node[even1] (f) at (0, 0) {$C$};
-        \node[odd1]  (g) at (1, 2) {$A$};
-        \node[even1] (h) at (2, 1) {$B$};
-        \node[even1] (i) at (2, 0) {$I$};
-
-        \draw[delay, ->] (a.-30) ++(-30:2.5pt) -- ++(-45:0.73cm) arc (120:-30:10pt) -- ++(-45:0.81cm);
-    
-        \draw[delay, ->] (a.-75) ++(-75:2.5pt) -- ++(0,-.31cm) arc (75:-30:10pt) node (d4){} -- ++(-45:0.73cm) arc (120:-30:10pt) node (d5){} -- ++(-45:0.81cm);
-        \draw[delay, ->] (d4) arc (-30:-75:10pt) -- ++(0,-.4cm);
-        \draw[delay, ->] (d5) arc (-30:-75:10pt) -- ++(0,-.4cm);
-        \draw[delay, ->] (d5) arc (-30:-120:10pt) -- ++(-135:0.81cm);
-        \draw[parity, <-] (a.-60) ++(-60:2.5pt) -- ++(-45:0.73cm) arc (150:300:10pt) -- ++(-45:0.73cm);
-        \draw[parity, <-] (a.-105) ++(-105:2.5pt) -- ++(0,-.31cm) arc(105:255:10pt) node (p4){} -- ++(0,-.38cm);
-        \draw[parity] (p4) arc (-105:-60:10pt) -- ++(-45:0.73cm) arc (150:210:10pt) node (p5){} -- ++(-135:0.76cm);
-        \draw[parity] (p5) arc (210:255:10pt) node (p5b) {} -- ++(0,-.38cm);
-        \draw[parity] (p5b) arc(255:300:10pt) -- ++(-45:0.73cm);
-        
-        % -- ++(-45:0.73cm) arc (150:300:10pt) -- ++(-45:0.73cm);
-        
-        \draw[l2] (a) -- (b) -- (c) -- (d);
-        \draw[l2] (b) -- (e);
-        \draw[l2] (c) -- (f);
-        \draw[l2] (c) -- (i);
-        \draw[l2] (a) -- (g) -- (h);
-
-        % \node[text=morange] at (2.6,2.8) {Delay};
-        \node[parameters, anchor=north] (inf2) at (3.8,3.3) {subroots $\m{R}: [E, A]$\\$\min_{X \in \nset}{\tilde{\delta_X}}$};
-        \draw[l2, ->, opacity=.5] (a) -- (a-|inf2.west);
-        
-        \begin{scope}[shift={(3.5,0)}]
-            \path[legend] (-.5, 2) rectangle (2, -.4);
-            \path (0,1.5) node[even1, minimum size=10, preaction={fill, white}]{} -- +(.5,0) node[anchor=west] {$\pi_N$ even};
-            \path (0,1) node[odd1 , minimum size=10, preaction={fill, white}]{} -- +(.5,0) node[anchor=west] {$\pi_N$ odd};
-            \draw[parity, ->] (-.25, .5) -- ++(0.5,0);
-            \draw[delay, ->] (-.25, 0) -- ++(0.5,0);
-            \node[color=mblue, anchor=west] at (.5,.5) {Parity};
-            \node[color=mpink, anchor=west] at (.5,0) {Delay};
-        \end{scope}
-    \end{scope}
-
-    
 \end{tikzpicture}
 
 
