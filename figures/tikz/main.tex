@@ -35,7 +35,7 @@
 \tikzstyle{leven}=[even, pattern = crosshatch dots]
 \tikzstyle{enset}=[node1, l2, double, font=\footnotesize, fill=white]
 \tikzstyle{onset}=[node1, l2, densely dashed, double, font=\footnotesize, fill=white]
-\tikzstyle{subtree}=[node1, opacity=0.3,dotted, font=\footnotesize]
+\tikzstyle{subtree}=[node1, opacity=0.75,densely dashed, font=\footnotesize]
 \tikzstyle{known}=[nodel, pattern=dots, pattern color=green!75!white]
 \tikzstyle{undef}=[nodel, dotted, pattern=dots, pattern color=black!25!white]
 \tikzstyle{edge}=[above,midway,font=\tiny]
@@ -337,7 +337,7 @@
         \draw[l2,->, opacity=.5] (nb) -- (nb-|inf2.west);
 
         \node[nodel, minimum size=15] (n) at (1,-.75){$N$};
-        \node[parameters, anchor=west, align=left] (ni) at (2,-.75){neighboring nodes,\\ boundary vertices,\\$\rho_N$, $\pi_N$, $\tilde{\delta}_N$, $\gamma_N$}; 
+        \node[parameters, anchor=west, align=left] (ni) at (2,-.75){neighboring nodes,\\ boundary vertices,\\$\rho_N$, $\pi_N$, $\tilde{\delta}_N$, $\oset_N$}; 
         \draw[l2, opacity=0.5, ->] (n) -- (ni);
 
     \end{scope}
@@ -501,7 +501,7 @@
     \node (b2l) [below left = 1.3cm and 1.2cm of c] {};
     \node (b2r) [above right = 3.2cm and 1.2cm of c] {};
     \path[fill=black!10!white, rounded corners=0.5cm] (b2l) rectangle (b2r);
-    \node [above=2.8cm of c] {$k-1$};
+    \node [above=2.8cm of c] {$k+1$};
 
     \node (l) [above=.5cm of d] {};
     \begin{scope}[shift={(l)}]
@@ -517,27 +517,27 @@
     \draw[enset] (a0) circle[radius=.4cm];
     \draw[enset] (a1) circle[radius=.4cm];
     \draw[enset] (a2) circle[radius=.4cm];
-    \node at (a0) {\footnotesize $\pr{k}\gamma_2$};
-    \node at (a1) {\footnotesize $\pr{k}\gamma_1$};
-    \node at (a2) {\footnotesize $\pr{k}\gamma_0$};
+    \node at (a0) {\footnotesize $\pr{k}\oset_2$};
+    \node at (a1) {\footnotesize $\pr{k}\oset_1$};
+    \node at (a2) {\footnotesize $\pr{k}\oset_0$};
 
     \foreach \i in {0,1,2}{
             \node (b\i) [above = \i cm of b] {};
         }
     \draw[enset] (b2) circle[radius=0.4cm];
-    \node at (b2) {\footnotesize $\pr{k}\gamma_0$};
+    \node at (b2) {\footnotesize $\pr{k}\oset_0$};
 
     \draw[enset] (b0) ++(0.5cm,0) -- ++(0, 1.1cm) arc (0:180:0.5cm) -- ++(0, -1.1cm) arc (180:360:0.5cm) -- cycle;
     \draw[subtree] (b1) circle[radius=.4cm];
     \draw[subtree] (b0) circle[radius=.4cm];
-    \node at ($(b0)!0.5!(b1)$) {\footnotesize $\pr{k}\theta$};
+    \node at ($(b0)!0.5!(b1)$) {\footnotesize $\pr{k}\eset$};
 
     \foreach \i in {0,1,2}{
             \node (c\i) [above =\i cm of c] {};
         }
 
     \draw[enset] (c0) ++(0.5cm,0) -- +(0, 2.2cm) arc (0:180:0.5cm) -- +(0, -2.2cm) arc (180:360:0.5cm) -- cycle;
-    \node at (c1) {\footnotesize $\pr{k-1}\gamma$};
+    \node at (c1) {\footnotesize $\pr{k+1}\oset$};
 
     \draw[subtree] (c2) circle[radius=.4cm];
     \draw[subtree] (c0) ++(0.4cm,0) -- +(0, 1.2) arc (0:180:0.4) -- +(0, -1.2) arc (180:360:0.4) -- cycle;
@@ -550,9 +550,9 @@
     \draw[l2, ->, dashed] (f2a) .. controls +(225:0.9cm) and +(315:0.9cm) .. (f2b);
     \draw[l2, ->, dashed] (fa)  .. controls +(210:1.8cm) and +(330:1.8cm) .. (fb);
 
-    \node (ca) at ($(c)!0.5!(a)$) {}; \node [below = 1cm of ca] {$\m{F}(\pr{k-1}\gamma)$};
-    \node (cb) at ($(c)!0.5!(b)$) {}; \node [below = 0.6cm of cb] {$\m{F}_\gamma(\pr{k-1}\gamma)$};
-    \node [below = 0.6cm of b1t] {$\m{F}_\theta(\pr{k}\theta)$};
+    \node (ca) at ($(c)!0.5!(a)$) {}; \node [below = 1cm of ca] {$\frag(\pr{k+1}\oset)$};
+    \node (cb) at ($(c)!0.5!(b)$) {}; \node [below = 0.6cm of cb] {$\frag_\oset(\pr{k+1}\oset)$};
+    \node [below = 0.6cm of b1t] {$\frag_\eset(\pr{k}\eset)$};
 
     \node (u1lt) at ($(a0)!0.5!(a1)$) {}; \node(u1l) [right=1cm of u1lt] {};
     \node (u1rt) at ($(b0)!0.5!(b1)$) {}; \node(u1r) [left=1cm of u1rt] {};

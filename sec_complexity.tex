@@ -1,101 +1,97 @@
 
 \section{Complexity of Partitioned-Growth}\label{sec:complexity}
 
-In this section, we will find the worst-case time complexity of the Union-Find Partitioned-Growth decoder. The additional cost of the original Union-Find decoder can be split in two parts: (A) the depth-first-searches (DFSs) related to the (re)calculation of the node parities and node delays in line \ref{algo:pdc}, and (B) the DFS related to the growth of a cluster in line \ref{algo:grow}. We dub the two parts the \textbf{delay cost} and the \textbf{growth cost}, respectively. The $\Nodejoin$ operation in lines \ref{algo:joina}-\ref{algo:joinb} only has a linear addition to the cost.
+In this section, we will find the worst-case time complexity of the Union-Find Partitioned-Growth decoder. The additional cost with respect to the original Union-Find decoder can be split in two parts: (A) the depth-first-searches (DFS's) related to the (re)calculation of the node parities and node delays in line \ref{algo:pdc}, and (B) the DFS related to the growth of a cluster in line \ref{algo:grow}. We dub the two parts the \textbf{delay cost} and the \textbf{growth cost}, respectively. The $\Nodejoin$ operation in lines \ref{algo:joina}-\ref{algo:joinb} only has a linear addition to the cost.
 
 \subsection{Delay cost}\label{sec:suscomplexity}
+The cost of each step the DFS (\eqref{}, \eqref{} and \eqref{}) is independent of the tree size. In consequence the delay cost is proportional to the total number of nodes encountered in the DFS'. In the following we bound this number, which we denote by $N_\delta$: 
 
-The cost of node delay calculation is proportional to $N_\delta$, the number of nodes traversed in the DFSs of the node parities and node delays. As a result of Odd-Rooted Join, $N_\delta$ is proportional to the sum of sizes of all even node-trees. Root List Replacement decreases the sum to the most recent even node-trees that are ancestors of grown odd node-trees, which we dub $\mathbf{\Theta}$ \textbf{node-trees}. To find the worst-case time complexity, we maximize $N_\delta$, which is proportional to the computation time. We take a time-reversed approach of analyzing a cluster; starting from a single cluster that maximally occupies the lattice at the end of growth, and move back in time to find its ancestor clusters. In this process that we call \textbf{cluster fragmentation}, we aim to find the combination of cluster mergers that maximizes the number and sizes of $\Theta$ node-trees. 
+%As a result of \emph{Odd-Rooted Join} and \emph{Root List Replacement}, 
+$N_\delta$ is the sum of all even node-trees that join with another to an odd node-tree and grows afterwards. Even node-trees that join with multiple node-trees within the same growth iteration and the final set of even node-trees whose clusters are peeled thus do not count towards $N_\delta$. Let an odd node-tree be denoted by $\oset$, an even node-tree by $\eset$, and an even node-tree that counts towards the delay cost by $\bm{\eset}$. To find the worst-case time complexity, we analyze cluster growth by a time-reversed approach; starting from a single cluster at the end of growth, and move back in time to find its \emph{node-tree decomposition}.
 
-% The maximization of $N_\delta$ is in the repetitiveness of the recalculation over some parition of the final node-tree. 
-
-
-% \begin{enumerate}[label=P\arabic*,ref=P\arabic*]
-%   \item Joins between the node-trees of odd and even clusters retain the root node of the odd cluster. \label{rjoin}
-%   \item The DFSs of the node parity and delay calculation are performed just before cluster growth in an even partition of the node-tree starting from the pointer saved at the root node. \label{rgrow}
-%   \item The smallest clusters, measured by the number of verties in $\vset$, are grown first. \label{rweight}
-% \end{enumerate}
-
-% From properties \ref{rjoin} and \ref{rgrow}, it can be $N_\delta$ is proportional to the sum of sizes of all even node-trees during all mergers of the growth process on the lattice. Note that if many clusters merge within the same growth iteration, only the last even cluster counts towards the cost, since \ref{rgrow} ensures that the calculation is not performed on intermediate even partitions.
 
 \begin{definition}\label{def:fragmentation}
-  Let the \textbf{fragmentation} function $\m{F}$ on an odd node-tree $\gamma$ return $\nu + 1$ of its most recent odd ancestor node-trees on which delay calculations were performed. Let the prefix on the node-tree indicate the \textbf{fragmentation generation}, such that $\m{F}(\pr{k-1}\gamma)$ returns $\nu + 1$ node-trees of generation $k$:
-  \begin{equation}\label{eq:fstep}
-    \m{F}(\{\pr{k-1}\gamma\}) = \{\pr{k}\gamma_0,\pr{k}\gamma_1,...,\pr{k}\gamma_{\nu}\}.
-  \end{equation}
-  Let $\m{F}$ be the combination of \textbf{partial fragmentation} functions $\m{F}_\gamma$ and $\m{F}_\theta$, where $\m{F}_\gamma$ fragments an odd node-tree $\pr{k-1}\gamma$ into an odd ancestor $\pr{k}\gamma_0$ and an even ancestor node-tree $\pr{k}\theta$: 
+  
+  Let the \textbf{fragmentation} $\frag_\oset$ of some odd node-tree $\pr{k}\oset$ return its two most recently joined predecessor node-trees, which are $\pr{k-1}\oset$ and $\pr{k-1}\eset$
   \begin{equation}\label{eq:pfo}
-    \m{F}_\gamma(\{\pr{k-1}\gamma\}) = \{\pr{k}\theta, \pr{k}\gamma_0 \},
+    \frag_\oset(\{\pr{k}\oset\}) = \{\pr{k-1}\oset, \pr{k-1}\eset \},
   \end{equation}
-  and where $\m{F}_\theta$ further fragments $\pr{k}\theta$ into $\nu$ odd ancestors
+  where the prefix $k$ indicate the \textbf{generation} to which the node-tree belongs. Let $\frag_\eset$ fragment an even node-tree $\pr{k}\eset$ to some even number $\nu$ of its predecessor odd node-trees  
   \begin{equation}\label{eq:pfe}
-    \m{F}_\theta(\{\pr{k}\theta\}) =\{\pr{k}\gamma_1,...,\pr{k}\gamma_{\nu}\}.
+    \frag_\eset(\{\pr{k}\eset\}) =\{\pr{k}\oset_1,...,\pr{k}\oset_{\nu} \},
   \end{equation}
-  % of an odd cluster with node-tree $\pr{k-1}\gamma$ split it into a set of its ancester node-trees. Here $k-1$ indicates the \emph{fragmentation step number}, where larger step number $k$ refers to an ancestor node-tree of smaller size. Let the fragmentation $\m{F}$ be the combination of \emph{intermediate fragmentations} (IF) $\m{F}_\gamma$, which fragments an odd node-tree into an even ancestor and an odd ancestor
-
-  % and $\m{F}_\theta$, which fragments even node-trees into $\nu$ odd ancestors
-  % \begin{equation}\label{eq:pfe}
-  %   f_\theta(\{\pr{k}\theta\}) = \m{F}^e_k=\{\pr{k}\gamma_1,...,\pr{k}\gamma_{\nu}\},
-  % \end{equation}
-  % such that a fragmentation is
+  which have joined to $\pr{k}\eset$ within the same growth iteration. As an even node-tree does not grow, it belongs to the same generation as its odd predecessors. Since $\frag_\oset$ and $\frag_\eset$ operate on node-trees of different parties, both can be combined as a \textbf{fragmentation step} $\frag$, which takes an odd node-tree $\pr{k}\oset$ and returns its $\nu+1$ predecessors
+  \begin{multline}\label{eq:fstep}
+    \frag(\{\pr{k}\oset\}) = \frag_\eset(\frag_\oset(\{\pr{k}\oset\})) =  \\ \{\pr{k-1}\oset_0,\pr{k-1}\oset_1,...,\pr{k-1}\oset_\nu\}, 
+  \end{multline}
+  where $\pr{k-1}\oset$ from \Cref{eq:pfo} is now labelled as $\pr{k-1}\oset_0$.
 \end{definition}
 
+Note that node-trees of the same \emph{generation} might not have been constructed in the same growth \emph{iteration}. An odd cluster grow for many iterations, while its node-tree does not change, before it merges with another node-tree of the same generation. We use the notation $\frag^{(2)}(\pr{k}\oset)$ to indicate that two fragmentation steps are applied on $\pr{k}\oset$ to obtain its predecessors of generation $k-2$. Furthermore, let $\frag_\oset^{(i)}(\nset)$ and be equivalent to $\frag_\oset(\frag^{(i-1)}(\nset))$. 
+
 \Figure[hbt](topskip=0pt, botskip=0pt, midskip=0pt){figures/tikz/build/main-figure7.pdf}{
-  The \emph{fragmentation} of node-tree $\pr{k-1}\gamma$ into its ancestor node-trees, where the prefix $k-1$ indicates the \emph{fragmentation generation}. The fragmentation $f(\pr{k-1}\gamma)$ returns $\nu+1$ odd ancestors of generation $k$. Fragmentation function $f$ can be separated into the \emph{partial fragmentation} $\m{F}_\gamma(\pr{k-1}\gamma)$ that returns an odd ancestor $\pr{k}\gamma_0$ and even ancestor $\pr{k}\theta$, and subsequently the partial fragmentation $f_\theta(\pr{k}\theta)$, which returns $\nu$ odd ancestors of generation $k$. With $\nu=2$, each partial fragmentation is the opposite of a join operation between two node-trees. Furthermore, note that if $\abs{\vset_0} = \abs{\vset_1} = \abs{\vset_2}$, the vertex-tree sizes related to node trees $\pr{k}\gamma_0, \pr{k}\gamma_1, \pr{k}\gamma_2$, each generation is the opposite of a growth iteration. \label{fig6}}
+  The \emph{fragmentation} of node-tree $\pr{k+1}\oset$ into its predecessor node-trees, where the prefix $k+1$ indicates its \emph{generation}. The fragmentation step $\frag(\pr{k+1}\oset)$ returns $\nu+1$ odd predecessors of generation $k$. Fragmentation step $\frag$ can be separated into $\frag_\oset(\pr{k+1}\oset)$ that returns an odd predecessor $\pr{k}\oset_0$ and even predecessor $\pr{k}\eset$, and subsequently the $\frag_\eset(\pr{k}\eset)$, which returns $\nu$ odd predecessors of generation $k$. The figure depicts a fragmentation step with $\nu=2$.\label{fig6}}
 
+\begin{definition}\label{def:decomposition}
+  Let the \textbf{decomposition} of a node-tree $\nset$ be a series of $\mu$ fragmentation steps on $\nset$, such that the output of $\frag^{(\mu)}$ is a set of node-trees that have no predecessors. 
+\end{definition}
 
-The fragmentation function can be applied consecutively, such that a set of odd node-trees of generation $k$ is fragmented to ancestors of generation $k+1$. We use the notation $\m{F}^{(2)}(\pr{k-1}\gamma)$ to indicate that two fragmentations are applied on $\pr{k-1}\gamma$ to obtain the ancestors of generation $k+1$. Furthermore, let $\m{F}_\gamma^{(i)}(\nset)$ and be equivalent to $\m{F}_\gamma \m{F}^{(i-1)}(\nset)$. 
-
-As a result of Odd-Rooted Join and Root List Replacement, if the cluster of node-tree $\pr{k-1}\gamma$ is grown, the DFSs of the parity and delay calculations are performed within $\pr{k}\theta$. Therefore, every even node-tree returned by $\m{F}_\gamma$ is a $\Theta$ node-tree. The value of $N_\delta$ can thus be obtained by taking the sum of sizes of all even node-tree in $\m{F}_\gamma^{(k)}$ over a series of $\mu$ fragmentations of some odd node-tree $\Gamma = \pr{0}\gamma$ until there are no more ancestor node-trees:
+Using node-tree decomposition, we aim to find the fragmentations that maximizes the number and size of $\bm{\eset}$ node-trees. The definitions of $\frag_\oset$ and $\frag_\eset$ matches the rules of \emph{Odd-Rooted Join} and \emph{Root List Replacement} such that each of the even node-trees in the output of $\frag_\oset$ is a $\bm{\eset}$ node-tree. The maximum value for $N_\delta$ can thus be computed using the decomposition of a maximally large odd node-tree $\pr{\mu}\oset$. 
 \begin{equation}\label{eq:npdc}
-  N_\delta = 2\sum_{k=1}^\mu{ \sum_{ \pr{k}\theta \in \m{F}_\gamma^{(k)}(\Gamma) }{ \abs{\pr{k}\theta}} }.
+  N_\delta = 2\sum_{k=1}^\mu{ \sum_{ \pr{\mu-k}\eset \in \frag_\oset^{(k)}(\pr{\mu}\oset) }{ \abs{\pr{\mu-k}\eset}} }.
 \end{equation}
+The inner sum accounts for the combined size of all even node-trees during a single fragmentation step $\frag_\oset^{(k)}$. The outer sum loops over all $\mu$ fragmentation steps. Finally, the $2$ refers to the individual DFS's of the parity and delay calculations. Note that in the decomposition of $\pr{\mu}\oset$, the lowest generation of node-trees outputted by $\frag^{(\mu)}(\pr{\mu}\oset)$ is $1$. 
 
-To find $N_\delta$, we will make two assumptions to simplify \Cref{eq:npdc}. Junction-nodes are initiated on the tangent of two node radii belonging to separate node-trees when merging into one. For increasing fragmentation generation, the total number of nodes in the fragmented set must therefore decrease. By neglecting their existence, \Cref{eq:npdc} becomes
+
+We will use two simplifications to \Cref{eq:npdc} to find $N_\delta$. Junction-nodes are initiated on the tangent of two node radii belonging to separate node-trees when merging into one. With increasing number of fragmentations, the total number of nodes in the fragmented set must therefore decrease. We thus change \Cref{eq:npdc} into the inequality
 \begin{equation}\label{eq:npdc2}
-  N_\delta \leq 2\sum_{k=1}^\mu{ \sum_{ \pr{k}\theta \in \m{F}_\gamma^{(k)}(\Gamma) }{ \abs{\pr{k}\theta}} }.
+  N_\delta \leq 2\sum_{k=1}^\mu{ \sum_{ \pr{\mu-k}\eset \in \frag_\oset^{(k)}(\pr{\mu}\oset) }{ \abs{\pr{\mu-k}\eset}}}. 
 \end{equation}
-Furthermore, if only syndrome-nodes exist, $\pr{k-1}\gamma$'s size must equal the sum of sizes of its ancestors $\m{F}(\pr{k-1}\gamma)$. In other words, the size of each of the $\nu+1$ ancestors $\pr{k}\gamma_i$ can be represented by the \textbf{fragmentation ratio} $\lambda$
-\begin{equation}\label{eq:ratio}
-  \pr{k}\lambda_i = \frac{\abs{\pr{k}\gamma_i}}{\abs{\pr{k-1}\gamma}}, \hspace{0.5cm} \sum_{i=0}^{\nu}{\pr{k}\lambda_i} = 1,
-\end{equation}
-Secondly, we assume that vertex-trees do not increase in size, such that $\abs{\nset}=\abs{\vset}$. Normally, the number of nodes in a cluster is bounded by the number of vertices $\abs{\nset}\leq \abs{\vset}$, as non-trivial vertices can be added to the node, which increases the node radius. By this assumption, the vertex-tree can only increase in size due to a merger between clusters, and nodes are effectively not allowed to increase in radius. While this is not possible during realistic cluster growth, using this assumption simplifies \Cref{eq:npdc2}, as we will see later, while not compromising its upper bound. 
 
-To find the upper bound in $N_\delta$, we are now tasked to find: (a) $\nu$, the number of ancestors in $\m{F}_\theta$, (b) the fragmentation ratios $\{\lambda_0, ..., \lambda_\nu\}$, and (c) the number of fragmentation generations $\mu$. 
+The existence of junction-nodes will be ignored in the remainder of this section, which does not compromise the inequality. If only syndrome-nodes exist, $\pr{k}\oset$'s size must equal the sum of sizes of its predecessors in $\frag(\pr{k}\oset)$. The size of each of the $\nu+1$ predecessors $\pr{k}\oset_i$ can be represented by the \textbf{fragmentation ratio} $\lambda$
+\begin{equation}\label{eq:ratio}
+  \pr{k}\lambda_i = \frac{\abs{\pr{k-1}\oset_i}}{\abs{\pr{k}\oset}}, \hspace{0.5cm} \sum_{i=0}^{\nu}{\pr{k}\lambda_i} = 1.
+\end{equation}
+Secondly, we assume that vertex-trees do not increase in size, such that $\abs{\nset}=\abs{\vset}$. Normally, the number of nodes in a cluster is bounded by the number of vertices $\abs{\nset}\leq \abs{\vset}$, as non-trivial vertices can be added to the node, which increases the node radius. By this assumption, the vertex-tree can only increase in size due to a merger between clusters, and nodes are effectively not allowed to increase in radius. While this is not possible during realistic cluster growth, this assumption allows us to further simplify \Cref{eq:npdc2}. 
+
+To find the upper bound in $N_\delta$, we are now tasked to find: (a) $\nu$, the number of predecessors in $\frag_\eset$, (b) the fragmentation ratios $\{\lambda_0, ..., \lambda_\nu\}$, (c) the number of fragmentation generations $\mu$, and (d) the size of $\pr{\mu}\oset$. 
 
 \begin{lemma}\label{lem:evenconstant}
-  For constant fragmentation ratios $\pr{k}\lambda_i = \lambda_i$, the sum $\sum_{ \pr{k}\theta \in \m{F}_\gamma^{(k)}(\Gamma) }{ \abs{\pr{k}\theta}}$ is constant for every $k$. 
+  For constant fragmentation ratios $\pr{k}\lambda_i = \lambda_i$ during all generations $1\leq k<\mu$, the inner sum of \Cref{eq:npdc} is constant:
+  \begin{equation*}
+    \sum_{ \pr{\mu-k}\eset \in \frag_\oset^{(k)}(\pr{\mu}\oset) }{ \abs{\pr{\mu-k}\eset}} = C \hspace{1em}\forall k.
+  \end{equation*}
 \end{lemma}
 \begin{proof}
-  For $k=1$, there is a single even ancestor $\pr{1}\theta$ of size 
+  For $k=1$, there is an even-parity predecessor $\pr{\mu-1}\eset$ of size 
   \begin{equation*}
-    \abs{\pr{1}\theta} = (1 - \lambda_0)\abs{\Gamma}.
+    \abs{\pr{\mu-1}\eset} = (1 - \lambda_0)\abs{\pr{\mu}\oset}.
   \end{equation*}
-  For $k=2$, every odd node-tree in $\m{F}(\Gamma)=\{\pr{1}\gamma_0,...,\pr{1}\gamma_\nu\}$ is fragmented by $\m{F}_\gamma$ to an even ancestor $\pr{2}\theta_i$ for $i \in \{0,...,\nu \}$, such that 
+  For $k=2$, every odd node-tree in $\{\pr{\mu-1}\oset_0,... ,\pr{\mu-1}\oset_\nu\}$ is fragmented by $\frag_\oset$ to an even predecessor $\pr{\mu-2}\eset_i$ for $i \in \{0,...,\nu \}$, such that 
   \begin{equation*}
-    \sum_{i=0}^{\nu}{\abs{\pr{2}\theta_i}}  = \sum_{i=0}^{\nu}{\lambda_i(1 - \lambda_0)\abs{\Gamma}}= (1 - \lambda_0)\abs{\Gamma}.
+    \sum_{i=0}^{\nu}{\abs{\pr{\mu-2}\eset_i}}  = \sum_{i=0}^{\nu}{\lambda_i(1 - \lambda_0)\abs{\pr{\mu}\oset}}= (1 - \lambda_0)\abs{\pr{\mu}\oset}.
   \end{equation*}
-  The same is true for all subsequent generations $k$. 
+  The same is true for all generations $1\leq k<\mu$. 
 \end{proof}
 
 \begin{theorem}\label{the:fragnumber}
-  The upper bound for $N_\delta$ is obtained by setting $\nu=2$ in \Cref{eq:pfe}. 
+  The upper bound of $N_\delta$ is obtained for $\nu=2$, such that $\frag_\eset$ of even node-tree $\pr{k}\eset$ returns two odd predecessors. 
 \end{theorem}
 \begin{proof}
-  The sum of even node-tree sizes in every generation is constant per \Cref{lem:evenconstant}. Thus, the upper bound in \Cref{eq:npdc2} is obtained by the largest possible $\mu$. As $\nu$ increases the number of odd node-trees in each $\m{F}^{(k)}_\gamma$, the average size of these odd node-trees decreases. Since the size of a node-tree is proportional to the number of ancestor generations, we find that 
+  The sum of even node-tree sizes in every generation is constant per \Cref{lem:evenconstant}. Thus, the upper bound in \Cref{eq:npdc2} is obtained by the largest possible $\mu$. As $\nu$ increases the number of odd node-trees in each $\frag^{(k)}_\oset$, the average size of these odd node-trees decreases. Since the size of a node-tree is proportional to the number of predecessor generations, we find that 
   \begin{equation*}
     \mu \propto \frac{1}{\nu}. 
   \end{equation*}
   Hence, the upper bound in \Cref{eq:npdc2} exists in the minimal value of $\nu$, which is $\nu = 2$.
 \end{proof}
 
-Using \Cref{the:fragnumber}, we now find that a fragmentation on an odd cluster $\m{F}(\pr{k-1}\gamma)$ returns $\{\pr{k}\gamma_0, \pr{k}\gamma_1, \pr{k}\gamma_2\}$, where $\pr{k}\gamma_1, \pr{k}\gamma_2$ are ancestors of the even node-tree $\pr{k}\theta$ returned by $\m{F}_\gamma(\pr{k-1}\gamma)$. 
+Using \Cref{the:fragnumber}, a fragmentation step on an odd cluster $\frag(\pr{k+1}\oset)$ now returns $\{\pr{k}\oset_0, \pr{k}\oset_1, \pr{k}\oset_2\}$, where $\pr{k}\oset_1, \pr{k}\oset_2$ are predecessors of the even node-tree $\pr{k}\eset$. 
 
 \begin{lemma}\label{lem:chrono}
-  The node-tree size of $\pr{k}\gamma_0$ must be smaller than $\pr{k}\gamma_1, \pr{k}\gamma_2$, such that $\lambda_1 \geq \lambda_0 \leq \lambda_2$. 
+  The node-tree size of $\pr{k}\oset_0$ must be smaller than or equal to $\pr{k}\oset_1, \pr{k}\oset_2$, such that $\lambda_1 \geq \lambda_0 \leq \lambda_2$. 
 \end{lemma}
 \begin{proof}
-  The partial fragmentations must occur in the order of first \Cref{eq:pfo}, then \eqref{eq:pfe}, as \eqref{eq:pfe} requires an even node-tree that is returned by \eqref{eq:pfo}. In terms of cluster growth, the vertex-trees $\vset_1, \vset_2$, corresponding to $\pr{k}\gamma_1, \pr{k}\gamma_2$, must merge before the combined vertex-tree can merge with $\vset_0$, which corresponds to $\pr{k}\nset_0$. As a result of Weighted Growth, $\abs{\vset_1}$ and $\abs{\vset_2}$ must be smaller or equal to $\abs{\vset_0}$, such that 
+  The partial fragmentations must occur in the order of first \Cref{eq:pfo}, then \eqref{eq:pfe}, as \eqref{eq:pfe} requires an even node-tree that is returned by \eqref{eq:pfo}. In terms of cluster growth, the vertex-trees $\vset_1, \vset_2$, corresponding to $\pr{k}\oset_1, \pr{k}\oset_2$, must merge before the combined vertex-tree can merge with $\vset_0$, which corresponds to $\pr{k}\nset_0$. As a result of Weighted Growth, $\abs{\vset_1}$ and $\abs{\vset_2}$ must be smaller or equal to $\abs{\vset_0}$, such that 
   \begin{equation*}
     \abs{\vset_1}\geq \vset_0 \leq\abs{\vset_2}.
   \end{equation*}
@@ -110,42 +106,44 @@ Using \Cref{the:fragnumber}, we now find that a fragmentation on an odd cluster 
   The upper bound for $N_\delta$ is obtained via the fragmentation ratios $\lambda_0 = \lambda_1 = \lambda_2 = \nicefrac{1}{3}$.
 \end{theorem}
 \begin{proof}
-  The ratios $\{\lambda_0, \lambda_1, \lambda_2\}$ can be found by maximizing the size of the even node-tree $\pr{k}\theta$ in each fragmentation, which is 
+  The ratios $\{\lambda_0, \lambda_1, \lambda_2\}$ can be found by maximizing the size of the even node-tree $\pr{k}\eset$ in each fragmentation step, which is 
   \begin{equation*}
-    \abs{\pr{k}\theta} = (\lambda_1 + \lambda_2)\abs{\pr{k-1}\gamma}.
+    \abs{\pr{k}\eset} = (\lambda_1 + \lambda_2)\abs{\pr{k-1}\oset}.
   \end{equation*}
   Since $ \lambda_1 \geq \lambda_0 \leq \lambda_2$ per \Cref{lem:chrono}, the largest values for $\lambda_1, \lambda_2$ possible are equal to $\lambda_0$.
 \end{proof}
 
-The last unknown parameter in finding the upper bound of $N_\delta$ in \Cref{eq:npdc2} is $\mu$.
+The last unknown parameters in finding the upper bound of $N_\delta$ in are $\mu$ and $\abs{\pr{\mu}\oset}$.
 
 \begin{theorem}\label{the:km}
-  For $\nu = 2$ and $\lambda_i = \{\nicefrac{1}{3},\nicefrac{1}{3},\nicefrac{1}{3}\}$, the maximum number of fragmentation generations is $\mu = \log_3{\abs{\Gamma}}$.
+  For $\nu = 2$ and $\lambda_i = \{\nicefrac{1}{3},\nicefrac{1}{3},\nicefrac{1}{3}\}$, the maximum number of fragmentation generations is $\mu = \log_3{\abs{\pr{\mu}\oset}}$.
 \end{theorem}
 \begin{proof}
-  In every generation, all node-trees are fragmented into 3 ancestors that are $\nicefrac{1}{3}$ the size of their common descendant. The series of $\mu$ fragmentations is thus simply $\mu$ divisions of the node-tree $\Gamma$ in 3 parts until all ancestors have size 1, at which point a node-tree cannot be fragmented.
+  In every generation, all node-trees are fragmented into 3 predecessors that are $\nicefrac{1}{3}$ the size of their common successor. The series of $\mu$ fragmentation steps is thus simply $\mu$ divisions of the node-tree $\pr{\mu}\oset$ in 3 parts until all predecessors have size 1, at which point a node-tree cannot be fragmented.
 \end{proof}
 
-Collecting \Cref{the:fragnumber,the:ratios,the:km} and filling in \Cref{eq:npdc2}, we find that
+The maximum size of the odd node-tree $\pr{\mu}\oset$ is bounded by the system size $n$, the number of qubits on the lattice. Collecting \Cref{the:fragnumber,the:ratios,the:km} and filling in \Cref{eq:npdc2}, we find that
 
 \begin{align*}
-  \nonumber N_\delta &\leq 2\sum_{k=1}^\mu{ \sum_{ \pr{k}\theta \in \m{F}_\gamma^{(k)}(\Gamma) }{ \abs{\pr{k}\theta}}  } \\
-  \nonumber         &\leq 2\sum_{k=1}^{\log_3{\abs{\Gamma}}} \frac{2}{3}\abs{\Gamma}\\
-                    &\leq \frac{4}{3}\abs{\Gamma}\log_3{\abs{\Gamma}}.
+  \nonumber N_\delta &\leq 2\sum_{k=1}^\mu{ \sum_{ \pr{\mu-k}\eset \in \frag_\oset^{(k)}(\pr{\mu}\oset) }{ \abs{\pr{\mu-k}\eset}}  } \\
+  \nonumber         &\leq 2\sum_{k=1}^{\log_3{\abs{\pr{\mu}\oset}}} \frac{2}{3}\abs{\pr{\mu}\oset}\\
+                    &\leq \frac{4}{3}\abs{\pr{\mu}\oset}\log_3{\abs{\pr{\mu}\oset}} \\
+                    &\leq \frac{4}{3}n \log_3{n}.
 \end{align*}
 
-The maximum size of the odd node-tree $\Gamma$ is bounded by the system size $n$, the number of qubits on the lattice. The worst-case time complexity of the delay calculation is thus $\m{O}(n\log{n})$. 
+The worst-case time complexity of related to the delay cost is thus $\Omega(n\log{n})$. 
 
 \subsection{Growth cost}\label{sec:growthcost}
 
-To grow a cluster represented by a node-tree $\nset$, a depth-first search (DFS) is performed on the node-tree to find all nodes with zero delay. The total cost of these DFSs is proportional to the total number of nodes encountered during these DFSs, which we dub $N_g$. Using the definition of fragmentations of \Cref{def:fragmentation}, the cost of growth is proportional to
+To grow a cluster represented by a node-tree $\nset$, a depth-first search (DFS) is performed on the node-tree to find all nodes with zero delay. The total cost of these DFS's is proportional to the total number of nodes encountered during these DFS's, which we dub $N_g$. Using \Cref{def:fragmentation,def:decomposition}, the cost of growth of a node-tree $\pr{\mu}\oset$ is proportional to the sum of sizes of all odd node-trees in the decomposition of $\pr{\mu}\oset$: 
 \begin{equation}\label{eq:ngrow}
-  N_g = 2\sum_{k=1}^\mu{ \sum_{ \pr{k}\gamma \in \m{F}^{(k)}(\Gamma) }{ \abs{\pr{k}\gamma}} }.
+  N_g = 2\sum_{k=1}^\mu{ \sum_{ \pr{\mu-k}\oset \in \frag^{(k)}(\pr{\mu}\oset) }{ \abs{\pr{\mu-k}\oset}} }.
 \end{equation}
-Again, we assume that no trivial vertices are added to a cluster or $|\nset| = |\vset|$ such that \Cref{eq:ngrow} becomes an upper bound. As a result of Odd-Rooted Join and Root List Replacement, the upper bound is obtained if there are as many fragmentation generations. This is again achieved through $\nu = 2$. For every fragmentation of some odd node-tree $\pr{k-1}\gamma$ into $\{\pr{k}\gamma_0, \pr{k}\gamma_1, \pr{k}\gamma_2\}$, all three ancestors add to $N_g$ if they have grown. As a result of Weighted Growth, this is the case when $\abs{\vset_0}\approx \abs{\vset_1}\approx\abs{\vset_2}$ such that $\lambda_0 \approx \lambda_1 \approx \lambda_2\approx \nicefrac{1}{3}$. For these values of $\nu$ and $\lambda$, we can apply \Cref{the:km} for $\mu$. For $|\nset| = |\vset|$, the sum of even node-tree sizes in every $\m{F}_\gamma^{(k)}$ is exactly $\abs{\Gamma}$, and we find that
+Again, we assume that no trivial vertices are added to a cluster or $|\nset| = |\vset|$ such that \Cref{eq:ngrow} becomes an upper bound. As a result of \emph{Odd-Rooted Join} and \emph{Root List Replacement}, the upper bound is obtained in the largest $\mu$. This is again achieved through $\nu = 2$. For every fragmentation of some odd node-tree $\pr{k-1}\oset$ into $\{\pr{k}\oset_0, \pr{k}\oset_1, \pr{k}\oset_2\}$, all three predecessors add to $N_g$ if they have grown. As a result of Weighted Growth, this is the case when $\abs{\vset_0}\approx \abs{\vset_1}\approx\abs{\vset_2}$ such that $\lambda_0 \approx \lambda_1 \approx \lambda_2\approx \nicefrac{1}{3}$. For these values of $\nu$ and $\lambda$, we can apply \Cref{the:km} for $\mu$. For $|\nset| = |\vset|$, the sum of even node-tree sizes in every $\frag_\oset^{(k)}$ is exactly $\abs{\pr{\mu}\oset}$, and we find that
 \begin{align*}
-  \nonumber N_g &\leq 2\sum_{k=1}^\mu{ \sum_{ \pr{k}\gamma \in \m{F}^{(k)}(\Gamma) }{ \abs{\pr{k}\gamma}}  } \\
-  \nonumber         &\leq 2\sum_{k=1}^{\log_3{\abs{\Gamma}}} \abs{\Gamma}\\
-                    &\leq 2\abs{\Gamma}\log_3{\abs{\Gamma}},
+  \nonumber N_g &\leq 2\sum_{k=1}^\mu{ \sum_{ \pr{\mu-k}\oset \in \frag^{(k)}(\pr{\mu}\oset) }{ \abs{\pr{\mu-k}\oset}}  } \\
+  \nonumber         &\leq 2\sum_{k=1}^{\log_3{\abs{\pr{\mu}\oset}}} \abs{\pr{\mu}\oset}\\
+                    &\leq 2\abs{\pr{\mu}\oset}\log_3{\abs{\pr{\mu}\oset}}\\
+                    &\leq 2 n \log_3{n},
 \end{align*}
-which again corresponds to a worst-case time complexity $\m{O}(n\log{n})$.
+which again corresponds to a worst-case time complexity $\Omega(n\log{n})$.
