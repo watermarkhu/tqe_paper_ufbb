@@ -1,5 +1,5 @@
 \section{Union-Find Partitioned-Growth decoder}\label{sec:ufbb}
-We describe the \emph{Union-Find Partitioned-Growth} decoder in this section. We first introduce the concept of the potential matching weight in \Cref{sec:matchingweight}. The Union-Find Partitioned-Growth decoder uses the potential matching weight as a heuristic to prioritize partitioned growth of clusters. We introduce the node-tree data structure required for this decoder in \Cref{sec:nodeset}, and describe how to approximate the potential matching weight leveraging the node-tree in \Cref{sec:paritydelay}. In \Cref{sec:grownodetrees,sec:nodejoin,sec:inversion}, we find ways to further reduce the number of calculations needed in the approximation. The algorithm is described in \Cref{sec:pseudocode}. 
+We describe the \emph{Union-Find Partitioned-Growth} decoder in this section. We first introduce the concept of the potential matching weight in \Cref{sec:matchingweight}. The Union-Find Partitioned-Growth decoder uses the potential matching weight as a heuristic to prioritize partitioned growth of clusters. We introduce the node-tree data structure required for this decoder in \Cref{sec:nodeset}, and describe how to approximate the potential matching weight leveraging the node-tree in \Cref{sec:paritydelay}. In \Cref{sec:grownodetrees,sec:nodejoin,sec:inversion}, we show how to approximate efficiently the potential matching weight. The algorithm is described in \Cref{sec:pseudocode}. 
 
 \subsection{Potential Matching Weight}\label{sec:matchingweight}
 
@@ -23,16 +23,22 @@ let $v$ be a vertex in the boundary of an odd cluster and let $w$ be a hypotheti
     %\end{equation}
     %\end{definition}
     
-Since per growth iteration half-edges are attached to the odd cluster's boundary, the addition of an edge $(v,w)$ to a cluster occurs in two steps. In the first step, half of $(v,w)$ is added to the cluster of $v$. If $w$ is part of another cluster, and if the other half of $(v,w)$ was already added to the cluster of $w$, $(v,w)$ is now \emph{fully grown}. If this is not the case, another round of growth is required to fully growth $(v,w)$ and to merge the clusters of $v$ and $w$. The PWM of $v$ is identical in both cases. To be able to distinguish between to two cases, we add $\nicefrac{1}{2}$ to the PMW's of vertices with half-edges attached. Using this definition, the cluster with vertices $\{a,b,c\}$ in \Cref{fig0} has PMW's $\{2\nicefrac{1}{2}, 3\nicefrac{1}{2}, 2\nicefrac{1}{2}\}$. The PMW can be utilized to prioritize the growth of vertices with low PMW such that there is an increased probability of mergers between clusters on edges connected to these vertices, and there is an increased probability of a lower matching weight. However, this heuristic is only interesting if the PMW' calculation is lighter computationally than performing minimum-weight perfect-matching. %within a cluster is potentially , especially for clusters of increasingly larger size, as all edges of a cluster must be considered in its calculation. Furthermore, the PMWs within a cluster change due to cluster growth and mergers, both of which occur more frequently as the system size increases. For this reason, the scaling of the PMW computation is vital to the decoder. 
+Since per growth iteration half-edges are attached to the odd cluster's boundary, the addition of an edge $(v,w)$ to a cluster occurs in two steps. In the first step, half of $(v,w)$ is added to the cluster of $v$. If $w$ is part of another cluster, and if the other half of $(v,w)$ was already added to the cluster of $w$, $(v,w)$ becomes \emph{fully grown}. If this is not the case, another round of growth is required to fully grow $(v,w)$ and to merge the clusters of $v$ and $w$. The PWM of $v$ is identical in both cases. To distinguish between the two cases, we add $\nicefrac{1}{2}$ to the PMW's of vertices with half-edges attached. Using this definition, the vertices $\{a,b,c\}$ in the cluster shown in \Cref{fig0} have PMW's $\{2\nicefrac{1}{2}, 3\nicefrac{1}{2}, 2\nicefrac{1}{2}\}$. The PMW can be used to prioritize the growth of vertices with low PMW such that there is an increased probability of mergers between clusters on edges connected to these vertices, and there is an increased probability of a lower matching weight. However, this heuristic is only interesting if the calculation of the PMWs is lighter computationally than performing minimum-weight perfect-matching. %within a cluster is potentially , especially for clusters of increasingly larger size, as all edges of a cluster must be considered in its calculation. Furthermore, the PMWs within a cluster change due to cluster growth and mergers, both of which occur more frequently as the system size increases. For this reason, the scaling of the PMW computation is vital to the decoder. 
 
 
 \Figure[bt](topskip=0pt, botskip=0pt, midskip=0pt){figures/tikz/build/main-figure1.pdf}{
     The cluster of \Cref{fig0}, comprised of nodes $\{A, B, C\}$ with respective primer vertices $\{a, b, c\}$, after two rounds of prioritized growth of $a$ and $c$. There are regions of vertices that are either interior elements or have equal potential matching weights, represented as nodes with different node radii (labelled below the node) in the node-tree $\nset$. \label{fig:pmw}}
 
-\subsection{Partitioned-Growth data structure}\label{sec:nodeset}
-Fortunately, the PMW can be approximated efficiently. For this we introduce the \textbf{Partitioned-Growth} data structure for a cluster $C$.
+\subsection{The node tree}\label{sec:nodeset}
+Fortunately, the PMW can be approximated efficiently. 
+For this we introduce the \textbf{node-tree} data structure for a cluster $C$. \textcolor{red}{The following discussion assumes that clusters grow uniformly, i.e. when a cluster is grown all boundary edges are grown by half an edge.}
 
-Let the sub-graph $\vset\subseteq C$ be a spanning-tree of $C$ if it is a connected acyclic sub-graph that includes all vertices of $C$ and a minimum number of edges. A node-tree $\nset$ is a partition of the spanning-tree $\vset$, such that each element of the partition --- which we call a \textbf{node} --- represents a set of adjacent vertices that lie within a certain distance --- the \textbf{node radius} $\rho$ --- from the \textbf{primer vertex}, which initializes the node and lies at its center. The node-tree is an undirected acyclic graph, and its edges have lengths equal to the distance (edges in $\vset$) between the primer vertices of neighboring nodes. 
+%Let the sub-graph $\vset\subseteq C$ be 
+A spanning-tree of $C$ is a connected acyclic sub-graph that includes all vertices of $C$ and a minimum number of edges. 
+A node-tree $\nset$ is a partition of the \textcolor{red}{leaves} of $\vset$, a spanning tree of $C$. Each element of $\nset$ --- which we call a \textbf{node} --- represents a set of 
+boundary %???, discuss
+vertices that all lie at the same distance --- the \textbf{node radius} $\rho$ --- from a \textbf{primer vertex} in $\vset$. In the following we discuss how the primer vertices are chosen.%, which initializes the node and lies at its center. 
+%The node-tree is an undirected acyclic graph, and its edges have lengths equal to the distance (edges in $\vset$) between the primer vertices of neighboring nodes. 
 
 
 %\begin{definition}
@@ -41,13 +47,29 @@ Let the sub-graph $\vset\subseteq C$ be a spanning-tree of $C$ if it is a connec
 
 %Consider the cluster of non-trivial vertices $V_i=\{v_0,v_1,v_2\}$ and edges $E_i = \{(v_0,v_1), (v_1, v_2)\}$ from \Cref{fig0}. We had found previously that vertices $v_0, v_2$ have a lower PMW compared to $v_1$ by 1 edge. The growth of $v_0$ and $v_2$ could be prioritized, such that new vertices are added to the cluster on the boundary of $v_0$ and $v_2$. If all newly added vertices are trivial, the cluster would be described by \Cref{fig:pmw}. If we repeat the PMW calculation, we now find that the PMWs of the new vertices connected to $v_0$ are equal. The same holds for the vertices connected to $v_2$.
 
-Suppose every non-trivial vertex is the primer vertex of a node, all vertices within a node that lie at distance $\rho$ to the primer vertex are either boundary vertices to the cluster and have equal PMW, or lie within the radius of another node. Additionally, a growth iteration can be represented as an increase in the node radius by $\nicefrac{1}{2}$. The weight of a matching in $\vset$ is thus equal to the weight of the same matching in $\nset$. For the example in \Cref{fig:pmw}, the PMW of all boundary vertices of $A$, henceforth just the PMW of $A$, is $\rho_A + \abs{(B,C)} +1$. The partitioning of $\vset$ to $\nset$ thus allows us to compute the PMW using parameters of the reduced node-tree. We dub all nodes that have non-trivial vertices as primer vertices \textbf{syndrome-nodes} $\dot{N}$. Additionally, trivial vertices that lie on equal radii of two or more different nodes initiate a different type \textbf{junction-nodes} $\bar{N}$. A cluster with a node-tree comprised of both node types is depicted in \Cref{fig:nodes}. Note that similarly to trivial vertices on the cluster, junction-nodes do not count towards the parity of the node-tree. 
+First, we let every non-trivial vertex be the primer vertex of a node representing all the boundary vertices in $\vset$ that are closest to it, we call these nodes \textbf{syndrome-nodes}. 
+We define a second type of nodes, the \textbf{junction-nodes}, their primer vertices are trivial vertices at equal distance from two or more non-trivial vertices.
+% discuss, is this enough?
+We denote syndrome and junction nodes by an upper case letter decorated with a dot, $\dot{N}$, or a bar, $\bar{N}$, respectively.
+A cluster with a node-tree comprised of both node types is depicted in \Cref{fig:nodes}. 
+
+%Note that similarly to trivial vertices on the cluster, junction-nodes do not count towards the parity of the node-tree. 
+
+Node trees are a convenient data structure for computing the PMW for several reasons. %computing the PMW. 
+First, the weight of a matching in $\vset$ is equal to the weight of the same matching in $\nset$. 
+Second, they avoid redundant computations since all of the vertices in each node have equal PMW, moreover, this succinct representation is easy to maintain:
+ %However, or lie within the radius of another node. 
+a growth iteration can be represented as an increase in the node radius by $\nicefrac{1}{2}$. 
+
+For the example in \Cref{fig:pmw}, the PMW of all boundary vertices of $A$, henceforth just the PMW of $A$, is $\rho_A + \abs{(B,C)} +1$. %The partitioning of $\vset$ to $\nset$ thus allows us to compute the PMW using parameters of the reduced node-tree. 
 
 \Figure[bt](topskip=0pt, botskip=0pt, midskip=0pt){figures/tikz/build/main-figure2.pdf}{
 Two different node types. Syndrome-nodes $N$ have a non-trivial vertex or syndrome at its center. Vertices that lie on the radii of two existing nodes initialize a junction-node $\bar{N}$ in the node-tree. Vertex $b$ lies on equal distances to primer vertices $a$ of node $\dot{A}$ and $c$ of $\dot{C}$, and vertex $d$ to primer vertices $c$ of $\dot{C}$ and $e$ of $\dot{E}$. Therefore, vertices $b$ and $d$ initiate junction-nodes $\bar{B}$ and $\bar{D}$, respectively, in the merged node-tree. \label{fig:nodes}}
 
-The Partitioned-Growth data structure does not replace but coexists with the Union-Find data structure, whose \textbf{cluster-trees}' critical goal is to differentiate between clusters \cite{delfosse2017almost}. The relevant data structures and the cluster-tree, spanning-tree $\vset$ and node-tree $\nset$ of an example cluster are depicted in \Cref{fig:nodetypes}. Note that the set of all spanning-trees $\{\vset\}$ is equivalent to the spanning-forest $F$, which is constructed in the original Union-Find decoder after cluster growth and before peeling. When all clusters are of even parity, the set of spanning-trees $\{\vset\}$ can be passed to the peeling decoder \cite{delfosse2017linear}. 
-
+We note that the node tree needs to be maintained in addition to the cluster trees. The role of the cluster trees is to differentiate between clusters.
+%structure does not replace but coexists with the Union-Find data structure, whose \textbf{cluster-trees}' critical goal is to differentiate between clusters \cite{delfosse2017almost}. 
+We depict the different relevant data structures %The relevant data structures and the cluster-tree, spanning-tree $\vset$ and node-tree $\nset$ 
+of an example cluster in \Cref{fig:nodetypes}. %Note that the set of all spanning-trees $\{\vset\}$ is equivalent to the spanning-forest $F$, which is constructed in the original Union-Find decoder after cluster growth and before peeling. When all clusters are of even parity, the set of spanning-trees $\{\vset\}$ can be passed to the peeling decoder \cite{delfosse2017linear}. 
 
 \subsection{Node parity and delay}\label{sec:paritydelay}
 
