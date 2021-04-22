@@ -37,7 +37,7 @@ A node-tree $\nset$ (see \Cref{fig:nodes}) is a contraction of a spanning tree o
 
 We define two types of nodes. First, we let every non-trivial vertex be the root of a node, we call these nodes \textbf{syndrome-nodes}. The nodes can grow separately from each other according to different strategies, but we assume that they grow uniformly, i.e. when a node grows, all leaves are grown by half an edge.
 
-As the nodes grow, they can meet with each other. We call a \emph{junction} a vertex in the boundary to two or more nodes. We define a second type of nodes, \textbf{junction-nodes}, their roots are trivial vertices at equal distance from two or more non-trivial vertices.
+As the nodes grow, they can meet with each other. We call a \textbf{junction} a vertex in the boundary to two or more nodes. When two nodes meet at a junction that is equidistant to them, we define a second type of node, a \textbf{junction-node}, with root the junction vertex. 
 
 %Consider the cluster of non-trivial vertices $V_i=\{v_0,v_1,v_2\}$ and edges $E_i = \{(v_0,v_1), (v_1, v_2)\}$ from \Cref{fig0}. We had found previously that vertices $v_0, v_2$ have a lower PMW compared to $v_1$ by 1 edge. The growth of $v_0$ and $v_2$ could be prioritized, such that new vertices are added to the cluster on the boundary of $v_0$ and $v_2$. If all newly added vertices are trivial, the cluster would be described by \Cref{fig:pmw}. If we repeat the PMW calculation, we now find that the PMWs of the new vertices connected to $v_0$ are equal. The same holds for the vertices connected to $v_2$.
 
