@@ -27,44 +27,32 @@ Since per growth iteration half-edges are attached to the odd cluster's boundary
 
 
 \Figure[bt](topskip=0pt, botskip=0pt, midskip=0pt){figures/tikz/build/main-figure1.pdf}{
-    The cluster of \Cref{fig0}, comprised of nodes $\{A, B, C\}$ with respective primer vertices $\{a, b, c\}$, after two rounds of prioritized growth of $a$ and $c$. There are regions of vertices that are either interior elements or have equal potential matching weights, represented as nodes with different node radii (labelled below the node) in the node-tree $\nset$. \label{fig:pmw}}
+    The cluster of \Cref{fig0}, comprised of nodes $\{A, B, C\}$ with respective roots $\{a, b, c\}$, after two rounds of prioritized growth of $a$ and $c$. There are regions of vertices that are either interior elements or have equal potential matching weights, represented as nodes with different node radii (labelled below the node) in the node-tree $\nset$. \label{fig:pmw}}
 
 \subsection{The node tree}\label{sec:nodeset}
 Fortunately, the PMW can be approximated efficiently. 
-For this we introduce the \textbf{node-tree} data structure for a cluster $C$. \textcolor{red}{The following discussion assumes that clusters grow uniformly, i.e. when a cluster is grown all boundary edges are grown by half an edge.}
+For this we introduce the \textbf{node-tree} data structure for a cluster $C$. 
 
-%Let the sub-graph $\vset\subseteq C$ be 
-A spanning-tree of $C$ is a connected acyclic sub-graph that includes all vertices of $C$ and a minimum number of edges. 
-A node-tree $\nset$ is a partition of the \textcolor{red}{leaves} of $\vset$, a spanning tree of $C$. Each element of $\nset$ --- which we call a \textbf{node} --- represents a set of 
-boundary %???, discuss
-vertices that all lie at the same distance --- the \textbf{node radius} $\rho$ --- from a \textbf{primer vertex} in $\vset$. In the following we discuss how the primer vertices are chosen.%, which initializes the node and lies at its center. 
-%The node-tree is an undirected acyclic graph, and its edges have lengths equal to the distance (edges in $\vset$) between the primer vertices of neighboring nodes. 
+A node-tree $\nset$ (see \Cref{fig:nodes}) is a contraction of $\vset$. Each node $N\in\nset$ represents a sub-tree of $\vset$ that contains at most one non-trivial vertex and whose leaf vertices lie at equal distance from the sub-tree root, the \textbf{node radius} $\rho_N$. In the following we explain how to choose the nodes such that the leaves of the sub-tree represented by a node have equal PMW.
 
+We define two types of nodes. First, we let every non-trivial vertex be the root of a node, we call these nodes \textbf{syndrome-nodes}. The nodes can grow separately from each other according to different strategies, but we assume that they grow uniformly, i.e. when a node grows, all leaves are grown by half an edge.
 
-%\begin{definition}
-
-%\end{definition}
+As the nodes grow, at some point they can meet with another. We call a \emph{junction} a vertex in the boundary to two or more nodes. We define a second type of nodes, \textbf{junction-nodes}, their roots are trivial vertices at equal distance from two or more non-trivial vertices.
 
 %Consider the cluster of non-trivial vertices $V_i=\{v_0,v_1,v_2\}$ and edges $E_i = \{(v_0,v_1), (v_1, v_2)\}$ from \Cref{fig0}. We had found previously that vertices $v_0, v_2$ have a lower PMW compared to $v_1$ by 1 edge. The growth of $v_0$ and $v_2$ could be prioritized, such that new vertices are added to the cluster on the boundary of $v_0$ and $v_2$. If all newly added vertices are trivial, the cluster would be described by \Cref{fig:pmw}. If we repeat the PMW calculation, we now find that the PMWs of the new vertices connected to $v_0$ are equal. The same holds for the vertices connected to $v_2$.
 
-First, we let every non-trivial vertex be the primer vertex of a node representing all the boundary vertices in $\vset$ that are closest to it, we call these nodes \textbf{syndrome-nodes}. 
-We define a second type of nodes, the \textbf{junction-nodes}, their primer vertices are trivial vertices at equal distance from two or more non-trivial vertices.
-% discuss, is this enough?
-We denote syndrome and junction nodes by an upper case letter decorated with a dot, $\dot{N}$, or a bar, $\bar{N}$, respectively.
-A cluster with a node-tree comprised of both node types is depicted in \Cref{fig:nodes}. 
+We denote syndrome and junction nodes by an upper case letter decorated with a dot, $\dot{N}$, or a bar, $\bar{N}$, respectively. Given a set of nodes $\nset$, we define its parity as the parity of the number of syndrome-nodes, we decorate odd and even nodes with a dot, $\dot\nset$, or a bar, $\bar\nset$, respectively.
 
 %Note that similarly to trivial vertices on the cluster, junction-nodes do not count towards the parity of the node-tree. 
 
-Node trees are a convenient data structure for computing the PMW for several reasons. %computing the PMW. 
-First, the weight of a matching in $\vset$ is equal to the weight of the same matching in $\nset$. 
-Second, they avoid redundant computations since all of the vertices in each node have equal PMW, moreover, this succinct representation is easy to maintain:
+Node trees are a convenient data structure for computing the PMW. % for several reasons. %computing the PMW. 
+%First, the weight of a matching in $\vset$ is equal to the weight of the same matching in $\nset$. 
+They avoid redundant computations since all of the leaves in each node have equal PMW, moreover, this succinct representation is easy to maintain:
  %However, or lie within the radius of another node. 
-a growth iteration can be represented as an increase in the node radius by $\nicefrac{1}{2}$. 
-
-For the example in \Cref{fig:pmw}, the PMW of all boundary vertices of $A$, henceforth just the PMW of $A$, is $\rho_A + \abs{(B,C)} +1$. %The partitioning of $\vset$ to $\nset$ thus allows us to compute the PMW using parameters of the reduced node-tree. 
+a growth iteration can be represented as an increase in the node radius by $\nicefrac{1}{2}$. For the example in \Cref{fig:pmw}, the PMW of the leaves of $A$, henceforth just the PMW of $A$, is $\rho_A + \abs{(B,C)} +1$. %The partitioning of $\vset$ to $\nset$ thus allows us to compute the PMW using parameters of the reduced node-tree. 
 
 \Figure[bt](topskip=0pt, botskip=0pt, midskip=0pt){figures/tikz/build/main-figure2.pdf}{
-Two different node types. Syndrome-nodes $N$ have a non-trivial vertex or syndrome at its center. Vertices that lie on the radii of two existing nodes initialize a junction-node $\bar{N}$ in the node-tree. Vertex $b$ lies on equal distances to primer vertices $a$ of node $\dot{A}$ and $c$ of $\dot{C}$, and vertex $d$ to primer vertices $c$ of $\dot{C}$ and $e$ of $\dot{E}$. Therefore, vertices $b$ and $d$ initiate junction-nodes $\bar{B}$ and $\bar{D}$, respectively, in the merged node-tree. \label{fig:nodes}}
+Two different node types. Syndrome-nodes $N$ have a non-trivial vertex or syndrome at its center. Vertices that lie on the radii of two existing nodes initialize a junction-node $\bar{N}$ in the node-tree. Vertex $b$ lies on equal distances to root vertices $a$ of node $\dot{A}$ and $c$ of $\dot{C}$, and vertex $d$ to root vertices $c$ of $\dot{C}$ and $e$ of $\dot{E}$. Therefore, vertices $b$ and $d$ initiate junction-nodes $\bar{B}$ and $\bar{D}$, respectively, in the merged node-tree. \label{fig:nodes}}
 
 We note that the node tree needs to be maintained in addition to the cluster trees. The role of the cluster trees is to differentiate between clusters.
 %structure does not replace but coexists with the Union-Find data structure, whose \textbf{cluster-trees}' critical goal is to differentiate between clusters \cite{delfosse2017almost}. 
@@ -72,17 +60,27 @@ We depict the different relevant data structures %The relevant data structures a
 of an example cluster in \Cref{fig:nodetypes}. %Note that the set of all spanning-trees $\{\vset\}$ is equivalent to the spanning-forest $F$, which is constructed in the original Union-Find decoder after cluster growth and before peeling. When all clusters are of even parity, the set of spanning-trees $\{\vset\}$ can be passed to the peeling decoder \cite{delfosse2017linear}. 
 
 \subsection{Node parity and delay}\label{sec:paritydelay}
+%The Partitioned-Growth data structure allows for prioritizing the growth of \emph{nodes} on an odd-parity node-tree $\dot{\nset}$ with low PWM, instead of \emph{vertices}. 
+The PMW can be used to prioritize the growth of vertices with low PMW. However, for this heuristic the relevant figure of merit is not the PMW itself but the ordering of the vertices. In the following we explain how to order the vertices efficiently.
 
-The Partitioned-Growth data structure allows for prioritizing the growth of \emph{nodes} on an odd-parity node-tree $\dot{\nset}$ with low PWM, instead of \emph{vertices}. To quantize this priority, we define the \textbf{node delay} $\delta_N$, the number of growth iterations for a node to wait for all nodes in the node-tree to have equal PWM: 
-\begin{equation}\label{eq:delayequation}
-    \delta_N = 2\left(\text{PMW}(N) - \min_{X\in\nset}{\text{PMW}(X)}\right).
-\end{equation}
+%%%%%%%%%%%%%%%%%%%
+%We define the delay of a node $N$ which we denote by $\delta_N$, as the difference between the PMW of $N$ and the minimum PMW in the node-tree multiplied by two. 
+%\begin{equation}\label{eq:delayequation}
+%    \delta_N = 2\left(\text{PMW}(N) - \min_{X\in\nset}{\text{PMW}(X)}\right).
+%\end{equation}
+%The delay of a node can be interpreted operationally as the number of times the node with minimum PMW should grow to have the same PMW as node $N$. %rowth iterations for a node to wait for all nodes in the node-tree to have equal PWM: 
 
-To grow a cluster, we loop over all nodes in $\nset$ and grow all boundary vertices of $N$ if $\delta_N=0$. However, to find $\delta_N$, the PMW of all nodes in $\dot{\nset}$ must be known, which is no trivial task as the entire tree must be considered for the calculation in every node. Furthermore, the PWM of a node changes as it and its cluster grow. Instead, we will compute for the difference in node delay between child node and its parent. 
+%To grow a cluster, we loop over all nodes in $\nset$ and grow all boundary vertices of $N$ if $\delta_N=0$. 
+%However, to find $\delta_N$, the PMW of all nodes in $\dot{\nset}$ must be known, which is no trivial task as the entire tree must be considered for the calculation in every node. Furthermore, the PWM of a node changes as it and its cluster grow. Instead, we will compute for the difference in node delay between child node and its parent. 
+%%%%%%%%%%%%%%%%%%%%%
 
-Let any node $\mathbf{R}\in\dot{\nset}$ be the \textbf{root node} of the node tree. As $\dot{\nset}$ is an acyclic tree, $\mathbf{R}$ defines the parent-child relations for all the nodes in $\dot{\nset}$, where any node can only have a single parent, but multiple children. Let $P\geq Q$ denote that $P$ is the parent of $Q$. Furthermore, let $\nset_P$ be the subtree consisting of all ancestors of $P$ and all descendant branches excluding the branch starting from $(P,Q)$, and $\nset_Q$ be the subtree consisting of all descendant branches of $Q$. With this notation, any odd-parity node-tree of $\abs{\dot{\nset}}\geq 3$ can be simplified to $\{\nset_P,P,Q,\nset_Q\}$, where $(\nset_P, P)$ and $(Q, \nset_Q)$ can represent any number of edges on $\dot{\nset}$, depending on the number branches they represent. Based on the node types of $P,Q$ and the parity (number of syndrome-nodes) in $\nset_Q$, we can deduce the parity of $\nset_P$, since $\dot{\nset}$ must be odd. 
+Let a node $R\in \nset$ be the root node of the node tree. As $\nset$ is an acyclic tree, $R$ defines implicitly the parent-child relations for all the nodes in $\nset$, where a node has one parent, but potentially multiple children. Let $P\geq Q$ denote that $P$ is the parent of $Q$. Furthermore, let $\nset_P$ be the sub-tree consisting of all ancestors of $P$ and all descendant branches excluding the branch starting from $(P,Q)$, and $\nset_Q$ be the sub-tree consisting of all descendant branches of $Q$. 
 
-If subtree $\nset_Q$ is of even parity, denoted by $\overbar{\nset_Q}$, it must consist of a combination of some number of even branches and an even number odd branches, where the parity of the branch refers to the parity of the number of syndrome-nodes. For any even branch $\bar{b}$ the matching must be within $\bar{b}$, since there is a single edge $(Q,\bar{b})$ that cannot support two matches out of $\bar{b}$. If an odd branch $\dot{b}_1$ matches outside $\overbar{\nset_Q}$ on edge $(Q, \dot{b}_1)$, there must exist another odd branch $\dot{b}_2$ that must match with another node $N \notin \overbar{\nset_Q}$  via $(Q, \dot{b}_2)$, which is equivalent to a match between $\dot{b}_1$ and $\dot{b}_2$. For a hypothetical merger to even parity on either $Q$ or $P$, the matching of nodes within $\overbar{\nset_Q}$ must be \emph{equivalently} within $\overbar{\nset_Q}$. The same is true of an even $\nset_P$.
+With this notation, any odd-parity node-tree of $\abs{\dot\nset}\geq 3$ can be represented by $\{\nset_P,P,Q,\nset_Q\}$. %, where $(\nset_P, P)$ and $(Q, \nset_Q)$ can represent any number of edges on $\nset$, depending on the number branches they represent. 
+Based on the node types of $P,Q$ and the parity of $\nset_Q$, we can deduce the parity of $\nset_P$, since $\dot{\nset}$ is odd: 
+
+If the sub-tree $\nset_Q$ is of even parity, i.e. $\overbar{\nset_Q}$, it must consist of a combination of some number of even branches and an even number odd branches. %, where the parity of the branch refers to the parity of the number of syndrome-nodes. 
+For any even branch $\bar{b}$ the matching must be within $\bar{b}$, since there is a single edge $(Q,\bar{b})$ that cannot support two matches out of $\bar{b}$. If an odd branch $\dot{b}_1$ matches outside $\overbar{\nset_Q}$ on edge $(Q, \dot{b}_1)$, there must exist another odd branch $\dot{b}_2$ that must match with another node $N \notin \overbar{\nset_Q}$ via $(Q, \dot{b}_2)$, which is equivalent to a match between $\dot{b}_1$ and $\dot{b}_2$. For a hypothetical merger to even parity on either $Q$ or $P$, the matching of nodes within $\overbar{\nset_Q}$ must be \emph{equivalently} within $\overbar{\nset_Q}$. The same is true of an even $\nset_P$.
 
 If subtree $\nset_Q$ is of odd parity, denoted by $\dot{\nset_Q}$, it must consist of a combination of some number of even branches and an odd number of odd branches. For a hypothetical merger to even parity on either $Q$ or $P$, there must always be a matching between the single odd branch within $\dot{\nset_Q}$ with either $Q$, $P$, or the next syndrome-node in $\nset_P$. The same is true of an odd $\nset_P$.
 
@@ -167,7 +165,7 @@ As the node radii increase, the values for $\delta_N$ across $\nset$ change. Thi
     \emph{(a)} An odd cluster $\nset_o=\{A, B, \mathbf{O}\}$ with root $A$ joins with an even cluster $\nset_e=\{C, \mathbf{E}\}$ with root $C$ on nodes $\mathbf{O}, \mathbf{E}$, respectively, to a joined node-tree. If we choose to \emph{(b)}, make $\mathbf{E}$ a child of $\mathbf{O}$, the parities and delays the subtree of $\nset_o$ can unchanged, and we only have to perform partial parity and delay calculations over the subtree of $\nset_e$. If we choose to \emph{(c)}, make $\mathbf{O}$ a child of $\mathbf{E}$, parities and delays have to be recalculated in the entire joined node-tree. \label{fig:inversion}}
 
 \Figure[tb](topskip=0pt, botskip=0pt, midskip=0pt){figures/tikz/build/main-figure4.pdf}{
-    The relevant data structures. \emph{(a)} The cluster-tree of the Union-Find data structure, whose elements are vertices $v$. The path from a vertex to the root of the cluster-tree is traversed to find the root element, which differentiates clusters. Next to the cluster size and parity, the root node $\mathbf{R}$ of the node-tree $\nset$ is stored at the root of the cluster-tree. Each vertex $v$ additionally stores to which node $N$ it belongs. \emph{(b)} The spanning-tree $\vset$ with 3 non-trivial vertices. As $\vset$ is strictly acyclic, the cluster's edges must be maintained such that no cycles are created. This is done during growth by removing edges (red dotted lines) if a cycle is detected. \emph{(c)} The node-tree $\nset$, which consists of the syndrome-nodes $\dot{A}, \dot{B}, \dot{C}$ with primer vertices $a, b, c$, and junction-nodes $\bar{D}, \bar{I}$ with primer vertices $d,i$. At each node $N$ and the root $\mathbf{R}=\dot{B}$ various variables are stored.\label{fig:nodetypes}}
+    The relevant data structures. \emph{(a)} The cluster-tree of the Union-Find data structure, whose elements are vertices $v$. The path from a vertex to the root of the cluster-tree is traversed to find the root element, which differentiates clusters. Next to the cluster size and parity, the root node $\mathbf{R}$ of the node-tree $\nset$ is stored at the root of the cluster-tree. Each vertex $v$ additionally stores to which node $N$ it belongs. \emph{(b)} The spanning-tree $\vset$ with 3 non-trivial vertices. As $\vset$ is strictly acyclic, the cluster's edges must be maintained such that no cycles are created. This is done during growth by removing edges (red dotted lines) if a cycle is detected. \emph{(c)} The node-tree $\nset$, which consists of the syndrome-nodes $\dot{A}, \dot{B}, \dot{C}$ with primer vertices $a, b, c$, and junction-nodes $\bar{D}, \bar{I}$ with roots $d,i$. At each node $N$ and the root $\mathbf{R}=\dot{B}$ various variables are stored.\label{fig:nodetypes}}
 
 As clusters grow in size they merge with other clusters. 
 %In the Union-Find (UF) algorithm, odd clusters
