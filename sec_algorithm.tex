@@ -150,15 +150,21 @@ where ${\delta}_N = \text{PMW}(N) - \text{PMW}(R)$.
 %     \nonumber \Delta_C &= \delta_C - \delta_B =& 2\left(\rho_C - \rho_B - \abs{(B, C)}\right).
 % \end{align}
 
-Equations \Cref{eq:pmwdif,eq:pseudodelay,eq:snodeparity,eq:jnodeparity} show that the differences in PMW with respect to the root node can be calculated through two depth-first searches (DFS) of $\nset$. In the first DFS, the \emph{parity DFS}, we calculate the node parity $\pi_N$ a via tail-recursive function using \Cref{eq:snodeparity,eq:jnodeparity}. In the second DFS, the \emph{delay DFS}, we calculate the PMW differences $\delta_N$ via a head-recursive function using \Cref{eq:pmwdif,eq:pseudodelay}. 
+Equations \Cref{eq:pmwdif,eq:pseudodelay,eq:snodeparity,eq:jnodeparity} show that the differences in PMW with respect to the root node can be calculated through two depth-first searches (DFS) of $\nset$. In the first DFS, the \emph{parity DFS}, we calculate the node parity $\pi_N$ a via tail-recursive function using \Cref{eq:snodeparity,eq:jnodeparity}. In the second DFS, the \emph{PMW DFS}, we calculate the PMW differences $\delta_N$ via a head-recursive function using \Cref{eq:pmwdif,eq:pseudodelay}. 
 
 \textcolor{red}{MOVE? or expand, growth DFS is not yet introduced}During this second DFS, the minimal PMW difference within $\nset$ can be kept track of by comparison for calculating the node delay $\delta_N$ at a later instance during the \emph{growth DFS}. 
 
 \subsection{Growing node-trees}\label{sec:grownodetrees}
+The Union-Find decoder grows clusters by adding half-edges to all boundary vertices of the cluster. Instead, here we propose to grow only the nodes with minimal $PMW$. 
+%A single growth iteration, which is applied in the Union-Find decoder by adding half-edges to all boundary vertices of the cluster, is now replaced by another DFS of $\nset$ from the same root $\mathbf{R}$ as before. 
+%During this DFS, $\delta_N$ of every node $N$ is calculated via \Cref{eq:delaypseudo} and $N$ is conditionally grown --- adding half-edges to the boundary vertices in the current node and adding $\nicefrac{1}{2}$ to its radius $\rho_N$ --- if $\delta_N = 0$. 
+For this, it is necessary to save the list of boundary vertices to each node (\Cref{fig:nodetypes}c). %When the delays $\delta_N$ for all nodes in $\nset$ are zero, all nodes are grown simultaneously within the same iteration. 
 
-A single growth iteration, which is applied in the Union-Find decoder by adding half-edges to all boundary vertices of the cluster, is now replaced by another DFS of $\nset$ from the same root $\mathbf{R}$ as before. During this DFS, $\delta_N$ of every node $N$ is calculated via \Cref{eq:delaypseudo} and $N$ is conditionally grown --- adding half-edges to the boundary vertices in the current node and adding $\nicefrac{1}{2}$ to its radius $\rho_N$ --- if $\delta_N = 0$. This requires us to save the list of boundary vertices to each node (\Cref{fig:nodetypes}c). When the delays $\delta_N$ for all nodes in $\nset$ are zero, all nodes are grown simultaneously within the same iteration. 
-
-As the node radii increase, the values for $\delta_N$ across $\nset$ change. This would mean that the DFS's of node parity and delay need to be done after each growth iteration. Luckily, if no new nodes are added to $\nset$ after a growth iteration, which is the case if no mergers occur between clusters, $\pi_N$ on iteration $t+\theta$ can be calculated via previous values of pseudo-delays in iteration $t$ by the introduction of the node \textbf{wait} parameter $\omega_N$. During the growth DFS, if $\delta_N \neq 0$, add 1 to $\omega_N$. If no nodes are added to $\nset$, the node delay in the next iteration are
+As the nodes grow, the values for $\delta_N$ across $\nset$ change. %This would mean that the DFS's of node parity and delay need to be done after each growth iteration. 
+Fortunately, if no new nodes are added to $\nset$ after a growth iteration, the parities %$\pi_N$ on iteration $t+\theta$ 
+can be calculated via previous values of the PMW differences. %pseudo-delays in iteration $t$ by the introduction of the node \textbf{wait} parameter $\omega_N$. 
+\textcolor{red}{BROKEN. }
+During the growth DFS, if $\delta_N \neq 0$, add 1 to $\omega_N$. If no nodes are added to $\nset$, the node delay in the next iteration are
 \begin{multline}\label{eq:delay}
     \delta_N(t+\theta) = \tilde{\delta}_N(t) - \min_{X \in \nset(t)}{\tilde{\delta}_X} - \omega_N(t+\theta-1),  \\
     \hspace{.3cm} N \in \nset, \hspace{.3cm} \nset(t+\theta) = \nset(t).  
@@ -189,23 +195,24 @@ In the following we describe how to obtain the node-tree of the merged cluster f
 
 Since only odd clusters grow, only two types of clusters can merge: even with odd and odd with odd. 
 
-For even node-trees, the PMW is undefined since a perfect matching would not be possible when merging with a non-trivial vertex. Consequently, node parity and delays are undefined for even node-trees and do not need to be calculated. 
+For even node-trees, the PMW is undefined since a perfect matching would not be possible when merging with a non-trivial vertex. Consequently, PMW differences are undefined for even node-trees and do not need to be calculated. 
 
 The second type of merger is between an even and an odd cluster. %The combined cluster is odd, and its growth is continued. Thus, its node delays must be computed. 
-In order to define the new node-tree, we need to choose a new root. We consider two different Options, choosing the root of the odd cluster and choosing the root of the even cluster:
+In order to define the new node-tree, we need to choose a new root. We consider two different options, choosing the root of the odd cluster and choosing the root of the even cluster:
 
 Let $\nset_o,\nset_e$ be the odd and even node-trees that are to be joined, and let $\mathbf{O}\in \nset_o,\mathbf{E} \in \nset_e$ be the nodes connected (\Cref{fig:inversion}\emph{a}).
 If $\nset_o$'s root becomes the root of the joined node-tree (\Cref{fig:inversion}\emph{b}), $\mathbf{E}$ becomes a child node of $\mathbf{O}$. 
 Since $\nset_e$ contains an even number of syndrome-nodes, the node parities in $\nset_o$ do not change. 
-Hence, the node parity DFS is only necessary in the subtree $\nset_e$, which now has $\mathbf{E}$ as subroot. 
-Furthermore, as the node delay depends only on its own properties and its parent's, the node delay DFS is also only required from node $\mathbf{E}$ and within the subtree of $\nset_e$. 
+Hence, the node parity DFS is only necessary in the subtree $\nset_e$, which now has $\mathbf{E}$ as subroot potentially different than the original root. 
+Furthermore, as the node PMW difference depends only on its own properties and its parent's, the node PMW DFS is also only required from node $\mathbf{E}$ and within the subtree of $\nset_e$. 
 Hence, only partial DFS's within the even cluster are required. % of the node-tree are precisely what was required, as the node parity and delays in $\nset_e$ were undefined. 
 
-Alternatively, if $\nset_e$'s root becomes the root of the combined tree (\Cref{fig:inversion}\emph{c}), an odd number of syndrome-nodes are attached to $\mathbf{E}$. In consequence the parities of the nodes on the path from $\mathbf{E}$ to the root are changed. This choice of root requires the DFS's on the entire combined node-tree to calculate for node parities and delays. 
+Alternatively, if $\nset_e$'s root becomes the root of the combined tree (\Cref{fig:inversion}\emph{c}), an odd number of syndrome-nodes are attached to $\mathbf{E}$. In consequence the parities of the nodes on the path from $\mathbf{E}$ to the root are changed. This choice of root requires the DFS's on the entire combined node-tree to calculate for node parities and PMW differences. 
 
-For this reason, we choose to keep the root of the odd node-tree, which we dub \textbf{Odd-Rooted Join}. 
+For this reason, when merging node trees we keep the root of the odd node-tree. We dub this strategy \textbf{Odd-Rooted Join}. 
 
-In addition, a cluster can be subjected to multiple mergers within the same growth iteration, during which the parity of the merged cluster changes depending on the number of mergers and the parities of the clusters involved. The DFS's related to the parity and delay calculations must, for this reason, not be initiated directly after the joining of node-trees. After all, it may be possible for the cluster to merge again such that the parities and delays become invalid. To prevent these redundant calculations, subroots of the even subtrees are stored to a list $\m{R}$ at the root of the node-tree (\Cref{fig:nodetypes}\emph{c}). When multiple mergers occur, the root node that stores the now redundant subroots is replaced by a new root with new $\m{R}$. If a cluster is selected for growth, we bar for the subroots in $\m{R}$ at the new root node and initiate the DFS's from these subroots. We call this the \textbf{Root List Replacement}. 
+In addition, a cluster can be subjected to multiple mergers within the same growth iteration, during which the parity of the merged cluster changes depending on the number of mergers and the parities of the clusters involved. The DFS's related to the parities and PMW differences should not be calculated directly after the joining of node-trees. %After all, it may be possible for the cluster to merge again such that the parities and delays become invalid. 
+To prevent redundant calculations, subroots of the even subtrees are stored in a list $\m{R}$ at the root of the node-tree (\Cref{fig:nodetypes}\emph{c}). When multiple mergers occur, the root node that stores the now redundant subroots is replaced by a new root with new $\m{R}$. If a cluster is selected for growth, we bar for the subroots in $\m{R}$ at the new root node and initiate the DFS's from these subroots. We call this the \textbf{Root List Replacement}. 
 
 
 \subsection{Parity Inversion}\label{sec:inversion}
