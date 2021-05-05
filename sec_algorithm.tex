@@ -41,16 +41,16 @@ As the nodes grow, they can meet with each other. We call a \textbf{junction} a 
 
 %Consider the cluster of non-trivial vertices $V_i=\{v_0,v_1,v_2\}$ and edges $E_i = \{(v_0,v_1), (v_1, v_2)\}$ from \Cref{fig0}. We had found previously that vertices $v_0, v_2$ have a lower PMW compared to $v_1$ by 1 edge. The growth of $v_0$ and $v_2$ could be prioritized, such that new vertices are added to the cluster on the boundary of $v_0$ and $v_2$. If all newly added vertices are trivial, the cluster would be described by \Cref{fig:pmw}. If we repeat the PMW calculation, we now find that the PMWs of the new vertices connected to $v_0$ are equal. The same holds for the vertices connected to $v_2$.
 
-We denote syndrome and junction nodes by an upper case letter decorated with a dot, $\dot{N}$, or a bar, $\bar{N}$, respectively. Given a set of nodes $\nset$, we define its parity as the parity of the number of syndrome-nodes, we decorate odd and even nodes with a dot, $\dot\nset$, or a bar, $\bar\nset$, respectively.
+We denote syndrome and junction nodes by an upper case letter decorated with a dot, $\dot{N}$, or a bar, $\bar{N}$, respectively. Given a set of nodes $\nset$, we define its parity as the parity of the number of syndrome-nodes. We decorate odd and even sets of nodes with a dot, $\dot\nset$, or a bar, $\bar\nset$, respectively.
 
 %Note that similarly to trivial vertices on the cluster, junction-nodes do not count towards the parity of the node-tree. 
 
 Node trees are a convenient data structure for computing the PMW. % for several reasons. %computing the PMW. 
 %First, the weight of a matching in $\vset$ is equal to the weight of the same matching in $\nset$. 
-They avoid redundant computations since all of the leaves in each node have equal PMW. For the example in \Cref{fig:pmw}, the PMW of the leaves of $A$, henceforth just the PMW of $A$, is $\rho_A + \abs{(B,C)} +1$. Moreover, this succinct representation is easy to maintain: a growth iteration can be represented as an increase in the node radius by $\nicefrac{1}{2}$.
+They avoid redundant computations since all of the leaves in each node have equal PMW. For the example in \Cref{fig:pmw}, the PMW of the leaves of $A$, henceforth just the PMW of $A$, is $\rho_A + \abs{(B,C)} +1$. Moreover, this succinct representation is easy to maintain: a growth iteration can be modeled by an increase in the node radius by $\nicefrac{1}{2}$.
 
 \Figure[bt](topskip=0pt, botskip=0pt, midskip=0pt){figures/tikz/build/main-figure2.pdf}{
-Two different node types. Syndrome-nodes $N$ have a non-trivial vertex or syndrome at its center. Vertices that lie on the radii of two existing nodes initialize a junction-node $\bar{N}$ in the node-tree. Vertex $b$ lies on equal distances to root vertices $a$ of node $\dot{A}$ and $c$ of $\dot{C}$, and vertex $d$ to root vertices $c$ of $\dot{C}$ and $e$ of $\dot{E}$. Therefore, vertices $b$ and $d$ initiate junction-nodes $\bar{B}$ and $\bar{D}$, respectively, in the merged node-tree. \label{fig:nodes}}
+Two different node types. Syndrome-nodes $\dot N$ have a non-trivial vertex at its center. Vertices that lie on the radii of two existing nodes initiate a junction-node $\bar{N}$ in the node-tree. Vertex $b$ lies on equal distances to root vertices $a$ of node $\dot{A}$ and $c$ of $\dot{C}$, and vertex $d$ to root vertices $c$ of $\dot{C}$ and $e$ of $\dot{E}$. Therefore, vertices $b$ and $d$ initiate junction-nodes $\bar{B}$ and $\bar{D}$, respectively, in the merged node-tree. \label{fig:nodes}}
 
 We note that the node tree needs to be maintained in addition to the cluster trees. The role of the cluster trees is to differentiate between clusters.
 %structure does not replace but coexists with the Union-Find data structure, whose \textbf{cluster-trees}' critical goal is to differentiate between clusters \cite{delfosse2017almost}. 
@@ -59,7 +59,7 @@ of an example cluster in \Cref{fig:nodetypes}. %Note that the set of all spannin
 
 \subsection{Node parity and delay}\label{sec:paritydelay}
 %The Partitioned-Growth data structure allows for prioritizing the growth of \emph{nodes} on an odd-parity node-tree $\dot{\nset}$ with low PWM, instead of \emph{vertices}. 
-The PMW can be used to prioritize the growth of vertices with low PMW. However, for this heuristic the relevant figure of merit is not the PMW itself but the ordering of the vertices. In the following we explain how to order the vertices efficiently.
+The PMW can be used to prioritize the growth of vertices with low PMW. However, in order to implement this heuristic, the relevant figure of merit is not the PMW itself but the difference in PMW between the vertices. In the following we explain how to track the differences in PMW efficiently.
 
 %%%%%%%%%%%%%%%%%%%
 %We define the delay of a node $N$ which we denote by $\delta_N$, as the difference between the PMW of $N$ and the minimum PMW in the node-tree multiplied by two. 
@@ -72,15 +72,20 @@ The PMW can be used to prioritize the growth of vertices with low PMW. However, 
 %However, to find $\delta_N$, the PMW of all nodes in $\dot{\nset}$ must be known, which is no trivial task as the entire tree must be considered for the calculation in every node. Furthermore, the PWM of a node changes as it and its cluster grow. Instead, we will compute for the difference in node delay between child node and its parent. 
 %%%%%%%%%%%%%%%%%%%%%
 
-Let a node $R\in \nset$ be the root node of the node tree. As $\nset$ is an acyclic tree, $R$ defines implicitly the parent-child relations for all the nodes in $\nset$, where a node has one parent, but potentially multiple children. Let $P\geq Q$ denote that $P$ is the parent of $Q$. Furthermore, let $\nset_P$ be the sub-tree consisting of all ancestors of $P$ and all descendant branches excluding the branch starting from $(P,Q)$, and $\nset_Q$ be the sub-tree consisting of all descendant branches of $Q$. 
+Let a node $R\in \nset$ be the root node of the node tree. As $\nset$ is an acyclic tree, $R$ defines implicitly the parent-child relations for all the nodes in $\nset$, where a node has one parent, but potentially multiple children. We let $P\geq Q$ denote that $P$ is the parent of $Q$. Abusing notation, we represent any odd-parity node-tree of $\abs{\dot\nset}\geq 3$ by the tuple $\{\nset_P,P,Q,\nset_Q\}$, where $\nset_P$ denotes the sub-tree consisting of all ancestors of $P$ and all descendant branches excluding the branch starting from $(P,Q)$, and $\nset_Q$ denotes the sub-tree consisting of all descendant branches of $Q$. With this notation  %, where $(\nset_P, P)$ and $(Q, \nset_Q)$ can represent any number of edges on $\nset$, depending on the number branches they represent. 
+and based on the node types of $P,Q$ and the parity of $\nset_Q$, we can deduce the parity of $\nset_P$, since $\dot{\nset}$ is odd. 
 
-With this notation, any odd-parity node-tree of $\abs{\dot\nset}\geq 3$ can be represented by $\{\nset_P,P,Q,\nset_Q\}$. %, where $(\nset_P, P)$ and $(Q, \nset_Q)$ can represent any number of edges on $\nset$, depending on the number branches they represent. 
-Based on the node types of $P,Q$ and the parity of $\nset_Q$, we can deduce the parity of $\nset_P$, since $\dot{\nset}$ is odd: 
+In the following, we derive the difference in PMW between a parent node $P$ and its child $Q$. For this, let us consider that a syndrome node is connected to either $P$ or $Q$. 
 
-If the sub-tree $\nset_Q$ is of even parity, i.e. $\overbar{\nset_Q}$, it must consist of a combination of some number of even branches and an even number odd branches. %, where the parity of the branch refers to the parity of the number of syndrome-nodes. 
-For any even branch $\bar{b}$ the matching must be within $\bar{b}$, since there is a single edge $(Q,\bar{b})$ that cannot support two matches out of $\bar{b}$. If an odd branch $\dot{b}_1$ matches outside $\overbar{\nset_Q}$ on edge $(Q, \dot{b}_1)$, there must exist another odd branch $\dot{b}_2$ that must match with another node $N \notin \overbar{\nset_Q}$ via $(Q, \dot{b}_2)$, which is equivalent to a match between $\dot{b}_1$ and $\dot{b}_2$. For a hypothetical merger to even parity on either $Q$ or $P$, the matching of nodes within $\overbar{\nset_Q}$ must be \emph{equivalently} within $\overbar{\nset_Q}$. The same is true of an even $\nset_P$.
+We first argue that any matching is equivalent to a matching where all nodes in the even node are matched internally. If the sub-tree $\nset_Q$ is of even parity, denoted by $\overbar{\nset_Q}$, it must consist of a combination of even branches and an even number odd branches, where a branch is the subtree hanging from a child node. %, where the parity of the branch refers to the parity of the number of syndrome-nodes. 
+For any even branch $\bar{b}$, the full matching must be within $\bar{b}$: since there is a single edge connecting $\bar b$ with $Q$ and the branch is even, it would not be possible to support two matches out of $\bar{b}$. 
+If an odd branch $\dot{b}_1$ matches outside $\overbar{\nset_Q}$, on edge $(Q, \dot{b}_1)$, there must exist another odd branch $\dot{b}_2$ that also matches outside $\overbar{\nset_Q}$, in this case via edge $(Q, \dot{b}_1)$. Since the matchings meet at node $Q$ there is an equivalent matching that matches $\dot{b}_1$ and $\dot{b}_2$. 
+%If the node-tree merges with another odd tree either at $Q$ or $P$, the minimum weight matching will be equivalent to a matching where all nodes in $\overbar{\nset_Q}$ match internally. 
+The same argument holds for an even $\nset_P$.
 
-If subtree $\nset_Q$ is of odd parity, denoted by $\dot{\nset_Q}$, it must consist of a combination of some number of even branches and an odd number of odd branches. For a hypothetical merger to even parity on either $Q$ or $P$, there must always be a matching between the single odd branch within $\dot{\nset_Q}$ with either $Q$, $P$, or the next syndrome-node in $\nset_P$. The same is true of an odd $\nset_P$.
+If the subtree $\nset_Q$ is of odd parity, denoted by $\dot{\nset_Q}$, it must consist of a combination of even branches and an odd number of odd branches. By the same argument as before, the even branches must match internally. 
+Moreover, For a hypothetical merger to even parity on either $Q$ or $P$, there must always be a matching between an odd branch within $\dot{\nset_Q}$ with either $Q$, $P$, or the next syndrome-node in $\nset_P$. 
+The same argument holds for an odd $\nset_P$.
 
 Using this strategy, we can deduce the required edges for a matching during a merger on $Q$ and $P$ and find the difference in node delays $\delta_Q - \delta_P$. For example, if both $P,Q$ are syndrome-nodes and $\nset_Q$ is even, $\nset_P$ must be odd. The potential matching weights on $\dot{P},\dot{Q}$ are thus
 \begin{align*}
