@@ -9,6 +9,7 @@ We describe the \emph{Union-Find Partitioned-Growth} decoder in this section. We
 %In the following we give some intuition into the improvement of the Union-Find Balanced Bloom decoder upon the original Union-Find decoder. 
 % We compared the ratio of the matchings between the MWPM decoder and our own implementation of the UF decoder, averaged over many simulations, and found that UF matching weight has a constant prefactor of $\sim 1.043$ over the minimum weight for the toric code (\Cref{comp_weight}). From this, we suspected that a decreased matching weight is a heuristic for an increased threshold. Within the context of the UF decoder, the matching weight may be decreased by prioritizing the growth of vertices with low PWM's within the cluster. 
 
+\textcolor{cyan}{Let a \emph{matching} in an cluster be a pairing between its syndrome vertices, such that every syndrome pair is connected via uniquely occupied edges in the cluster. The \emph{matching weight} is the total number of occupied edges in the matching.}\todo{Define matching and weight}
 Consider a cluster containing the set of an odd number of non-trivial vertices $V=\{a,b,c\}$ and the set of edges $E=\{(a,b), (b, c)\}$ of \Cref{fig0}. Now let us investigate the weight of a matching if an additional non-trivial vertex $w$ is connected to the cluster. If $w$ is connected to $a$ or to $c$, then the resulting matching has a total weight of 2: $(w,a)$ and $(b,c)$, or $(a,b)$ and $(c,w)$. However, if $w$ is connected to vertex $b$, then the total weight is 3: $(w, b)$ and $(a, c)$. %If we want to minimize the weight of the 
 
 Inspired by this observation, we associate with each vertex $v$ of an odd-parity cluster a \textbf{Potential Matching Weight} $\text{PMW}(v)$. The PMW measures the matching weight, assuming a union occurs in the next growth iteration. More precisely,
@@ -29,11 +30,11 @@ Since per growth iteration half-edges are attached to the odd cluster's boundary
 \Figure[bt](topskip=0pt, botskip=0pt, midskip=0pt){figures/tikz/build/main-figure1.pdf}{
     The cluster of \Cref{fig0}, comprised of nodes $\{A, B, C\}$ with respective roots $\{a, b, c\}$, after two rounds of prioritized growth of $a$ and $c$. There are regions of vertices that are either interior elements or have equal potential matching weights, represented as nodes with different node radii (labelled below the node) in the node-tree $\nset$. \label{fig:pmw}}
 
-\subsection{The node tree}\label{sec:nodeset}
+\subsection{The node-tree}\label{sec:nodeset}
 Fortunately, the PMW can be approximated efficiently. 
 For this we introduce the \textbf{node-tree} data structure for a cluster $C$. 
 
-A node-tree $\nset$ (see \Cref{fig:nodes}) is a contraction of a spanning tree of $C$. Each node $N\in\nset$ represents a sub-tree that contains at most one non-trivial vertex and whose leaf vertices lie at equal distance from the sub-tree root, the \textbf{node radius} $\rho_N$. In the following we explain how to choose the nodes such that the leaves of the sub-tree represented by a node have equal PMW.
+A node-tree $\nset$ (see \Cref{fig:nodes}) is a contraction of a spanning tree of $C$. Each node $N\in\nset$ represents a sub-tree that contains at most one non-trivial vertex and whose leaf vertices lie at equal distance from the sub-tree root\todo[inline]{We already use root for node-trees. Might rename this to node center or node source, node cradle}, the \textbf{node radius} $\rho_N$. In the following we explain how to choose the nodes such that the leaves of the sub-tree represented by a node have equal PMW.
 
 We define two types of nodes. First, we let every non-trivial vertex be the root of a node, we call these nodes \textbf{syndrome-nodes}. The nodes can grow separately from each other according to different strategies, but we assume that they grow uniformly, i.e. when a node grows, all leaves are grown by half an edge.
 
@@ -41,18 +42,18 @@ As the nodes grow, they can meet with each other. We call a \textbf{junction} a 
 
 %Consider the cluster of non-trivial vertices $V_i=\{v_0,v_1,v_2\}$ and edges $E_i = \{(v_0,v_1), (v_1, v_2)\}$ from \Cref{fig0}. We had found previously that vertices $v_0, v_2$ have a lower PMW compared to $v_1$ by 1 edge. The growth of $v_0$ and $v_2$ could be prioritized, such that new vertices are added to the cluster on the boundary of $v_0$ and $v_2$. If all newly added vertices are trivial, the cluster would be described by \Cref{fig:pmw}. If we repeat the PMW calculation, we now find that the PMWs of the new vertices connected to $v_0$ are equal. The same holds for the vertices connected to $v_2$.
 
-We denote syndrome and junction nodes by an upper case letter decorated with a dot, $\dot{N}$, or a bar, $\bar{N}$, respectively. Given a set of nodes $\nset$, we define its parity as the parity of the number of syndrome-nodes. We decorate odd and even sets of nodes with a dot, $\dot\nset$, or a bar, $\bar\nset$, respectively.
+We denote syndrome and junction nodes by an upper case letter decorated with a dot, $\dot{N}$, or a bar, $\bar{N}$, respectively. Given a set of nodes $\nset$, we define its parity as the parity of the number of syndrome-nodes, which corresponds to the parity of its cluster. We decorate odd and even sets of nodes with a dot, $\dot\nset$, or a bar, $\bar\nset$, respectively.
 
 %Note that similarly to trivial vertices on the cluster, junction-nodes do not count towards the parity of the node-tree. 
 
-Node trees are a convenient data structure for computing the PMW. % for several reasons. %computing the PMW. 
+node-trees are a convenient data structure for computing the PMW. % for several reasons. %computing the PMW. 
 %First, the weight of a matching in $\vset$ is equal to the weight of the same matching in $\nset$. 
 They avoid redundant computations since all of the leaves in each node have equal PMW. For the example in \Cref{fig:pmw}, the PMW of the leaves of $A$, henceforth just the PMW of $A$, is $\rho_A + \abs{(B,C)} +1$. Moreover, this succinct representation is easy to maintain: a growth iteration can be modeled by an increase in the node radius by $\nicefrac{1}{2}$.
 
 \Figure[bt](topskip=0pt, botskip=0pt, midskip=0pt){figures/tikz/build/main-figure2.pdf}{
 Two different node types. Syndrome-nodes $\dot N$ have a non-trivial vertex at its center. Vertices that lie on the radii of two existing nodes initiate a junction-node $\bar{N}$ in the node-tree. Vertex $b$ lies on equal distances to root vertices $a$ of node $\dot{A}$ and $c$ of $\dot{C}$, and vertex $d$ to root vertices $c$ of $\dot{C}$ and $e$ of $\dot{E}$. Therefore, vertices $b$ and $d$ initiate junction-nodes $\bar{B}$ and $\bar{D}$, respectively, in the merged node-tree. \label{fig:nodes}}
 
-We note that the node tree needs to be maintained in addition to the cluster trees. The role of the cluster trees is to differentiate between clusters.
+We note that the node-tree needs to be maintained in addition to the cluster trees. The role of the cluster trees is to differentiate between clusters.
 %structure does not replace but coexists with the Union-Find data structure, whose \textbf{cluster-trees}' critical goal is to differentiate between clusters \cite{delfosse2017almost}. 
 We depict the different relevant data structures %The relevant data structures and the cluster-tree, spanning-tree $\vset$ and node-tree $\nset$ 
 of an example cluster in \Cref{fig:nodetypes}. %Note that the set of all spanning-trees $\{\vset\}$ is equivalent to the spanning-forest $F$, which is constructed in the original Union-Find decoder after cluster growth and before peeling. When all clusters are of even parity, the set of spanning-trees $\{\vset\}$ can be passed to the peeling decoder \cite{delfosse2017linear}. 
@@ -72,33 +73,30 @@ The PMW can be used to prioritize the growth of vertices with low PMW. However, 
 %However, to find $\delta_N$, the PMW of all nodes in $\dot{\nset}$ must be known, which is no trivial task as the entire tree must be considered for the calculation in every node. Furthermore, the PWM of a node changes as it and its cluster grow. Instead, we will compute for the difference in node delay between child node and its parent. 
 %%%%%%%%%%%%%%%%%%%%%
 
-Let a node $R\in \nset$ be the root node of the node tree. As $\nset$ is an acyclic tree, $R$ defines implicitly the parent-child relations for all the nodes in $\nset$, where a node has one parent, but potentially multiple children. We let $P\geq Q$ denote that $P$ is the parent of $Q$. Abusing notation, we represent any odd-parity node-tree of $\abs{\dot\nset}\geq 3$ by the tuple $\{\nset_P,P,Q,\nset_Q\}$, where $\nset_P$ denotes the sub-tree consisting of all ancestors of $P$ and all descendant branches excluding the branch starting from $(P,Q)$, and $\nset_Q$ denotes the sub-tree consisting of all descendant branches of $Q$. With this notation  %, where $(\nset_P, P)$ and $(Q, \nset_Q)$ can represent any number of edges on $\nset$, depending on the number branches they represent. 
+Let a node $R\in \nset$ be the root node of the node-tree. As $\nset$ is an acyclic tree, $R$ defines implicitly the parent-child relations for all the nodes in $\nset$, where a node has one parent, but potentially multiple children. We let $P\geq Q$ denote that $P$ is the parent of $Q$. Abusing notation, we represent any odd-parity node-tree of $\abs{\dot\nset}\geq 3$ by the tuple $\{\nset_P,P,Q,\nset_Q\}$, where $\nset_P$ \todo[inline]{We might want to add that $\nset_P$ includes all edges to $P$, and $Q$ for $\nset_Q$} denotes the sub-tree consisting of all ancestors of $P$ and all descendant branches excluding the branch starting from $(P,Q)$, and $\nset_Q$ denotes the sub-tree consisting of all descendant branches of $Q$. With this notation  %, where $(\nset_P, P)$ and $(Q, \nset_Q)$ can represent any number of edges on $\nset$, depending on the number branches they represent. 
 and based on the node types of $P,Q$ and the parity of $\nset_Q$, we can deduce the parity of $\nset_P$, since $\dot{\nset}$ is odd. 
 
-In the following, we derive the difference in PMW between a parent node $P$ and its child $Q$. For this, let us consider that a syndrome node is connected to either $P$ or $Q$. 
+In the following, we derive the difference in PMW between a parent node $P$ and its child $Q$. For this, let us consider that a syndrome-node is connected to either $P$ or $Q$. 
 
-We first argue that any matching is equivalent to a matching where all nodes in the even node are matched internally. If the sub-tree $\nset_Q$ is of even parity, denoted by $\overbar{\nset_Q}$, it must consist of a combination of even branches and an even number odd branches, where a branch is the subtree hanging from a child node. %, where the parity of the branch refers to the parity of the number of syndrome-nodes. 
+We first argue that any matching is equivalent to a matching where all nodes in the even node\todo{note-tree?} are matched internally. If the sub-tree $\nset_Q$ is of even parity, denoted by $\overbar{\nset_Q}$, it must consist of a combination of even branches and an even number odd branches, where a branch is the subtree hanging from a child node. %, where the parity of the branch refers to the parity of the number of syndrome-nodes. 
 For any even branch $\bar{b}$, the full matching must be within $\bar{b}$: since there is a single edge connecting $\bar b$ with $Q$ and the branch is even, it would not be possible to support two matches out of $\bar{b}$. 
 If an odd branch $\dot{b}_1$ matches outside $\overbar{\nset_Q}$, on edge $(Q, \dot{b}_1)$, there must exist another odd branch $\dot{b}_2$ that also matches outside $\overbar{\nset_Q}$, in this case via edge $(Q, \dot{b}_1)$. Since the matchings meet at node $Q$ there is an equivalent matching that matches $\dot{b}_1$ and $\dot{b}_2$. 
 %If the node-tree merges with another odd tree either at $Q$ or $P$, the minimum weight matching will be equivalent to a matching where all nodes in $\overbar{\nset_Q}$ match internally. 
 The same argument holds for an even $\nset_P$.
 
-\textcolor{red}{DEFINE MATCHING and WEIGHT}
-
 If the subtree $\nset_Q$ is of odd parity, denoted by $\dot{\nset_Q}$, it must consist of a combination of even branches and an odd number of odd branches. By the same argument as before, for any matching, there exists an equivalent matching where the even branches and all odd branches except for one (which is an even number) match internally. 
-The remaining odd branch in $\dot{\nset_Q}$ must be connected with either $Q$, $P$, or the new syndrome-node connected. 
-The same argument holds for an odd $\nset_P$.
+The remaining odd branch in $\dot{\nset_Q}$ must be connected with either $Q$, $P$, or the new syndrome-node connected. The same argument holds for an odd $\nset_P$.
 
-Using this argument, we can deduce the required edges for a matching during a merger on $Q$ and $P$ and find the difference in the PMW of $Q$ and $P$. For example, if both $P,Q$ are syndrome-nodes and $\nset_Q$ is even, $\nset_P$ must be odd. The potential matching weights on $\dot{P},\dot{Q}$ are thus
+
+Using this argument, we can deduce the required edges for a matching during a merger on $Q$ and $P$ and find the difference in the PMW of $Q$ and $P$. For example, if both $P,Q$ are syndrome-nodes and $\nset_Q$ is even, $\nset_P$ must be odd. The potential matching weights on $\dot{P},\dot{Q}$ are thus 
 \begin{align*}
   \text{PMW}(\dot{P}) &= \rho_{\dot{P}} + \abs{(\dot{\nset_P},\dot{P})} + \abs{(\dot{P}, \dot{Q})} + C \\
   \text{PMW}(\dot{Q}) &= \rho_{\dot{Q}} + \abs{(\dot{\nset_P},\dot{P})} + C,
 \end{align*}
-where $C$ is a constant equal to the weight of the matching with the subtrees $\dot{\nset_P}$ and $\overbar{\nset_Q}$ and \textcolor{red}{$\abs{(\dot{\nset_P},\dot{P})}$ denotes the distance between the roots of $\nset_P$ and $P$}. In consequence, we find that their difference is 
+where $C$ is a constant equal to the weight of the matching \textcolor{cyan}{entirely within} the subtrees $\dot{\nset_P}$ and $\overbar{\nset_Q}$ and \textcolor{cyan}{$\abs{(\dot{\nset_P},\dot{P})}$ denotes the distance between the $P$ and its pair in $\nset_P$}. In consequence, we find that their difference is 
 \begin{equation*}
   \text{PMW}(\dot{Q}) - \text{PMW}(\dot{P}) = \rho_{\dot{Q}} - \rho_{\dot{P}} - \abs{(\dot{P}, \dot{Q})}.
 \end{equation*}
-
 Similarly, the PMW difference can be deduced for any combination of node types of $P,Q$ and parity of $\nset_Q$ (see \Cref{fig:nmcombi}):
 \begin{align*}
   \text{PMW}({Q}) - \text{PMW}({P}) &= \rho_Q - \rho_P - \abs{(P,Q)}  &\dot{P}, \dot{Q}, \overbar{\nset_Q} \\
@@ -128,13 +126,15 @@ where $\pi_N$ is the \textbf{node parity} of $N$, i.e. the number of syndrome-no
 
 The previous relations allow to compute the difference in PMW between nodes directly connected in the node-tree. These relations can be used to obtain the difference with respect to a reference node, for instance with respect to $R$ the root of the node-tree.
 
-% Whereas $\delta_\mathbf{R}$ is unknown, $\tilde{\delta}_\mathbf{R}$ is always zero. The delay $\delta_N$ of node $N$ can be computed from $\tilde{\delta}_N$ of all pseudo-delays within the node-tree is known by subtracting the minimal $\tilde{\delta}$.
+% Whereas $\delta_R$ is unknown, $\tilde{\delta}_R$ is always zero. The delay $\delta_N$ of node $N$ can be computed from $\tilde{\delta}_N$ of all pseudo-delays within the node-tree is known by subtracting the minimal $\tilde{\delta}$.
 %\begin{equation}\label{eq:delaypseudo}
 %  \delta_N = \tilde{\delta}_N - \min_{X \in \nset}{\tilde{\delta}_X}
 %\end{equation}
 The differences with respect to $R$ can be calculated by a depth-first search from root $R$ to all descendant nodes by adding the differences between each parent and its child:
+\todo[inline]{\small $\delta_Q-\delta_P=\text{PMW}(Q) - \text{PMW}(R)-\text{PMW}(P) + \text{PMW}(R)=\text{PMW}(Q) - \text{PMW}(R)$ and in consequence $\delta_Q=\delta_P+\text{PMW}(Q) - \text{PMW}(R)$. What am I missing?}
+
 \begin{equation}\label{eq:pseudodelay}
-    {\delta}_Q = {\delta}_P + \text{PMW}(Q) - \text{PMW}(P), \hspace{.3cm} Q\leq P.
+    {\delta}_Q = {\delta}_P + 2\left(\text{PMW}(Q) - \text{PMW}(P)\right), \hspace{.3cm} Q\leq P.
 \end{equation}
 where ${\delta}_N = \text{PMW}(N) - \text{PMW}(R)$. 
 
@@ -152,18 +152,18 @@ where ${\delta}_N = \text{PMW}(N) - \text{PMW}(R)$.
 
 Equations \Cref{eq:pmwdif,eq:pseudodelay,eq:snodeparity,eq:jnodeparity} show that the differences in PMW with respect to the root node can be calculated through two depth-first searches (DFS) of $\nset$. In the first DFS, the \emph{parity DFS}, we calculate the node parity $\pi_N$ a via tail-recursive function using \Cref{eq:snodeparity,eq:jnodeparity}. In the second DFS, the \emph{PMW DFS}, we calculate the PMW differences $\delta_N$ via a head-recursive function using \Cref{eq:pmwdif,eq:pseudodelay}. 
 
-\textcolor{red}{MOVE? or expand, growth DFS is not yet introduced}During this second DFS, the minimal PMW difference within $\nset$ can be kept track of by comparison for calculating the node delay $\delta_N$ at a later instance during the \emph{growth DFS}. 
+\todo[inline]{MOVE? or expand, growth DFS is not yet introduced}During this second DFS, the minimal PMW difference within $\nset$ can be kept track of by comparison for calculating the node delay $\delta_N$ at a later instance during the \emph{growth DFS}. 
 
 \subsection{Growing node-trees}\label{sec:grownodetrees}
 The Union-Find decoder grows clusters by adding half-edges to all boundary vertices of the cluster. Instead, here we propose to grow only the nodes with minimal $PMW$. 
-%A single growth iteration, which is applied in the Union-Find decoder by adding half-edges to all boundary vertices of the cluster, is now replaced by another DFS of $\nset$ from the same root $\mathbf{R}$ as before. 
+%A single growth iteration, which is applied in the Union-Find decoder by adding half-edges to all boundary vertices of the cluster, is now replaced by another DFS of $\nset$ from the same root $R$ as before. 
 %During this DFS, $\delta_N$ of every node $N$ is calculated via \Cref{eq:delaypseudo} and $N$ is conditionally grown --- adding half-edges to the boundary vertices in the current node and adding $\nicefrac{1}{2}$ to its radius $\rho_N$ --- if $\delta_N = 0$. 
 For this, it is necessary to save the list of boundary vertices to each node (\Cref{fig:nodetypes}c). %When the delays $\delta_N$ for all nodes in $\nset$ are zero, all nodes are grown simultaneously within the same iteration. 
 
 As the nodes grow, the values for $\delta_N$ across $\nset$ change. %This would mean that the DFS's of node parity and delay need to be done after each growth iteration. 
 Fortunately, if no new nodes are added to $\nset$ after a growth iteration, the parities %$\pi_N$ on iteration $t+\theta$ 
 can be calculated via previous values of the PMW differences. %pseudo-delays in iteration $t$ by the introduction of the node \textbf{wait} parameter $\omega_N$. 
-\textcolor{red}{BROKEN. }
+\todo[inline]{BROKEN. }
 During the growth DFS, if $\delta_N \neq 0$, add 1 to $\omega_N$. If no nodes are added to $\nset$, the node delay in the next iteration are
 \begin{multline}\label{eq:delay}
     \delta_N(t+\theta) = \tilde{\delta}_N(t) - \min_{X \in \nset(t)}{\tilde{\delta}_X} - \omega_N(t+\theta-1),  \\
@@ -176,10 +176,11 @@ During the growth DFS, if $\delta_N \neq 0$, add 1 to $\omega_N$. If no nodes ar
 \subsection{Joining node-trees}\label{sec:nodejoin}
 
 \Figure[b](topskip=0pt, botskip=0pt, midskip=0pt){figures/tikz/build/main-figure5.pdf}{
-    \emph{(a)} An odd cluster $\nset_o=\{A, B, \mathbf{O}\}$ with root $A$ joins with an even cluster $\nset_e=\{C, \mathbf{E}\}$ with root $C$ on nodes $\mathbf{O}, \mathbf{E}$, respectively, to a joined node-tree. If we choose to \emph{(b)}, make $\mathbf{E}$ a child of $\mathbf{O}$, the parities and delays the subtree of $\nset_o$ can unchanged, and we only have to perform partial parity and delay calculations over the subtree of $\nset_e$. If we choose to \emph{(c)}, make $\mathbf{O}$ a child of $\mathbf{E}$, parities and delays have to be recalculated in the entire joined node-tree. \label{fig:inversion}}
+    \emph{(a)} An odd cluster $\nset_o=\{A, B, O\}$ with root $A$ joins with an even cluster $\nset_e=\{C, E\}$ with root $C$ on nodes $O, E$, respectively, to a joined node-tree. If we choose to \emph{(b)}, make $E$ a child of $O$, the parities and delays the subtree of $\nset_o$ can unchanged, and we only have to perform partial parity and delay calculations over the subtree of $\nset_e$. If we choose to \emph{(c)}, make $O$ a child of $E$, parities and delays have to be recalculated in the entire joined node-tree. \label{fig:inversion}}
 
 \Figure[tb](topskip=0pt, botskip=0pt, midskip=0pt){figures/tikz/build/main-figure4.pdf}{
-    The relevant data structures. \emph{(a)} The cluster-tree of the Union-Find data structure, whose elements are vertices $v$. The path from a vertex to the root of the cluster-tree is traversed to find the root element, which differentiates clusters. Next to the cluster size and parity, the root node $\mathbf{R}$ of the node-tree $\nset$ is stored at the root of the cluster-tree. Each vertex $v$ additionally stores to which node $N$ it belongs. \emph{(b)} A spanning-tree $\vset$ with 3 non-trivial vertices. As $\vset$ is strictly acyclic, the cluster's edges must be maintained such that no cycles are created. This is done during growth by removing edges (red dotted lines) if a cycle is detected. \emph{(c)} The node-tree $\nset$, which consists of the syndrome-nodes $\dot{A}, \dot{B}, \dot{C}$ with primer vertices $a, b, c$, and junction-nodes $\bar{D}, \bar{I}$ with roots $d,i$. At each node $N$ and the root $\mathbf{R}=\dot{B}$ various variables are stored.\label{fig:nodetypes}}
+    \todo[inline]{Parity would be odd instead of 3, right?}
+    The relevant data structures. \emph{(a)} The cluster-tree of the Union-Find data structure, whose elements are vertices $v$. The path from a vertex to the root of the cluster-tree is traversed to find the root element, which differentiates clusters. Next to the cluster size and parity, the root node $R$ of the node-tree $\nset$ is stored at the root of the cluster-tree. Each vertex $v$ additionally stores to which node $N$ it belongs. \emph{(b)} A spanning-tree $\vset$ with 3 non-trivial vertices. As $\vset$ is strictly acyclic, the cluster's edges must be maintained such that no cycles are created. This is done during growth by removing edges (red dotted lines) if a cycle is detected. \emph{(c)} The node-tree $\nset$, which consists of the syndrome-nodes $\dot{A}, \dot{B}, \dot{C}$ with primer vertices $a, b, c$, and junction-nodes $\bar{D}, \bar{I}$ with roots $d,i$. At each node $N$ and the root $R=\dot{B}$ various variables are stored.\label{fig:nodetypes}}
 
 As clusters grow in size they merge with other clusters. 
 %In the Union-Find (UF) algorithm, odd clusters
@@ -200,27 +201,28 @@ For even node-trees, the PMW is undefined since a perfect matching would not be 
 The second type of merger is between an even and an odd cluster. %The combined cluster is odd, and its growth is continued. Thus, its node delays must be computed. 
 In order to define the new node-tree, we need to choose a new root. We consider two different options, choosing the root of the odd cluster and choosing the root of the even cluster:
 
-Let $\nset_o,\nset_e$ be the odd and even node-trees that are to be joined, and let $\mathbf{O}\in \nset_o,\mathbf{E} \in \nset_e$ be the nodes connected (\Cref{fig:inversion}\emph{a}).
-If $\nset_o$'s root becomes the root of the joined node-tree (\Cref{fig:inversion}\emph{b}), $\mathbf{E}$ becomes a child node of $\mathbf{O}$. 
+Let $\nset_o,\nset_e$ be the odd and even node-trees that are to be joined, and let $O\in \nset_o,E \in \nset_e$ be the nodes connected (\Cref{fig:inversion}\emph{a}).
+If $\nset_o$'s root becomes the root of the joined node-tree (\Cref{fig:inversion}\emph{b}), $E$ becomes a child node of $O$. 
 Since $\nset_e$ contains an even number of syndrome-nodes, the node parities in $\nset_o$ do not change. 
-Hence, the node parity DFS is only necessary in the subtree $\nset_e$, which now has $\mathbf{E}$ as subroot potentially different than the original root. 
-Furthermore, as the node PMW difference depends only on its own properties and its parent's, the node PMW DFS is also only required from node $\mathbf{E}$ and within the subtree of $\nset_e$. 
+Hence, the node parity DFS is only necessary in the subtree $\nset_e$, which now has $E$ as subroot potentially different than the original root. 
+Furthermore, as the node PMW difference depends only on its own properties and its parent's, the node PMW DFS is also only required from node $E$ and within the subtree of $\nset_e$. 
 Hence, only partial DFS's within the even cluster are required. % of the node-tree are precisely what was required, as the node parity and delays in $\nset_e$ were undefined. 
 
-Alternatively, if $\nset_e$'s root becomes the root of the combined tree (\Cref{fig:inversion}\emph{c}), an odd number of syndrome-nodes are attached to $\mathbf{E}$. In consequence the parities of the nodes on the path from $\mathbf{E}$ to the root are changed. This choice of root requires the DFS's on the entire combined node-tree to calculate for node parities and PMW differences. 
+Alternatively, if $\nset_e$'s root becomes the root of the combined tree (\Cref{fig:inversion}\emph{c}), an odd number of syndrome-nodes are attached to $E$. In consequence the parities of the nodes on the path from $E$ to the root are changed. This choice of root requires the DFS's on the entire combined node-tree to calculate for node parities and PMW differences. 
 
-For this reason, when merging node trees we keep the root of the odd node-tree. We dub this strategy \textbf{Odd-Rooted Join}. 
+For this reason, when merging node-trees we keep the root of the odd node-tree. We dub this strategy \textbf{Odd-Rooted Join}. 
 
 In addition, a cluster can be subjected to multiple mergers within the same growth iteration, during which the parity of the merged cluster changes depending on the number of mergers and the parities of the clusters involved. The DFS's related to the parities and PMW differences should not be calculated directly after the joining of node-trees. %After all, it may be possible for the cluster to merge again such that the parities and delays become invalid. 
-To prevent redundant calculations, subroots of the even subtrees are stored in a list $\m{R}$ at the root of the node-tree (\Cref{fig:nodetypes}\emph{c}). When multiple mergers occur, the root node that stores the now redundant subroots is replaced by a new root with new $\m{R}$. If a cluster is selected for growth, we bar for the subroots in $\m{R}$ at the new root node and initiate the DFS's from these subroots. We call this the \textbf{Root List Replacement}. 
+\textcolor{red}{To prevent redundant calculations, subroots of the even subtrees are stored in a list at the root of the node-tree (\Cref{fig:nodetypes}\emph{c}). When multiple mergers occur, the root node that stores the now redundant subroots is replaced by a new root with a new list of even subtrees subroots. If a cluster is selected for growth, we loop over the list of the subroots in the list at the new root node and initiate the DFS's from these subroots.} We call this the \textbf{Root List Replacement}. 
 
 
 \subsection{Parity Inversion}\label{sec:inversion}
 
 \Figure[tb](topskip=0pt, botskip=0pt, midskip=0pt){figures/tikz/build/main-figure6.pdf}{
+\todo[inline]{We need the root in order to define the parities, which one would be the root of each node-tree? Also when the nodes merge, why is the weight of the link 2? Shouldn't it be 5?}
     The node delays $\delta_N$ for nodes for 3 odd node-trees $\{\nset_1, \nset_2, \nset_3\}$ of 3 nodes that grow and join into a single node-tree. \emph{(a)} Node delays are calculated via \Cref{eq:pmwdif,eq:pseudodelay,eq:delaypseudo}. In step 1, the growth in each of the three node-trees' outer nodes is prioritized, and the node-trees merge. In step 2, the recalculation of the joined node-tree is performed. Parities within the subtree of $\nset_2$ are now inverted, and the  in these nodes have doubled. \emph{(b)} Node delays are calculated with \Cref{eq:pmwdifnew} instead of \Cref{eq:pmwdif}. Now the increase in $\delta_N$ after parity inversion is halved.\label{fig:partialdfs}}
 
-An unfortunate effect, which we dub \textbf{parity inversion}, causes a decrease in the algorithm's performance as the lattice size is increased. We will demonstrate this effect through the example in \Cref{fig:partialdfs}\emph{a}. Consider three instances of the node-tree of \Cref{fig0}; $\nset_a, \nset_b, \nset_c$, positioned near each other on the lattice. For each node-tree, if the middle node is suspended from growth for two iterations, all nodes have the same Potential Matching Weight. However, in the current example, the node-trees $\nset_a, \nset_b, \nset_c$ merge after 1 iteration. The combined node-tree is odd. Thus, we recalculate the node parities and delays to find that the parities in the partition of the node-tree containing the nodes of $\nset_b$ have been inverted, and the node suspensions in this partition have doubled with respect to their value before the merger. If the next merging event occurs on the node with the doubled node suspension, the matching weight may be large, in contrast with the goal of decreasing the matching weight. Moreover, the effect of parity inversion accumulates if subsequent mergers occur before zero node suspension has been reached. %Nevertheless, as more inversions occur, the maximum node suspension in the node-tree increases, and it becomes more and more unlikely for a cluster to actually reach zero node suspension in all nodes. The number of inversions is directly related to the number of merging events, and thus to the size of the lattice. The performance to improve the heuristic for minimum weight matching thus decreases for larger lattices. 
+An unfortunate effect, which we dub \textbf{parity inversion}, causes a decrease in the algorithm's performance as the lattice size is increased. We will demonstrate this effect through the example in \Cref{fig:partialdfs}\emph{a}. Consider three instances of the node-tree of \Cref{fig0}; $\nset_a, \nset_b, \nset_c$, positioned near each other on the lattice. For each node-tree, if the middle node is suspended from growth for two iterations, all nodes have the same Potential Matching Weight. However, in the example, the node-trees $\nset_a, \nset_b, \nset_c$ merge after one iteration. The combined node-tree is odd. Thus, we recalculate the node parities and delays to find that the parities in the partition of the node-tree containing the nodes of $\nset_b$ have been inverted, and the node suspensions in this partition have doubled with respect to their value before the merger. If the next merging event occurs on the node with the doubled node suspension, the matching weight may be large, in contrast with the goal of decreasing the matching weight. Moreover, the effect of parity inversion accumulates if subsequent mergers occur before zero node suspension has been reached. %Nevertheless, as more inversions occur, the maximum node suspension in the node-tree increases, and it becomes more and more unlikely for a cluster to actually reach zero node suspension in all nodes. The number of inversions is directly related to the number of merging events, and thus to the size of the lattice. The performance to improve the heuristic for minimum weight matching thus decreases for larger lattices. 
 
 %Parity inversion defines a trade-off in the Partitioned-Growth data structure: `A node must wait as many iterations as it is suspended to reach equilibrium in Potential Matching Weight in the node-tree. However, after Parity Inversion, the node suspension for previously prioritized nodes increases linearly with the number of iterations waited by the suspended nodes pre-inversion.' As a compromise, 
 To compensate the effect of parity inversion, we redefine the node delay as \textbf{half} the number of growth iterations needed for all nodes in the node-tree to reach equal PMW. This changes \Cref{eq:delayequation,eq:pmwdif} to:
@@ -243,17 +245,17 @@ The full version of the algorithm we have described is given in Algorithm \ref{a
   \While(){$\m{L}$ is not empty}{
     Initialize the fusion list $\m{F}$ as an empty list.\;\label{algo:B1b}
     \For(){cluster $\in\m{L}$ \label{algo:B2a}}{
-      \For(){$N \in\m{R}$ at root node $\mathbf{R}$ of $\nset$}{
+      \For(){$N \in\m{R}$ at root node $R$ of $\nset$}{
         Apply DFS's to calculate node parities and delays (\Cref{eq:pseudodelay,eq:snodeparity,eq:jnodeparity}) from $N$ to all descendant nodes. Keep track of $\min_{X \in \nset}{\tilde{\delta}_X}$ during the delay DFS.\;\label{algo:pdc}
       }
-      Apply DFS from root $\mathbf{R}$ to all descendants. At each node $N$ during the DFS, if $\delta_N=0$ (\Cref{eq:delay}), grow all boundary edges of vertices in the node a half-edge per the Union-Find decoder, such that grown edges are added to $\m{F}$, and apply $\rho_N=\rho_N +\nicefrac{1}{2}$. \;\label{algo:grow}
+      Apply DFS from root $R$ to all descendants. At each node $N$ during the DFS, if $\delta_N=0$ (\Cref{eq:delay}), grow all boundary edges of vertices in the node a half-edge per the Union-Find decoder, such that grown edges are added to $\m{F}$, and apply $\rho_N=\rho_N +\nicefrac{1}{2}$. \;\label{algo:grow}
       %If $\m{s}(n)\neq0$, apply $n_w=n_w+1$ and continue the DFS.
     }
     \For(){edge $(n,m) \in \m{F}$\label{algo:B3a}}{
       \eIf(){$\Find(n)\neq\Find(m)$}{
         Merge cluster-trees by Weighted $\Union$.\;
         \eIf(){$n \in N$ and $m \in M$\label{algo:joina}}{
-          Merge node-trees by Odd-Rooted $\Nodejoin$. If resulting node-tree with root $\mathbf{R}$ is odd, add even subroot (either $N$ or $M$) to list $\m{R}$ at $\mathbf{R}$.\;
+          Merge node-trees by Odd-Rooted $\Nodejoin$. If resulting node-tree with root $R$ is odd, add even subroot (either $N$ or $M$) to list $\m{R}$ at $R$.\;
         }($n$ or $m$ does not belong to a cluster){
           Add $n$ to $N$ or $m$ to $M$.\;\label{algo:joinb}
         }

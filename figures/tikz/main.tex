@@ -17,8 +17,9 @@
 }
 \tikzexternalize[optimize=false]
 
+
 \tikzstyle{l2}=[line width=0.5]
-\tikzstyle{l2}=[line width=0.5]
+\tikzstyle{l1}=[line width=1]
 \tikzstyle{node}=[circle, draw=black, minimum size=25pt, l2, inner sep= 5pt]
 \tikzstyle{nodel}=[circle, draw=black, minimum size=15pt, l2, inner sep= 0pt]
 \tikzstyle{nodem}=[circle, draw=black, minimum size=12pt, l2, inner sep= 0pt]
@@ -316,7 +317,7 @@
         \draw[l2] (vb) -- (vc) (vb) -- (vh) (vb) -- (vi) (vb) -- (vg) ;
         \draw[l2] (vc) -- (vk) (vc) -- (vj);
 
-        \node[parameters] (inf) at (4.5,3) {size: 11, parity: 3\\root node $\mathbf{R}_\nset: \dot{B}$};
+        \node[parameters] (inf) at (4.5,3) {size: 11, parity: 3\\root node $R_\nset: \dot{B}$};
         \draw[l2, ->, opacity=.5] (va) -- (inf);
 
         \node[nodem, minimum size=12] (v) at (0.85,-1){$v$};
@@ -352,20 +353,20 @@
         \node at (3.5,-1) {$\nset_e$};
         \node (o1) [known] at (1.5, 1) {$A$};
         \node (o2) [known] at (1, 0) {$B$};
-        \node (o3) [known] at (2, 0) {$\mathbf{O}$};
+        \node (o3) [known] at (2, 0) {$O$};
         \node (e4) [undef] at (3.5,1) {$C$};
-        \node (e5) [undef] at (3.5,0) {$\mathbf{E}$};
+        \node (e5) [undef] at (3.5,0) {$E$};
         \draw[l2] (o2) -- (o1) -- (o3) (e4) -- (e5);
         \draw[l2, dashed] (o3) -- (e5) node[midway,below] (a) {};
-        % \draw[l2, <-] (a) -- ++(0,-.5) node[below] {$\Nodejoin(\mathbf{E}, \mathbf{O})$};
+        % \draw[l2, <-] (a) -- ++(0,-.5) node[below] {$\Nodejoin(E, O)$};
     \end{scope}
 
     \begin{scope}[shift={(4.5,0)}]
         \node (o1) [known] at (1.5, 1) {$A$};
         \node (o2) [known] at (1, 0) {$B$};
-        \node (o3) [known] at (2, 0) {$\mathbf{O}$};
+        \node (o3) [known] at (2, 0) {$O$};
         \node (e4) [undef] at (2,-2) {$C$};
-        \node (e5) [undef] at (2,-1) {$\mathbf{E}$};
+        \node (e5) [undef] at (2,-1) {$E$};
         \draw[l2] (o2) -- (o1) -- (o3) -- (e5) -- (e4);
         \draw[parity, ->] (e4) ++(-.7,0) -- + (0,1);
         \draw[delay, ->] (o3) ++(.7,-.5) -- +(0,-1.5);
@@ -374,9 +375,9 @@
     \begin{scope}[shift={(9.5,-2)}]
         \node (o1) [undef] at (0, 0.75) {$A$};
         \node (o2) [undef] at (0.75, 0) {$B$};
-        \node (o3) [undef] at (0.75, 1.5) {$\mathbf{O}$};
+        \node (o3) [undef] at (0.75, 1.5) {$O$};
         \node (e4) [undef] at (0.75,3) {$C$};
-        \node (e5) [undef] at (0,2.25) {$\mathbf{E}$};
+        \node (e5) [undef] at (0,2.25) {$E$};
         \draw[l2] (o2) -- (o1) -- (o3) -- (e5) -- (e4);
         \draw[parity, <-] (e4) ++(-1.5,0) -- +(0,-3);
         \draw[delay, ->] (e4) ++(.75,0) -- +(0,-3);
@@ -406,16 +407,22 @@
 
 \begin{tikzpicture}[on grid, scale=0.8]
 
-    \begin{scope}[shift={(9.5,-3)}]
-        \path[legend] (-.9, -1.5) rectangle (2.4, 2.9);
+    \begin{scope}[shift={(9.5,-2.5)}]
+        \path[legend] (-.9, -2.25) rectangle (2.4, 2.9);
         \node[node2, pattern=dots, pattern color=black!20!white, preaction={fill, white}] (n1) at (0,2) {\small$\rho_N$};
         \node[node2, pattern=dots, pattern color=black!20!white, preaction={fill, white}] (n2) at (1.5,2) {\small$\rho_M$};
+
         \draw[l2] (n1) -- (n2) node[edge, above=0.2cm]{$|(N, M)|$};
+
         \node[align=center, fill=white!80!black, rounded corners=2pt, inner sep=0.5mm] at (0.75, 1.3) {\footnotesize node delays $\delta_N$};
-        \draw (0, 0.5) node[odd, nodem, preaction={fill, white}]{} +(.3,0) node[align=left, anchor=west]{\footnotesize $\pi_N$ odd };
-        \draw (0, -0.25) node[even, nodem, preaction={fill, white}]{} +(.3,0) node[align=left, anchor=west]{\footnotesize $\pi_N$ even };
-        \node[minimum size=10pt] (l) at (0, -1) {};
-        \node[align=left, anchor=west] at (.2,-1) {\footnotesize new edge};
+
+        \draw (0, 0.5) node[nodem, preaction={fill, white}, l1]{} +(.3,0) node[align=left, anchor=west]{\footnotesize root $R$};
+
+        \draw (0, -.25) node[odd, nodem, preaction={fill, white}]{} +(.3,0) node[align=left, anchor=west]{\footnotesize $\pi_N$ odd };
+        \draw (0, -1) node[even, nodem, preaction={fill, white}]{} +(.3,0) node[align=left, anchor=west]{\footnotesize $\pi_N$ even };
+
+        \node[minimum size=10pt] (l) at (0, -1.75) {};
+        \node[align=left, anchor=west] at (.2,-1.75) {\footnotesize new edge};
         \draw[l2, dotted] (l.west) -- (l.east);
     \end{scope}
 
@@ -425,7 +432,8 @@
     \node[smallarrow] at (6, -1.3) {};
 
     \foreach \x in {0,3,6}{\DLINE{\x}{0}{2}{0}}
-    \foreach \x in {0,2,3,5,6,8}{\draw (\x,0) node [even, nodem] (a\x) {\tiny$\nicefrac{1}{2}$} ++(0,-.7) node (ad\x) {0};}
+    \foreach \x in {0,3,6}{\draw (\x,0) node [even, nodem, l1] (a\x) {\tiny$\nicefrac{1}{2}$} ++(0,-.7) node (ad\x) {0};}
+    \foreach \x in {2,5,8}{\draw (\x,0) node [even, nodem] (a\x) {\tiny$\nicefrac{1}{2}$} ++(0,-.7) node (ad\x) {0};}
     \foreach[count=\i] \x in {1,4,7}{      \draw (\x,0) node [odd, nodem]  (a\x) {\tiny$\nicefrac{1}{2}$} ++(0,-.7) node (ad\x) {2};
             \node at (\x,0.7) {$\nset_{\alphalph{\i}}$};}
     \draw[l2] (a0) -- (a1) node[edge]{1} -- (a2) node[edge]{1} (a3) -- (a4) node[edge]{1} -- (a5) node[edge]{1} (a6) -- (a7) node[edge]{1} -- (a8) node[edge]{1};
@@ -437,7 +445,8 @@
 
 
         \foreach \x in {0,3,6}{\DLINE{\x}{0}{2}{0}}
-        \foreach \x in {0,2,3,5,6,8}{\draw (\x,0) node [even] (e\x) {\small2} ++(0,-.7) node {0};}
+        \foreach \x in {0,3,6}{\draw (\x,0) node [even, l1] (e\x) {\small2} ++(0,-.7) node {0};}
+        \foreach \x in {2, 5, 8}{\draw (\x,0) node [even] (e\x) {\small2} ++(0,-.7) node {0};}
         \foreach \x in {1,4,7}{      \draw (\x,0) node [odd, nodem]  (e\x) {\tiny$\nicefrac{1}{2}$} ++(0,-.7) node {1};}
         \draw[l2] (e0) -- (e1) node[edge]{1} -- (e2) node[edge]{1} (e3) -- (e4) node[edge]{1} -- (e5) node[edge]{1} (e6) -- (e7) node[edge]{1} -- (e8) node[edge]{1};
         \draw[l2, dotted] (e2) -- (e3) (e5) -- (e6);
@@ -445,7 +454,8 @@
 
     \begin{scope}[shift={(0,-4)}]
         \DLINE{0}{0}{8}{0}
-        \foreach \x in {0,2,6,8}{\draw (\x,0) node [even] (b\x) {\small2} ++(0,-.7) node {0};}
+        \draw (0,0) node [even, l1] (b0) {\small2} ++(0,-.7) node {0};
+        \foreach \x in {2,6,8}{\draw (\x,0) node [even] (b\x) {\small2} ++(0,-.7) node {0};}
         \foreach \x in {1,7}{    \draw (\x,0) node [odd, nodem]  (b\x) {\tiny$\nicefrac{1}{2}$} ++(0,-.7) node {1};}
         \foreach \x in {3,5}{    \draw (\x,0) node [odd]  (b\x) {\small2} ++(0,-.7) node {4};}
         \draw (4,0)  node [even, nodem] (b4)  {\tiny$\nicefrac{1}{2}$} ++(0,-.7) node {1};
@@ -460,7 +470,8 @@
         \node[smallarrow] at (6, -1.3) {};
 
         \foreach \x in {0,3,6}{\DLINE{\x}{0}{2}{0}}
-        \foreach \x in {0,2,3,5,6,8}{\draw (\x,0) node [even, nodem] (c\x) {\tiny$\nicefrac{1}{2}$} ++(0,-.7) node {0};}
+        \foreach \x in {0,3,6}{\draw (\x,0) node [even, nodem, l1] (c\x) {\tiny$\nicefrac{1}{2}$} ++(0,-.7) node {0};}
+        \foreach \x in {2,5,8}{\draw (\x,0) node [even, nodem] (c\x) {\tiny$\nicefrac{1}{2}$} ++(0,-.7) node {0};}
         \foreach[count=\i] \x in {1,4,7}{      \draw (\x,0) node [odd, nodem]  (c\x) {\tiny$\nicefrac{1}{2}$} ++(0,-.7) node (cd\x) {1};
                 \node at (\x,0.7) {$\nset_{\alphalph{\i}}$};}
         \draw[l2] (c0) -- (c1) node[edge]{1} -- (c2) node[edge]{1} (c3) -- (c4) node[edge]{1} -- (c5) node[edge]{1} (c6) -- (c7) node[edge]{1} -- (c8) node[edge]{1};
@@ -470,7 +481,8 @@
             \node at (4,-1.3) {\footnotesize 2. parity and delay}; 
             \node[smallarrow] at (6, -1.3) {};
             \foreach \x in {0,3,6}{\DLINE{\x}{0}{2}{0}}
-            \foreach \x in {0,2,3,5,6,8}{\draw (\x,0) node [even] (c\x) {\small2} ++(0,-.7) node {0};}
+            \foreach \x in {0,3,6}{\draw (\x,0) node [even, l1] (c\x) {\small2} ++(0,-.7) node {0};}
+            \foreach \x in {2,5,8}{\draw (\x,0) node [even] (c\x) {\small2} ++(0,-.7) node {0};}
             \foreach \x in {1,4,7}{      \draw (\x,0) node [odd, nodem]  (c\x) {\tiny$\nicefrac{1}{2}$} ++(0,-.7) node {0};}
             \draw[l2] (c0) -- (c1) node[edge]{1} -- (c2) node[edge]{1} (c3) -- (c4) node[edge]{1} -- (c5) node[edge]{1} (c6) -- (c7) node[edge]{1} -- (c8) node[edge]{1};
             \draw[l2, dotted] (c2) -- (c3) (c5) -- (c6);
@@ -478,7 +490,8 @@
 
         \begin{scope}[shift={(0,-4)}]
             \DLINE{0}{0}{8}{0}
-            \foreach \x in {0,2,6,8}{\draw (\x,0) node [even] (d\x) {\small2} ++(0,-.7) node {0};}
+            \draw (0,0) node [even, l1] (d0) {\small2} ++(0,-.7) node {0};
+            \foreach \x in {2,6,8}{\draw (\x,0) node [even] (d\x) {\small2} ++(0,-.7) node {0};}
             \foreach \x in {1,7}{    \draw (\x,0) node [odd, nodem]  (d\x) {\tiny$\nicefrac{1}{2}$} ++(0,-.7) node {0};}
             \foreach \x in {3,5}{    \draw (\x,0) node [odd]  (d\x) {\small2} ++(0,-.7) node {2};}
             \draw (4,0)  node [even, nodem] (d4)  {\tiny$\nicefrac{1}{2}$} ++(0,-.7) node {0};
