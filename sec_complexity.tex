@@ -1,5 +1,5 @@
 
-\subsection{Complexity of Partitioned-Growth}\label{sec:complexity}
+\section{Complexity of Partitioned-Growth}\label{sec:complexity}
 
 In this section, we will find the worst-case time complexity of the Union-Find Partitioned-Growth decoder of \Cref{algo:ufbb}. Compared to the original Union-Find algorithm, there are additional pseudocode in lines \ref{line:grow} and \ref{algo:joina}-\ref{algo:joinb}. In line \ref{line:grow}, the DFS's on the node-tree results has an addional cost which is investigated in this section. In lines \ref{algo:joina}-\ref{algo:joinb}, the pseudocode for merging node-trees only has a cost proportional to the number of cluster mergers, which is defined by the complexity of the Union-Find algorithm. 
 % The additional cost with respect to the original Union-Find decoder can be split in two parts: (A) the depth-first-searches (DFS's) related to the (re)calculation of the node parities and node delays in line \ref{algo:pdc}, and (B) the DFS related to the growth of a cluster in line \ref{algo:grow}. We dub the two parts the \textbf{delay cost} and the \textbf{growth cost}, respectively. The $\Nodejoin$ operation in lines \ref{algo:joina}-\ref{algo:joinb} only has a linear addition to the cost.
